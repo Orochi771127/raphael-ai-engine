@@ -26,8 +26,10 @@ Current status: `v0.1.0` contract-first mock engine.
 node tests/engine-contract.test.mjs
 node tests/image-derived-knowledge.test.mjs
 node tests/local-learning-sidecar.test.mjs
+node tests/canon-retrieval.test.mjs
 node training/run-eval.mjs
 node training/run-phase-4-expanded-eval.mjs
+node training/run-canon-retrieval-eval.mjs
 node training/run-conversation-lab.mjs
 node adapters/nexuslink/run-probe.mjs
 ```
@@ -38,8 +40,10 @@ On the Codex Windows workspace, use the bundled Node runtime if `node` is not on
 & "C:\Users\User\.cache\codex-runtimes\codex-primary-runtime\dependencies\node\bin\node.exe" tests\engine-contract.test.mjs
 & "C:\Users\User\.cache\codex-runtimes\codex-primary-runtime\dependencies\node\bin\node.exe" tests\image-derived-knowledge.test.mjs
 & "C:\Users\User\.cache\codex-runtimes\codex-primary-runtime\dependencies\node\bin\node.exe" tests\local-learning-sidecar.test.mjs
+& "C:\Users\User\.cache\codex-runtimes\codex-primary-runtime\dependencies\node\bin\node.exe" tests\canon-retrieval.test.mjs
 & "C:\Users\User\.cache\codex-runtimes\codex-primary-runtime\dependencies\node\bin\node.exe" training\run-eval.mjs
 & "C:\Users\User\.cache\codex-runtimes\codex-primary-runtime\dependencies\node\bin\node.exe" training\run-phase-4-expanded-eval.mjs
+& "C:\Users\User\.cache\codex-runtimes\codex-primary-runtime\dependencies\node\bin\node.exe" training\run-canon-retrieval-eval.mjs
 & "C:\Users\User\.cache\codex-runtimes\codex-primary-runtime\dependencies\node\bin\node.exe" training\run-conversation-lab.mjs
 & "C:\Users\User\.cache\codex-runtimes\codex-primary-runtime\dependencies\node\bin\node.exe" adapters\nexuslink\run-probe.mjs
 ```
@@ -91,3 +95,13 @@ Image knowledge intake and Phase 5 local learning:
 - `corpus/wellbeing-soft-context.json`
 - `npm run test:image-knowledge`
 - `npm run test:local-learning`
+
+Phase 6 canon retrieval lab:
+
+- `docs/PHASE_6_CANON_RETRIEVAL_LAB_REPORT.md`
+- `corpus/nexuslink-canon-cards.json`
+- `training/canon-retrieval/canon-retrieval-cases.json`
+- `npm run test:canon-retrieval`
+- `npm run eval:canon`
+
+Canon retrieval answers only when a reviewed source card is matched. Unsupported or unapproved claims abstain instead of inventing lore.

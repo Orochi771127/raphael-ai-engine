@@ -8,8 +8,10 @@
     "test": "node tests/engine-contract.test.mjs",
     "test:image-knowledge": "node tests/image-derived-knowledge.test.mjs",
     "test:local-learning": "node tests/local-learning-sidecar.test.mjs",
+    "test:canon-retrieval": "node tests/canon-retrieval.test.mjs",
     "eval": "node training/run-eval.mjs",
     "eval:phase4": "node training/run-phase-4-expanded-eval.mjs",
+    "eval:canon": "node training/run-canon-retrieval-eval.mjs",
     "conversation": "node training/run-conversation-lab.mjs",
     "probe:nexuslink": "node adapters/nexuslink/run-probe.mjs"
   },

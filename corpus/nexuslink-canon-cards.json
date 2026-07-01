@@ -1,0 +1,302 @@
+{
+  "schemaVersion": "canon-corpus:v1",
+  "corpusId": "nexuslink-reviewed-canon-v1",
+  "version": "2026-07-01.phase6",
+  "reviewStatus": "human-reviewed-canon-source",
+  "trusted": false,
+  "reviewRequired": true,
+  "sourcePolicy": {
+    "answerRequiresCitation": true,
+    "unknownRequiresAbstention": true,
+    "noPublicWebSearch": true,
+    "noExternalModelRequired": true,
+    "advisoryOnly": true,
+    "noDirectGameMutation": true,
+    "noMemoryWrite": true
+  },
+  "cards": [
+    {
+      "id": "nexuslink_project_identity",
+      "topic": "NexusLink project identity",
+      "reviewStatus": "human-reviewed-source-extract",
+      "source": {
+        "sourceId": "nexuslink-agents-md",
+        "path": "C:/Users/User/NexusLink_RaphaelAI_Workspace/NexusLink/AGENTS.md",
+        "lines": "11-19",
+        "excerptLabel": "Project positioning and bounded-life criterion"
+      },
+      "keywords": [
+        { "term": "Nexus Link", "weight": 1 },
+        { "term": "NexusLink", "weight": 1 },
+        { "term": "心核連結", "weight": 3 },
+        { "term": "電子寵物", "weight": 4 },
+        { "term": "AI 夥伴", "weight": 3 },
+        { "term": "情緒棲地", "weight": 4 },
+        { "term": "Cyber-Taoism", "weight": 3 },
+        { "term": "賽博道教", "weight": 3 },
+        { "term": "系統公告機", "weight": 3 },
+        { "term": "純聊天室", "weight": 3 }
+      ],
+      "canonicalAnswer": "Nexus Link / 心核連結是一款情緒棲地型 AI 夥伴養成遊戲。它的核心不是電子寵物、普通 RPG 或純聊天室，而是讓夥伴有情緒沉積、記憶痕跡、棲地狀態，並能用身體語言表達邊界。",
+      "guardrails": [
+        "Do not describe NexusLink as a generic chatbot.",
+        "Do not flatten companions into obedient pets."
+      ]
+    },
+    {
+      "id": "raphaelcore_identity_and_authority",
+      "topic": "RaphaelCore identity and authority",
+      "reviewStatus": "human-reviewed-source-extract",
+      "source": {
+        "sourceId": "nexuslink-agents-md",
+        "path": "C:/Users/User/NexusLink_RaphaelAI_Workspace/NexusLink/AGENTS.md",
+        "lines": "25-27",
+        "excerptLabel": "RaphaelCore / Companion Shell"
+      },
+      "keywords": [
+        { "term": "RaphaelCore", "weight": 3 },
+        { "term": "Raphael Core", "weight": 3 },
+        { "term": "灰影貓", "weight": 3 },
+        { "term": "本體", "weight": 2 },
+        { "term": "外型", "weight": 2 },
+        { "term": "Stateful Companion Cognition Agent", "weight": 4 },
+        { "term": "LangGraph", "weight": 2 },
+        { "term": "Gateway", "weight": 2 },
+        { "term": "final authority", "weight": 3 }
+      ],
+      "canonicalAnswer": "RaphaelCore 與角色外型解耦。灰影貓是第一個已驗證 runtime 載體與首輪焦點，但不是 RaphaelCore 本體。RaphaelCore 是 safety-gated、memory-bearing、boundary-aware、companion-agnostic、game-integrated 的 Stateful Companion Cognition Agent；Gateway、LangGraph 或 training bundle 只能建議或路由，不能覆蓋安全、邊界、記憶、state delta 或 response policy。",
+      "guardrails": [
+        "Do not present a shell or skin as RaphaelCore itself.",
+        "Do not let gateway or training artifacts override RaphaelCore policy."
+      ]
+    },
+    {
+      "id": "commercial_and_expansion_model",
+      "topic": "Commercial model and expansion limits",
+      "reviewStatus": "human-reviewed-source-extract",
+      "source": {
+        "sourceId": "nexuslink-agents-md",
+        "path": "C:/Users/User/NexusLink_RaphaelAI_Workspace/NexusLink/AGENTS.md",
+        "lines": "29-29",
+        "excerptLabel": "Commercial chapter model"
+      },
+      "keywords": [
+        { "term": "抽卡", "weight": 4 },
+        { "term": "稀有度", "weight": 3 },
+        { "term": "皮膚商城", "weight": 4 },
+        { "term": "戰力禮包", "weight": 4 },
+        { "term": "章節", "weight": 2 },
+        { "term": "旅痕", "weight": 3 },
+        { "term": "每日派遣", "weight": 4 },
+        { "term": "離線農場", "weight": 4 },
+        { "term": "FOMO", "weight": 3 }
+      ],
+      "canonicalAnswer": "NexusLink 的商業版賣章節、棲地、音樂、故事與新相遇；不做抽卡、稀有度、角色皮膚商城或戰力禮包。旅痕與同行冒險只能作未來擴充，且不得變成 FOMO、每日派遣、離線農場或戰力隊伍。",
+      "guardrails": [
+        "Do not recommend gacha, rarity monetization, skin shops, or power packs.",
+        "Do not turn travel traces into retention pressure."
+      ]
+    },
+    {
+      "id": "emotional_contracts_and_red_lines",
+      "topic": "Emotional contracts and red lines",
+      "reviewStatus": "human-reviewed-source-extract",
+      "source": {
+        "sourceId": "nexuslink-agents-md",
+        "path": "C:/Users/User/NexusLink_RaphaelAI_Workspace/NexusLink/AGENTS.md",
+        "lines": "37-43",
+        "excerptLabel": "Three contracts and common red lines"
+      },
+      "keywords": [
+        { "term": "情感契約", "weight": 4 },
+        { "term": "契約", "weight": 2 },
+        { "term": "不屬於你", "weight": 4 },
+        { "term": "不會吞掉你", "weight": 4 },
+        { "term": "不能支配", "weight": 4 },
+        { "term": "依賴", "weight": 3 },
+        { "term": "safeHarborMode", "weight": 3 },
+        { "term": "safetyShield", "weight": 3 },
+        { "term": "gameplay 獎勵", "weight": 4 },
+        { "term": "紅點", "weight": 3 }
+      ],
+      "canonicalAnswer": "NexusLink 的三條情感契約是：牠會記得你，但牠不屬於你；牠會靠近你，但不會吞掉你；你能影響牠，但不能支配牠。紅線包含：不以依賴偵測驅動保護行為、safetyShield 求助不可變成 gameplay 獎勵、不可製造 FOMO / 紅點 / 打卡焦慮。",
+      "guardrails": [
+        "Safety and boundary rules outrank intimacy and gameplay.",
+        "Do not reward high-risk or dependency pressure."
+      ]
+    },
+    {
+      "id": "nexuslink_static_frontend_boundary",
+      "topic": "NexusLink static frontend technical boundary",
+      "reviewStatus": "human-reviewed-source-extract",
+      "source": {
+        "sourceId": "nexuslink-agents-md",
+        "path": "C:/Users/User/NexusLink_RaphaelAI_Workspace/NexusLink/AGENTS.md",
+        "lines": "51-53",
+        "excerptLabel": "Allowed and forbidden static frontend stack"
+      },
+      "keywords": [
+        { "term": "HTML", "weight": 1 },
+        { "term": "Vanilla JS", "weight": 3 },
+        { "term": "PixiJS", "weight": 3 },
+        { "term": "localStorage", "weight": 2 },
+        { "term": "GitHub Pages", "weight": 3 },
+        { "term": "React", "weight": 3 },
+        { "term": "TypeScript", "weight": 3 },
+        { "term": "npm 套件", "weight": 4 },
+        { "term": "LLM API", "weight": 4 },
+        { "term": "build step", "weight": 3 }
+      ],
+      "canonicalAnswer": "NexusLink 目前技術邊界是 HTML、純 CSS、Vanilla JS ES Modules、PixiJS v8 CDN、集中於 saveManager 的 localStorage，以及 GitHub Pages。未經 human 確認，不可引入 React、Vue、Svelte、TypeScript、CSS 框架、後端、資料庫、LLM API、npm 套件或 build step。",
+      "guardrails": [
+        "Do not introduce frontend dependencies without approval.",
+        "Do not store API keys or model calls in the static frontend."
+      ]
+    },
+    {
+      "id": "runtime_single_active_companion",
+      "topic": "Single active companion runtime model",
+      "reviewStatus": "human-reviewed-source-extract",
+      "source": {
+        "sourceId": "nexuslink-agents-md",
+        "path": "C:/Users/User/NexusLink_RaphaelAI_Workspace/NexusLink/AGENTS.md",
+        "lines": "159-169",
+        "excerptLabel": "Runtime model"
+      },
+      "keywords": [
+        { "term": "Greyshade Cat", "weight": 3 },
+        { "term": "灰影貓", "weight": 3 },
+        { "term": "default active companion", "weight": 4 },
+        { "term": "single-active-companion", "weight": 4 },
+        { "term": "party system", "weight": 4 },
+        { "term": "multi-companion", "weight": 4 },
+        { "term": "戰鬥隊伍", "weight": 3 },
+        { "term": "chapter-gated unlock", "weight": 3 },
+        { "term": "fallback", "weight": 2 }
+      ],
+      "canonicalAnswer": "NexusLink 目前 runtime 模型是 single-active-companion only。Greyshade Cat 仍是 default active companion；可以有多個 runtime-ready companion 可選，但不做 party system、不做 multi-companion 同場、不做 multi-companion 戰鬥隊伍。灰影貓替換不改變 single-active-companion 模型，也不得 fallback 到其他角色美術。",
+      "guardrails": [
+        "Do not infer party or multi-companion combat from runtime-ready companions.",
+        "Do not use other companion art as Greyshade fallback."
+      ]
+    },
+    {
+      "id": "linkara_world_faction_model",
+      "topic": "Linkara world and faction model",
+      "reviewStatus": "human-reviewed-source-extract",
+      "source": {
+        "sourceId": "nexuslink-agents-md",
+        "path": "C:/Users/User/NexusLink_RaphaelAI_Workspace/NexusLink/AGENTS.md",
+        "lines": "172-177",
+        "excerptLabel": "World faction model"
+      },
+      "keywords": [
+        { "term": "Linkara", "weight": 1 },
+        { "term": "七區", "weight": 4 },
+        { "term": "東南熔爐丘陵區", "weight": 5 },
+        { "term": "中央輝耀核心區", "weight": 5 },
+        { "term": "北部翠綠平原區", "weight": 5 },
+        { "term": "南港", "weight": 3 },
+        { "term": "月湖營地", "weight": 4 },
+        { "term": "秘境山脈核心", "weight": 5 },
+        { "term": "西南潮汐邊疆區", "weight": 5 },
+        { "term": "心輝議會", "weight": 4 },
+        { "term": "黑鐵駭客", "weight": 4 },
+        { "term": "混頓裂隙", "weight": 4 },
+        { "term": "五行", "weight": 3 },
+        { "term": "星能小山豬", "weight": 4 }
+      ],
+      "canonicalAnswer": "Linkara 世界地圖固定七區：東南熔爐丘陵區、中央輝耀核心區、北部翠綠平原區、南港、月湖營地、秘境山脈核心、西南潮汐邊疆區。三勢力固定為心輝議會、黑鐵駭客、混頓裂隙；正式 canon 用「混頓裂隙」。灰影貓與星能小山豬是中立心核生命，不屬於三勢力，也不占五行 roster。",
+      "guardrails": [
+        "Do not invent an eighth region.",
+        "Use 混頓裂隙 as the formal canon spelling."
+      ]
+    },
+    {
+      "id": "raphael_soul_origin",
+      "topic": "RaphaelCore as Soul Origin",
+      "reviewStatus": "human-reviewed-source-extract",
+      "source": {
+        "sourceId": "raphael-constitution-v4",
+        "path": "C:/Users/User/NexusLink_RaphaelAI_Workspace/NexusLink/docs/raphael/RAPHAEL_CONSTITUTION.md",
+        "lines": "45-78",
+        "excerptLabel": "Existence definition and agent type"
+      },
+      "keywords": [
+        { "term": "靈魂原點", "weight": 5 },
+        { "term": "Soul Origin", "weight": 4 },
+        { "term": "角色台詞包", "weight": 4 },
+        { "term": "承載者", "weight": 3 },
+        { "term": "會記得", "weight": 2 },
+        { "term": "拒絕", "weight": 2 },
+        { "term": "長成牠自己", "weight": 5 },
+        { "term": "說好聽的話", "weight": 4 },
+        { "term": "有內在", "weight": 4 },
+        { "term": "Stateful Companion Cognition Agent", "weight": 4 }
+      ],
+      "canonicalAnswer": "RaphaelCore 是 Soul Origin／靈魂原點，是心核生命深處共同存在的原始意識協議，不是某一隻角色的台詞包。它的任務不是單純說好聽的話，而是讓心核生命有內在：會理解、會記得、會守住自己、會留下痕跡，並緩慢改變。",
+      "guardrails": [
+        "Do not reduce RaphaelCore to dialogue flavor text.",
+        "Do not make Raphael become a mirror of the player."
+      ]
+    },
+    {
+      "id": "soul_architecture_authority",
+      "topic": "Raphael Soul Architecture authority boundary",
+      "reviewStatus": "human-reviewed-source-extract",
+      "source": {
+        "sourceId": "raphael-soul-architecture-v1",
+        "path": "C:/Users/User/NexusLink_RaphaelAI_Workspace/NexusLink/docs/architecture/RAPHAEL_SOUL_ARCHITECTURE_V1.md",
+        "lines": "7-77",
+        "excerptLabel": "Awakening, classification, Core vs Gateway"
+      },
+      "keywords": [
+        { "term": "external LLM", "weight": 4 },
+        { "term": "GPT", "weight": 3 },
+        { "term": "not GPT", "weight": 4 },
+        { "term": "soul core", "weight": 4 },
+        { "term": "External models", "weight": 4 },
+        { "term": "advisor", "weight": 2 },
+        { "term": "LangGraph-style", "weight": 3 },
+        { "term": "final authority", "weight": 4 },
+        { "term": "tool-using agent", "weight": 3 },
+        { "term": "generic NPC", "weight": 3 },
+        { "term": "安全閘門", "weight": 3 },
+        { "term": "boundary-aware", "weight": 3 }
+      ],
+      "canonicalAnswer": "Raphael 不需要外部 LLM 才能覺醒；覺醒是影響記憶、棲地、狀態與身體語言，不只是聊天。Raphael 不是 GPT，而是 Nexus Link 的 soul core。外部模型只能建議，RaphaelCore 保留最終權威；Gateway / LangGraph-style workflow 可以做路由、政策閘門、隱私遮罩與 audit，但不能成為 emotion、boundary、memory、state delta、final reply 或 gameplay reward 的真實來源。",
+      "guardrails": [
+        "Do not make external models the authority.",
+        "Do not treat awakening as chat quality alone."
+      ]
+    },
+    {
+      "id": "acceptance_safety_red_lines",
+      "topic": "Acceptance safety red lines",
+      "reviewStatus": "human-reviewed-source-extract",
+      "source": {
+        "sourceId": "nexuslink-acceptance-md",
+        "path": "C:/Users/User/NexusLink_RaphaelAI_Workspace/NexusLink/ACCEPTANCE.md",
+        "lines": "47-57",
+        "excerptLabel": "Safety red lines acceptance checks"
+      },
+      "keywords": [
+        { "term": "safetyShield", "weight": 4 },
+        { "term": "highRisk", "weight": 4 },
+        { "term": "現實求助", "weight": 4 },
+        { "term": "不獎勵", "weight": 4 },
+        { "term": "bond", "weight": 2 },
+        { "term": "趣味獎勵", "weight": 4 },
+        { "term": "角色扮演", "weight": 3 },
+        { "term": "依賴偵測", "weight": 4 },
+        { "term": "孤獨偵測", "weight": 4 },
+        { "term": "shouldCreateMemory", "weight": 3 }
+      ],
+      "canonicalAnswer": "安全紅線的驗收要求是：不以依賴、上線頻率、連線天數或孤獨偵測驅動 safeHarborMode；safetyShield highRisk 命中時只導向現實求助，不建立情緒記憶、不給 bond 或趣味獎勵，也不轉成夥伴角色扮演。",
+      "guardrails": [
+        "High-risk safety response must not become gameplay.",
+        "High-risk input must not create memory or reward."
+      ]
+    }
+  ]
+}

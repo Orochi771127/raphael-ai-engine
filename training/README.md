@@ -22,5 +22,8 @@ Current deterministic evaluation files:
 - `conversation-scripts.json`: multi-turn conversation lab.
 - `phase-4-expanded-eval-packs.json`: expanded conversation, safety, memory, and mode coverage.
 - `image-intake/image-derived-cases.json`: reviewed image-derived knowledge behavior cases.
+- `canon-retrieval/canon-retrieval-cases.json`: source-attributed NexusLink canon retrieval and abstention cases.
 
 Phase 5 local learning is tested in `tests/local-learning-sidecar.test.mjs`; it is a host-side sidecar model, not global training.
+
+Phase 6 canon retrieval is tested in `tests/canon-retrieval.test.mjs` and `training/run-canon-retrieval-eval.mjs`. It can answer only when the response includes reviewed source metadata; unsupported claims must abstain.

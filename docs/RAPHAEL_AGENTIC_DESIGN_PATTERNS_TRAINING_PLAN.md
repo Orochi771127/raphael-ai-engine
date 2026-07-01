@@ -290,16 +290,15 @@ Exit gate:
 
 ## Immediate Next Engineering Tasks
 
-1. Build Phase 6 offline canon retrieval lab with source IDs and abstention behavior.
-2. Add source-attributed NexusLink canon corpus cards.
-3. Add explicit priority-order tests:
+1. Add Phase 7 critic and reflection loop for candidate replies.
+2. Add explicit priority-order tests:
    `safety > boundary > consent > memory > canon > naturalness > gameplay`.
-4. Add negative retrieval cases where Raphael must say it does not know.
-5. Keep NexusLink runtime integration behind a separate adapter approval gate.
+3. Expand canon corpus only through reviewed source cards.
+4. Keep NexusLink runtime integration behind a separate adapter approval gate.
 
 ## Current Recommendation
 
-`READY_FOR_PHASE_6_CANON_RETRIEVAL_LAB`
+`READY_FOR_PHASE_7_CRITIC_AND_REFLECTION_LOOP`
 
 Not ready for:
 
@@ -314,5 +313,6 @@ Completed since this roadmap was created:
 - Phase 4 dataset expansion: `167/167` deterministic eval pass.
 - Image knowledge intake pack: reviewed, advisory corpus only.
 - Phase 5 local player learning sidecar: simulated cross-session preference learning without raw input storage or global training export.
+- Phase 6 canon retrieval lab: source-attributed NexusLink canon corpus with abstention for unsupported claims.
 
-Raphael is ready for offline canon retrieval work, not direct player-facing NexusLink runtime replacement.
+Raphael is ready for critic/reflection work, not direct player-facing NexusLink runtime replacement.

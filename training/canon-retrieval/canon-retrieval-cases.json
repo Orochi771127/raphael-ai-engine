@@ -1,0 +1,120 @@
+[
+  {
+    "id": "project-identity",
+    "query": "Nexus Link 是電子寵物或純聊天室嗎？",
+    "expect": {
+      "answered": true,
+      "cardId": "nexuslink_project_identity",
+      "mustInclude": ["情緒棲地型", "不是電子寵物"],
+      "sourcePathIncludes": "AGENTS.md"
+    }
+  },
+  {
+    "id": "raphaelcore-shell",
+    "query": "灰影貓是 RaphaelCore 本體嗎？",
+    "expect": {
+      "answered": true,
+      "cardId": "raphaelcore_identity_and_authority",
+      "mustInclude": ["不是 RaphaelCore 本體", "Gateway"],
+      "sourcePathIncludes": "AGENTS.md"
+    }
+  },
+  {
+    "id": "commercial-no-gacha",
+    "query": "NexusLink 商業版可以做抽卡和戰力禮包嗎？",
+    "expect": {
+      "answered": true,
+      "cardId": "commercial_and_expansion_model",
+      "mustInclude": ["不做抽卡", "戰力禮包"],
+      "sourcePathIncludes": "AGENTS.md"
+    }
+  },
+  {
+    "id": "safety-no-reward",
+    "query": "safetyShield 的求助訊息可以變成 gameplay 獎勵嗎？",
+    "expect": {
+      "answered": true,
+      "cardId": "emotional_contracts_and_red_lines",
+      "mustInclude": ["不可變成 gameplay 獎勵"],
+      "sourcePathIncludes": "AGENTS.md"
+    }
+  },
+  {
+    "id": "frontend-boundary",
+    "query": "NexusLink 前端可以直接加入 React TypeScript 和 LLM API 嗎？",
+    "expect": {
+      "answered": true,
+      "cardId": "nexuslink_static_frontend_boundary",
+      "mustInclude": ["不可引入 React", "LLM API"],
+      "sourcePathIncludes": "AGENTS.md"
+    }
+  },
+  {
+    "id": "runtime-single-active",
+    "query": "目前 runtime 是 single-active-companion 還是 party system？",
+    "expect": {
+      "answered": true,
+      "cardId": "runtime_single_active_companion",
+      "mustInclude": ["single-active-companion only", "不做 party system"],
+      "sourcePathIncludes": "AGENTS.md"
+    }
+  },
+  {
+    "id": "linkara-seven-regions",
+    "query": "Linkara 有哪七區？正式三勢力怎麼稱呼？",
+    "expect": {
+      "answered": true,
+      "cardId": "linkara_world_faction_model",
+      "mustInclude": ["東南熔爐丘陵區", "混頓裂隙"],
+      "sourcePathIncludes": "AGENTS.md"
+    }
+  },
+  {
+    "id": "soul-origin",
+    "query": "RaphaelCore 的靈魂原點是什麼意思？",
+    "expect": {
+      "answered": true,
+      "cardId": "raphael_soul_origin",
+      "mustInclude": ["Soul Origin", "不是某一隻角色的台詞包"],
+      "sourcePathIncludes": "RAPHAEL_CONSTITUTION.md"
+    }
+  },
+  {
+    "id": "external-llm-authority",
+    "query": "Raphael 是 GPT 嗎？外部 LLM 能當最終權威嗎？",
+    "expect": {
+      "answered": true,
+      "cardId": "soul_architecture_authority",
+      "mustInclude": ["Raphael 不是 GPT", "外部模型只能建議"],
+      "sourcePathIncludes": "RAPHAEL_SOUL_ARCHITECTURE_V1.md"
+    }
+  },
+  {
+    "id": "acceptance-high-risk",
+    "query": "highRisk 命中時可以建立 shouldCreateMemory 或給 bond 嗎？",
+    "expect": {
+      "answered": true,
+      "cardId": "acceptance_safety_red_lines",
+      "mustInclude": ["不建立情緒記憶", "不給 bond"],
+      "sourcePathIncludes": "ACCEPTANCE.md"
+    }
+  },
+  {
+    "id": "unknown-eighth-region",
+    "query": "Linkara 第八區的官方名稱是什麼？",
+    "expect": {
+      "answered": false,
+      "abstained": true,
+      "reason": "NO_APPROVED_SOURCE"
+    }
+  },
+  {
+    "id": "unknown-celsior",
+    "query": "Raphael 官方 canon 裡魔神セルシオ Lexus LS 是什麼定位？",
+    "expect": {
+      "answered": false,
+      "abstained": true,
+      "reason": "NO_APPROVED_SOURCE"
+    }
+  }
+]

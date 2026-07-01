@@ -7,6 +7,8 @@ import { deriveContextKnowledge } from './contextKnowledgePolicy.js';
 
 export const RAPHAEL_ENGINE_VERSION = '0.1.0';
 
+export { answerCanonQuestion, retrieveCanonCards } from './canonRetrievalPolicy.js';
+
 export function runRaphaelEngine(request = {}) {
   const mode = normalizeMode(request.mode);
   const inputText = String(request.input?.text || '').trim();
