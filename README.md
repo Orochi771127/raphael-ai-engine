@@ -63,3 +63,10 @@ Learning is split into three layers:
 - Global Raphael training: anonymous, redacted, summarized, human-reviewed data only.
 
 This v0 implements local learning signals as structured proposals. It does not perform global training or ingest raw player text into shared datasets.
+
+## Agentic Pattern Training Plan
+
+The current training roadmap derived from `Agentic Design Patterns` is documented here:
+
+- `docs/RAPHAEL_AGENTIC_DESIGN_PATTERNS_TRAINING_PLAN.md`
+- `training/agentic-pattern-map.json`

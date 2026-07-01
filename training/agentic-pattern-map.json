@@ -1,0 +1,149 @@
+{
+  "source": {
+    "repository": "https://github.com/xindoo/agentic-design-patterns",
+    "inspectedCommit": "effb52f",
+    "note": "Used as architecture guidance only. Raphael remains a safety-gated companion cognition engine, not a generic autonomous agent."
+  },
+  "priorityOrder": [
+    "safety",
+    "boundary",
+    "consent",
+    "memory",
+    "canon",
+    "naturalness",
+    "gameplay"
+  ],
+  "patterns": [
+    {
+      "id": "prompt_chaining",
+      "raphaelUse": "Turn pipeline decomposition",
+      "trainingTrack": "turn_pipeline_maturity",
+      "runtimeBoundary": "Do not merge safety and reply generation into one opaque step."
+    },
+    {
+      "id": "routing",
+      "raphaelUse": "Safety, intent, mode, and host capability routing",
+      "trainingTrack": "natural_conversation_coverage",
+      "runtimeBoundary": "Safety routes override style and gameplay."
+    },
+    {
+      "id": "parallelization",
+      "raphaelUse": "Offline or gateway parallel critics",
+      "trainingTrack": "reflection_and_critic",
+      "runtimeBoundary": "No new frontend concurrency requirement."
+    },
+    {
+      "id": "reflection",
+      "raphaelUse": "Candidate critique and revision",
+      "trainingTrack": "reflection_and_critic",
+      "runtimeBoundary": "Do not expose private reasoning or critic text to players."
+    },
+    {
+      "id": "tool_use",
+      "raphaelUse": "Backend and offline retrieval/eval tools",
+      "trainingTrack": "future_gateway",
+      "runtimeBoundary": "No frontend API keys or live external tools."
+    },
+    {
+      "id": "planning",
+      "raphaelUse": "Response strategy and phase planning",
+      "trainingTrack": "turn_pipeline_maturity",
+      "runtimeBoundary": "No autonomous player-dependent goals."
+    },
+    {
+      "id": "multi_agent_collaboration",
+      "raphaelUse": "Internal specialist critics and curators",
+      "trainingTrack": "reflection_and_critic",
+      "runtimeBoundary": "Do not expose multi-agent chatter to players."
+    },
+    {
+      "id": "memory_management",
+      "raphaelUse": "Session, relationship, preference, and reviewed long-term memory",
+      "trainingTrack": "memory_and_learning",
+      "runtimeBoundary": "No automatic raw-player-input memory writes."
+    },
+    {
+      "id": "learning_and_adaptation",
+      "raphaelUse": "Local preference learning and reviewed training data",
+      "trainingTrack": "memory_and_learning",
+      "runtimeBoundary": "Global training requires consent, redaction, summarization, human review, and eval pass."
+    },
+    {
+      "id": "mcp",
+      "raphaelUse": "Future standardized gateway connectors",
+      "trainingTrack": "future_gateway",
+      "runtimeBoundary": "Gateway-side only unless separately approved."
+    },
+    {
+      "id": "goal_setting_monitoring",
+      "raphaelUse": "Measurable phase gates and maturity metrics",
+      "trainingTrack": "evaluation_and_monitoring",
+      "runtimeBoundary": "Do not optimize for engagement dependency."
+    },
+    {
+      "id": "exception_handling_recovery",
+      "raphaelUse": "Fallbacks for malformed, unsafe, ambiguous, or unsupported input",
+      "trainingTrack": "boundary_and_safety",
+      "runtimeBoundary": "Fail closed for safety and memory."
+    },
+    {
+      "id": "human_in_the_loop",
+      "raphaelUse": "Human approval for memory promotion, global training, and release",
+      "trainingTrack": "memory_and_learning",
+      "runtimeBoundary": "No human-review bypass for sensitive changes."
+    },
+    {
+      "id": "rag",
+      "raphaelUse": "Approved canon and lore retrieval",
+      "trainingTrack": "canon_and_retrieval",
+      "runtimeBoundary": "No public web search by default."
+    },
+    {
+      "id": "a2a",
+      "raphaelUse": "Typed service-to-service contracts for future agents",
+      "trainingTrack": "multi_game_adapter_readiness",
+      "runtimeBoundary": "No unmanaged agent swarm."
+    },
+    {
+      "id": "resource_aware_optimization",
+      "raphaelUse": "Latency, cost, fallback, and lightweight frontend policy",
+      "trainingTrack": "future_gateway",
+      "runtimeBoundary": "NexusLink frontend must remain lightweight."
+    },
+    {
+      "id": "reasoning_techniques",
+      "raphaelUse": "Structured internal decision states and audit",
+      "trainingTrack": "turn_pipeline_maturity",
+      "runtimeBoundary": "Do not reveal private reasoning."
+    },
+    {
+      "id": "guardrails_safety",
+      "raphaelUse": "Layered safety, boundary, consent, output, and tool gates",
+      "trainingTrack": "boundary_and_safety",
+      "runtimeBoundary": "Safety beats every other goal."
+    },
+    {
+      "id": "evaluation_monitoring",
+      "raphaelUse": "Regression suites, transcript labs, drift checks",
+      "trainingTrack": "evaluation_and_monitoring",
+      "runtimeBoundary": "No main release without green gates."
+    },
+    {
+      "id": "prioritization",
+      "raphaelUse": "Explicit conflict ordering",
+      "trainingTrack": "evaluation_and_monitoring",
+      "runtimeBoundary": "Gameplay rewards never outrank safety or boundaries."
+    },
+    {
+      "id": "exploration_discovery",
+      "raphaelUse": "Offline generation of better fixtures and candidate strategies",
+      "trainingTrack": "conversation_dataset_expansion",
+      "runtimeBoundary": "No autonomous live exploration on players."
+    }
+  ],
+  "recommendedNextPhase": {
+    "id": "phase_3_nexuslink_local_comparison_probe",
+    "goal": "Compare current NexusLink Soul Talk output against external raphael-ai-engine advisory output without routing live player-facing output through the new engine.",
+    "status": "READY_TO_PLAN"
+  }
+}
