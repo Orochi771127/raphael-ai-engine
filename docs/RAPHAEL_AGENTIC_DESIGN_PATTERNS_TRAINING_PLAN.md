@@ -290,7 +290,7 @@ Exit gate:
 
 ## Immediate Next Engineering Tasks
 
-1. Prepare Phase 8 backend gateway maturity design.
+1. Prepare Phase 9 staging integration design.
 2. Add explicit priority-order tests:
    `safety > boundary > consent > memory > canon > naturalness > gameplay`.
 3. Expand canon corpus only through reviewed source cards.
@@ -298,7 +298,7 @@ Exit gate:
 
 ## Current Recommendation
 
-`READY_FOR_PHASE_8_BACKEND_GATEWAY_MATURITY`
+`READY_FOR_PHASE_9_STAGING_INTEGRATION_DESIGN`
 
 Not ready for:
 
@@ -315,5 +315,6 @@ Completed since this roadmap was created:
 - Phase 5 local player learning sidecar: simulated cross-session preference learning without raw input storage or global training export.
 - Phase 6 canon retrieval lab: source-attributed NexusLink canon corpus with abstention for unsupported claims.
 - Phase 7 critic and reflection loop: deterministic local critic catches unsafe gameplay framing, false intimacy, template-like replies, and missing canon sources.
+- Phase 8 backend gateway maturity: mock-only keyless gateway contract proves advisor output cannot override RaphaelCore authority.
 
-Raphael is ready for backend gateway maturity planning, not direct player-facing NexusLink runtime replacement.
+Raphael is ready for staging integration design, not direct player-facing NexusLink runtime replacement.

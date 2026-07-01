@@ -28,10 +28,12 @@ node tests/image-derived-knowledge.test.mjs
 node tests/local-learning-sidecar.test.mjs
 node tests/canon-retrieval.test.mjs
 node tests/critic-policy.test.mjs
+node tests/gateway-maturity.test.mjs
 node training/run-eval.mjs
 node training/run-phase-4-expanded-eval.mjs
 node training/run-canon-retrieval-eval.mjs
 node training/run-critic-reflection-eval.mjs
+node training/run-gateway-maturity-eval.mjs
 node training/run-conversation-lab.mjs
 node adapters/nexuslink/run-probe.mjs
 ```
@@ -44,10 +46,12 @@ On the Codex Windows workspace, use the bundled Node runtime if `node` is not on
 & "C:\Users\User\.cache\codex-runtimes\codex-primary-runtime\dependencies\node\bin\node.exe" tests\local-learning-sidecar.test.mjs
 & "C:\Users\User\.cache\codex-runtimes\codex-primary-runtime\dependencies\node\bin\node.exe" tests\canon-retrieval.test.mjs
 & "C:\Users\User\.cache\codex-runtimes\codex-primary-runtime\dependencies\node\bin\node.exe" tests\critic-policy.test.mjs
+& "C:\Users\User\.cache\codex-runtimes\codex-primary-runtime\dependencies\node\bin\node.exe" tests\gateway-maturity.test.mjs
 & "C:\Users\User\.cache\codex-runtimes\codex-primary-runtime\dependencies\node\bin\node.exe" training\run-eval.mjs
 & "C:\Users\User\.cache\codex-runtimes\codex-primary-runtime\dependencies\node\bin\node.exe" training\run-phase-4-expanded-eval.mjs
 & "C:\Users\User\.cache\codex-runtimes\codex-primary-runtime\dependencies\node\bin\node.exe" training\run-canon-retrieval-eval.mjs
 & "C:\Users\User\.cache\codex-runtimes\codex-primary-runtime\dependencies\node\bin\node.exe" training\run-critic-reflection-eval.mjs
+& "C:\Users\User\.cache\codex-runtimes\codex-primary-runtime\dependencies\node\bin\node.exe" training\run-gateway-maturity-eval.mjs
 & "C:\Users\User\.cache\codex-runtimes\codex-primary-runtime\dependencies\node\bin\node.exe" training\run-conversation-lab.mjs
 & "C:\Users\User\.cache\codex-runtimes\codex-primary-runtime\dependencies\node\bin\node.exe" adapters\nexuslink\run-probe.mjs
 ```
@@ -119,3 +123,13 @@ Phase 7 critic and reflection loop:
 - `npm run eval:critic`
 
 The critic can revise unsafe gameplay framing, false intimacy, template-like replies, and canon answers without reviewed citations. It exposes issue codes only, not chain-of-thought.
+
+Phase 8 backend gateway maturity:
+
+- `docs/PHASE_8_BACKEND_GATEWAY_MATURITY_REPORT.md`
+- `gateway/mock-gateway.js`
+- `training/gateway-maturity/gateway-maturity-cases.json`
+- `npm run test:gateway`
+- `npm run eval:gateway`
+
+The gateway remains mock-only and keyless. Gateway advisors are `trusted: false` and cannot override RaphaelCore safety, boundary, memory, response, or reward policy.
