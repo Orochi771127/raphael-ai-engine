@@ -29,6 +29,7 @@ node tests/local-learning-sidecar.test.mjs
 node tests/canon-retrieval.test.mjs
 node tests/critic-policy.test.mjs
 node tests/gateway-maturity.test.mjs
+node tests/gateway-legacy-contract.test.mjs
 node training/run-eval.mjs
 node training/run-phase-4-expanded-eval.mjs
 node training/run-canon-retrieval-eval.mjs
@@ -47,6 +48,7 @@ On the Codex Windows workspace, use the bundled Node runtime if `node` is not on
 & "C:\Users\User\.cache\codex-runtimes\codex-primary-runtime\dependencies\node\bin\node.exe" tests\canon-retrieval.test.mjs
 & "C:\Users\User\.cache\codex-runtimes\codex-primary-runtime\dependencies\node\bin\node.exe" tests\critic-policy.test.mjs
 & "C:\Users\User\.cache\codex-runtimes\codex-primary-runtime\dependencies\node\bin\node.exe" tests\gateway-maturity.test.mjs
+& "C:\Users\User\.cache\codex-runtimes\codex-primary-runtime\dependencies\node\bin\node.exe" tests\gateway-legacy-contract.test.mjs
 & "C:\Users\User\.cache\codex-runtimes\codex-primary-runtime\dependencies\node\bin\node.exe" training\run-eval.mjs
 & "C:\Users\User\.cache\codex-runtimes\codex-primary-runtime\dependencies\node\bin\node.exe" training\run-phase-4-expanded-eval.mjs
 & "C:\Users\User\.cache\codex-runtimes\codex-primary-runtime\dependencies\node\bin\node.exe" training\run-canon-retrieval-eval.mjs
@@ -133,3 +135,4 @@ Phase 8 backend gateway maturity:
 - `npm run eval:gateway`
 
 The gateway remains mock-only and keyless. Gateway advisors are `trusted: false` and cannot override RaphaelCore safety, boundary, memory, response, or reward policy.
+The mock worker also accepts NexusLink's legacy `POST /v1/gateway` preview contract for QA-only staging compatibility.

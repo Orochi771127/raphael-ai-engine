@@ -11,6 +11,7 @@
     "test:canon-retrieval": "node tests/canon-retrieval.test.mjs",
     "test:critic": "node tests/critic-policy.test.mjs",
     "test:gateway": "node tests/gateway-maturity.test.mjs",
+    "test:gateway-legacy": "node tests/gateway-legacy-contract.test.mjs",
     "eval": "node training/run-eval.mjs",
     "eval:phase4": "node training/run-phase-4-expanded-eval.mjs",
     "eval:canon": "node training/run-canon-retrieval-eval.mjs",
