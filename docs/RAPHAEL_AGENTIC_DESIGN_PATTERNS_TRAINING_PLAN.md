@@ -290,7 +290,7 @@ Exit gate:
 
 ## Immediate Next Engineering Tasks
 
-1. Add Phase 7 critic and reflection loop for candidate replies.
+1. Prepare Phase 8 backend gateway maturity design.
 2. Add explicit priority-order tests:
    `safety > boundary > consent > memory > canon > naturalness > gameplay`.
 3. Expand canon corpus only through reviewed source cards.
@@ -298,7 +298,7 @@ Exit gate:
 
 ## Current Recommendation
 
-`READY_FOR_PHASE_7_CRITIC_AND_REFLECTION_LOOP`
+`READY_FOR_PHASE_8_BACKEND_GATEWAY_MATURITY`
 
 Not ready for:
 
@@ -314,5 +314,6 @@ Completed since this roadmap was created:
 - Image knowledge intake pack: reviewed, advisory corpus only.
 - Phase 5 local player learning sidecar: simulated cross-session preference learning without raw input storage or global training export.
 - Phase 6 canon retrieval lab: source-attributed NexusLink canon corpus with abstention for unsupported claims.
+- Phase 7 critic and reflection loop: deterministic local critic catches unsafe gameplay framing, false intimacy, template-like replies, and missing canon sources.
 
-Raphael is ready for critic/reflection work, not direct player-facing NexusLink runtime replacement.
+Raphael is ready for backend gateway maturity planning, not direct player-facing NexusLink runtime replacement.

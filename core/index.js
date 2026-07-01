@@ -4,10 +4,12 @@ import { deriveLearningUpdate } from './learningPolicy.js';
 import { analyzeInput } from './nluPolicy.js';
 import { buildReply } from './replyPolicy.js';
 import { deriveContextKnowledge } from './contextKnowledgePolicy.js';
+import { applyCriticRevision, critiqueRaphaelOutput } from './criticPolicy.js';
 
 export const RAPHAEL_ENGINE_VERSION = '0.1.0';
 
 export { answerCanonQuestion, retrieveCanonCards } from './canonRetrievalPolicy.js';
+export { applyCriticRevision, critiqueRaphaelOutput } from './criticPolicy.js';
 
 export function runRaphaelEngine(request = {}) {
   const mode = normalizeMode(request.mode);
@@ -31,7 +33,7 @@ export function runRaphaelEngine(request = {}) {
   const boundaryAction = buildBoundaryAction(safetyStatus);
   const gameActionSuggestion = buildGameActionSuggestion({ request, modePolicy, safetyStatus });
 
-  return {
+  const draftOutput = {
     ok: safetyStatus.level !== 'blocked',
     requestId: request.requestId || 'request:missing',
     trusted: false,
@@ -62,6 +64,14 @@ export function runRaphaelEngine(request = {}) {
       directGameMutation: false,
     },
   };
+
+  const critic = critiqueRaphaelOutput({
+    request,
+    output: draftOutput,
+    canonResult: request.canonResult || null,
+  });
+
+  return applyCriticRevision(draftOutput, critic);
 }
 
 function buildEmotionState({ mode, safetyStatus }) {

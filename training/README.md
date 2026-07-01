@@ -23,7 +23,10 @@ Current deterministic evaluation files:
 - `phase-4-expanded-eval-packs.json`: expanded conversation, safety, memory, and mode coverage.
 - `image-intake/image-derived-cases.json`: reviewed image-derived knowledge behavior cases.
 - `canon-retrieval/canon-retrieval-cases.json`: source-attributed NexusLink canon retrieval and abstention cases.
+- `critic-reflection/critic-reflection-cases.json`: local critic and conservative revision cases.
 
 Phase 5 local learning is tested in `tests/local-learning-sidecar.test.mjs`; it is a host-side sidecar model, not global training.
 
 Phase 6 canon retrieval is tested in `tests/canon-retrieval.test.mjs` and `training/run-canon-retrieval-eval.mjs`. It can answer only when the response includes reviewed source metadata; unsupported claims must abstain.
+
+Phase 7 critic reflection is tested in `tests/critic-policy.test.mjs` and `training/run-critic-reflection-eval.mjs`. It catches unsafe gameplay framing, false intimacy, template-like replies, and missing canon sources without exposing private reasoning.

@@ -27,9 +27,11 @@ node tests/engine-contract.test.mjs
 node tests/image-derived-knowledge.test.mjs
 node tests/local-learning-sidecar.test.mjs
 node tests/canon-retrieval.test.mjs
+node tests/critic-policy.test.mjs
 node training/run-eval.mjs
 node training/run-phase-4-expanded-eval.mjs
 node training/run-canon-retrieval-eval.mjs
+node training/run-critic-reflection-eval.mjs
 node training/run-conversation-lab.mjs
 node adapters/nexuslink/run-probe.mjs
 ```
@@ -41,9 +43,11 @@ On the Codex Windows workspace, use the bundled Node runtime if `node` is not on
 & "C:\Users\User\.cache\codex-runtimes\codex-primary-runtime\dependencies\node\bin\node.exe" tests\image-derived-knowledge.test.mjs
 & "C:\Users\User\.cache\codex-runtimes\codex-primary-runtime\dependencies\node\bin\node.exe" tests\local-learning-sidecar.test.mjs
 & "C:\Users\User\.cache\codex-runtimes\codex-primary-runtime\dependencies\node\bin\node.exe" tests\canon-retrieval.test.mjs
+& "C:\Users\User\.cache\codex-runtimes\codex-primary-runtime\dependencies\node\bin\node.exe" tests\critic-policy.test.mjs
 & "C:\Users\User\.cache\codex-runtimes\codex-primary-runtime\dependencies\node\bin\node.exe" training\run-eval.mjs
 & "C:\Users\User\.cache\codex-runtimes\codex-primary-runtime\dependencies\node\bin\node.exe" training\run-phase-4-expanded-eval.mjs
 & "C:\Users\User\.cache\codex-runtimes\codex-primary-runtime\dependencies\node\bin\node.exe" training\run-canon-retrieval-eval.mjs
+& "C:\Users\User\.cache\codex-runtimes\codex-primary-runtime\dependencies\node\bin\node.exe" training\run-critic-reflection-eval.mjs
 & "C:\Users\User\.cache\codex-runtimes\codex-primary-runtime\dependencies\node\bin\node.exe" training\run-conversation-lab.mjs
 & "C:\Users\User\.cache\codex-runtimes\codex-primary-runtime\dependencies\node\bin\node.exe" adapters\nexuslink\run-probe.mjs
 ```
@@ -105,3 +109,13 @@ Phase 6 canon retrieval lab:
 - `npm run eval:canon`
 
 Canon retrieval answers only when a reviewed source card is matched. Unsupported or unapproved claims abstain instead of inventing lore.
+
+Phase 7 critic and reflection loop:
+
+- `docs/PHASE_7_CRITIC_REFLECTION_LOOP_REPORT.md`
+- `core/criticPolicy.js`
+- `training/critic-reflection/critic-reflection-cases.json`
+- `npm run test:critic`
+- `npm run eval:critic`
+
+The critic can revise unsafe gameplay framing, false intimacy, template-like replies, and canon answers without reviewed citations. It exposes issue codes only, not chain-of-thought.
