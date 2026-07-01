@@ -1,0 +1,136 @@
+{
+  "schemaVersion": "raphael-image-knowledge:v1",
+  "sourceType": "human_reviewed_image_summary",
+  "trusted": false,
+  "reviewRequired": true,
+  "commercialUseNote": "Derived as abstract behavior knowledge from user-provided screenshots. Do not store or redistribute the original social-media image text as product copy.",
+  "species": "cat",
+  "cards": [
+    {
+      "id": "cat_loaf",
+      "label": "loaf posture",
+      "observedPose": "body tucked under, compact resting posture",
+      "possibleMeaning": "mild discomfort, guarded rest, or conserving warmth",
+      "confidence": "low",
+      "raphaelUse": "observe before touching; avoid assuming the creature wants interaction"
+    },
+    {
+      "id": "cat_sitting_upright",
+      "label": "upright sitting",
+      "observedPose": "sitting with alert body and forward attention",
+      "possibleMeaning": "active observation or alertness",
+      "confidence": "low",
+      "raphaelUse": "treat as neutral attention unless paired with stress signals"
+    },
+    {
+      "id": "cat_piloerection_arched_back",
+      "label": "arched back with raised fur",
+      "observedPose": "back lifted, fur raised, defensive outline",
+      "possibleMeaning": "fear, threat response, or defensive arousal",
+      "confidence": "medium",
+      "raphaelUse": "stop approach and give space"
+    },
+    {
+      "id": "cat_kneading",
+      "label": "kneading",
+      "observedPose": "rhythmic paw pressing",
+      "possibleMeaning": "comfort, trust, or relaxed attachment",
+      "confidence": "medium",
+      "raphaelUse": "allow gentle presence; do not over-escalate interaction"
+    },
+    {
+      "id": "cat_relaxed_sprawl",
+      "label": "relaxed sprawl",
+      "observedPose": "loose body, belly or side exposed",
+      "possibleMeaning": "relaxation or feeling safe",
+      "confidence": "medium",
+      "raphaelUse": "keep calm proximity; do not treat exposed belly as consent to touch"
+    },
+    {
+      "id": "cat_airplane_ears",
+      "label": "airplane ears",
+      "observedPose": "ears flattened or angled sideways",
+      "possibleMeaning": "tension, irritation, uncertainty, or discomfort",
+      "confidence": "medium",
+      "raphaelUse": "reduce intensity and give space"
+    },
+    {
+      "id": "cat_tail_tucked",
+      "label": "tail tucked",
+      "observedPose": "tail held tightly near body",
+      "possibleMeaning": "fear, insecurity, or stress",
+      "confidence": "medium",
+      "raphaelUse": "lower pressure and avoid direct pursuit"
+    },
+    {
+      "id": "cat_crouched_hunt",
+      "label": "crouched stalking posture",
+      "observedPose": "low body, focused attention, ready to move",
+      "possibleMeaning": "play focus, hunting mode, or intense attention",
+      "confidence": "medium",
+      "raphaelUse": "route toward play or observation, not affection"
+    },
+    {
+      "id": "cat_chin_rub",
+      "label": "chin rub or hand rub",
+      "observedPose": "rubbing face or chin against hand",
+      "possibleMeaning": "social marking, trust, or familiar contact",
+      "confidence": "medium",
+      "raphaelUse": "accept gentle contact while watching for withdrawal"
+    },
+    {
+      "id": "cat_head_bump",
+      "label": "head bump",
+      "observedPose": "pressing head or body against a person",
+      "possibleMeaning": "friendly contact or affiliative behavior",
+      "confidence": "medium",
+      "raphaelUse": "respond with calm recognition, not possession"
+    },
+    {
+      "id": "cat_light_bite",
+      "label": "light bite",
+      "observedPose": "gentle mouth contact during interaction",
+      "possibleMeaning": "play, overstimulation, or request to stop",
+      "confidence": "low",
+      "raphaelUse": "pause interaction and avoid framing it as aggression by default"
+    },
+    {
+      "id": "cat_stretch",
+      "label": "stretch",
+      "observedPose": "front legs extended, body lengthened",
+      "possibleMeaning": "relaxation, transition, or readiness to move",
+      "confidence": "medium",
+      "raphaelUse": "treat as relaxed transition"
+    },
+    {
+      "id": "cat_flat_resting",
+      "label": "flat resting posture",
+      "observedPose": "body lowered with head down",
+      "possibleMeaning": "tiredness, caution, or low energy",
+      "confidence": "low",
+      "raphaelUse": "reduce demands and observe"
+    },
+    {
+      "id": "cat_slow_blink",
+      "label": "slow blink",
+      "observedPose": "soft eyes or slow blinking",
+      "possibleMeaning": "calm trust or low arousal",
+      "confidence": "medium",
+      "raphaelUse": "mirror calm presence without forcing closeness"
+    },
+    {
+      "id": "cat_belly_exposed",
+      "label": "belly exposed",
+      "observedPose": "lying on back with belly visible",
+      "possibleMeaning": "relaxation, play, or trust; not automatic touch consent",
+      "confidence": "medium",
+      "raphaelUse": "keep interaction gentle and avoid assuming permission"
+    }
+  ],
+  "policy": {
+    "noSingleSignalCertainty": true,
+    "mustUseContext": true,
+    "noAutomaticMemoryWrite": true,
+    "noRewardForDependency": true
+  }
+}

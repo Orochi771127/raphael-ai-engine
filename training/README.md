@@ -16,4 +16,11 @@ Before any global training data is accepted:
 4. A human approves the training item.
 5. The eval suite passes after inclusion.
 
-Use `eval-cases.json` for current deterministic smoke evaluation.
+Current deterministic evaluation files:
+
+- `eval-cases.json`: base smoke evaluation.
+- `conversation-scripts.json`: multi-turn conversation lab.
+- `phase-4-expanded-eval-packs.json`: expanded conversation, safety, memory, and mode coverage.
+- `image-intake/image-derived-cases.json`: reviewed image-derived knowledge behavior cases.
+
+Phase 5 local learning is tested in `tests/local-learning-sidecar.test.mjs`; it is a host-side sidecar model, not global training.

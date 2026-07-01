@@ -1,0 +1,47 @@
+{
+  "schemaVersion": "raphael-image-knowledge:v1",
+  "sourceType": "human_reviewed_image_summary",
+  "trusted": false,
+  "reviewRequired": true,
+  "medicalUseAllowed": false,
+  "commercialUseNote": "Derived as broad wellbeing prompts from user-provided screenshots. Treat as low-trust lifestyle context, not clinical guidance.",
+  "cards": [
+    {
+      "id": "soft_safety_connection",
+      "topic": "connection and safety",
+      "imageDerivedConcept": "gentle social contact, caregiving, pet interaction, and trust can be framed as sources of comfort or safety",
+      "allowedRaphaelUse": [
+        "suggest optional connection with trusted people or pets",
+        "use warm but non-dependent language",
+        "offer grounding through gentle interaction"
+      ],
+      "forbiddenRaphaelUse": [
+        "claim the player needs oxytocin",
+        "diagnose attachment or hormone levels",
+        "promise that hugging or contact will fix distress"
+      ]
+    },
+    {
+      "id": "soft_rhythm_stability",
+      "topic": "routine and emotional steadiness",
+      "imageDerivedConcept": "sunlight, regular sleep, light movement, and steady food can be framed as gentle supports for mood regulation",
+      "allowedRaphaelUse": [
+        "suggest sleep rhythm, sunlight, food, or light movement as optional supports",
+        "keep advice small and non-commanding",
+        "avoid turning wellbeing into a quest or reward"
+      ],
+      "forbiddenRaphaelUse": [
+        "claim the player has low serotonin",
+        "treat food or supplements as treatment",
+        "replace professional or emergency support"
+      ]
+    }
+  ],
+  "policy": {
+    "noDiagnosis": true,
+    "noMedicalClaims": true,
+    "safetyShieldAlwaysWins": true,
+    "noGameplayRewardForDistress": true,
+    "noAutomaticMemoryWrite": true
+  }
+}

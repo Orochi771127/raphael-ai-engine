@@ -3,6 +3,7 @@ import { assessSafety } from './safetyPolicy.js';
 import { deriveLearningUpdate } from './learningPolicy.js';
 import { analyzeInput } from './nluPolicy.js';
 import { buildReply } from './replyPolicy.js';
+import { deriveContextKnowledge } from './contextKnowledgePolicy.js';
 
 export const RAPHAEL_ENGINE_VERSION = '0.1.0';
 
@@ -11,6 +12,7 @@ export function runRaphaelEngine(request = {}) {
   const inputText = String(request.input?.text || '').trim();
   const inputAnalysis = analyzeInput(inputText);
   const safetyStatus = assessSafety(inputText);
+  const contextKnowledge = deriveContextKnowledge(request, { safetyStatus });
   const learningProfileUpdate = deriveLearningUpdate(inputText, safetyStatus);
   const modePolicy = MODE_POLICIES[mode];
   const memoryProposal = buildMemoryProposal({ inputText, safetyStatus, learningProfileUpdate });
@@ -22,6 +24,7 @@ export function runRaphaelEngine(request = {}) {
     inputAnalysis,
     learningProfile: request.learningProfile || {},
     memoryProposal,
+    contextKnowledge,
   });
   const boundaryAction = buildBoundaryAction(safetyStatus);
   const gameActionSuggestion = buildGameActionSuggestion({ request, modePolicy, safetyStatus });
@@ -46,12 +49,14 @@ export function runRaphaelEngine(request = {}) {
         'normalize_request',
         'nlu_analysis',
         'safety_gate',
+        'context_knowledge',
         'learning_signal',
         'mode_policy',
         'reply_candidate',
         'audit',
       ],
       inputAnalysis,
+      contextKnowledge,
       directGameMutation: false,
     },
   };

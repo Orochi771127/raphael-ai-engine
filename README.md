@@ -24,6 +24,8 @@ Current status: `v0.1.0` contract-first mock engine.
 
 ```bash
 node tests/engine-contract.test.mjs
+node tests/image-derived-knowledge.test.mjs
+node tests/local-learning-sidecar.test.mjs
 node training/run-eval.mjs
 node training/run-phase-4-expanded-eval.mjs
 node training/run-conversation-lab.mjs
@@ -34,6 +36,8 @@ On the Codex Windows workspace, use the bundled Node runtime if `node` is not on
 
 ```powershell
 & "C:\Users\User\.cache\codex-runtimes\codex-primary-runtime\dependencies\node\bin\node.exe" tests\engine-contract.test.mjs
+& "C:\Users\User\.cache\codex-runtimes\codex-primary-runtime\dependencies\node\bin\node.exe" tests\image-derived-knowledge.test.mjs
+& "C:\Users\User\.cache\codex-runtimes\codex-primary-runtime\dependencies\node\bin\node.exe" tests\local-learning-sidecar.test.mjs
 & "C:\Users\User\.cache\codex-runtimes\codex-primary-runtime\dependencies\node\bin\node.exe" training\run-eval.mjs
 & "C:\Users\User\.cache\codex-runtimes\codex-primary-runtime\dependencies\node\bin\node.exe" training\run-phase-4-expanded-eval.mjs
 & "C:\Users\User\.cache\codex-runtimes\codex-primary-runtime\dependencies\node\bin\node.exe" training\run-conversation-lab.mjs
@@ -78,3 +82,12 @@ Phase 4 dataset expansion status:
 - `docs/PHASE_4_DATASET_EXPANSION_REPORT.md`
 - `training/phase-4-expanded-eval-packs.json`
 - `npm run eval:phase4`
+
+Image knowledge intake and Phase 5 local learning:
+
+- `docs/IMAGE_KNOWLEDGE_INTAKE_REPORT.md`
+- `docs/PHASE_5_LOCAL_LEARNING_SIDECAR_REPORT.md`
+- `corpus/creature-body-language.json`
+- `corpus/wellbeing-soft-context.json`
+- `npm run test:image-knowledge`
+- `npm run test:local-learning`

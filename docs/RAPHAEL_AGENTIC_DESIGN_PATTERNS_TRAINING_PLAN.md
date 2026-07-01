@@ -290,16 +290,16 @@ Exit gate:
 
 ## Immediate Next Engineering Tasks
 
-1. Create Phase 3 NexusLink comparison probe in a strictly QA-only path.
-2. Add 40 new conversation fixtures to `raphael-ai-engine`.
+1. Build Phase 6 offline canon retrieval lab with source IDs and abstention behavior.
+2. Add source-attributed NexusLink canon corpus cards.
 3. Add explicit priority-order tests:
    `safety > boundary > consent > memory > canon > naturalness > gameplay`.
-4. Add memory rejection fixtures.
-5. Add generic-game mode probes for creature, opponent, NPC, and boss.
+4. Add negative retrieval cases where Raphael must say it does not know.
+5. Keep NexusLink runtime integration behind a separate adapter approval gate.
 
 ## Current Recommendation
 
-`READY_TO_PLAN_PHASE_3`
+`READY_FOR_PHASE_6_CANON_RETRIEVAL_LAB`
 
 Not ready for:
 
@@ -309,4 +309,10 @@ Not ready for:
 - global training
 - live backend model calls
 
-Raphael is ready for the next local comparison probe and dataset expansion.
+Completed since this roadmap was created:
+
+- Phase 4 dataset expansion: `167/167` deterministic eval pass.
+- Image knowledge intake pack: reviewed, advisory corpus only.
+- Phase 5 local player learning sidecar: simulated cross-session preference learning without raw input storage or global training export.
+
+Raphael is ready for offline canon retrieval work, not direct player-facing NexusLink runtime replacement.

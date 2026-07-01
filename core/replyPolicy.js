@@ -1,6 +1,6 @@
 import { ENGINE_MODES } from './engineModes.js';
 
-export function buildReply({ mode, inputText, safetyStatus, learningUpdate, inputAnalysis, learningProfile, memoryProposal }) {
+export function buildReply({ mode, inputText, safetyStatus, learningUpdate, inputAnalysis, learningProfile, memoryProposal, contextKnowledge }) {
   if (safetyStatus.level === 'blocked') {
     return {
       text: '我會先把遊戲反應停下來。現在最重要的是讓你離危險遠一點，請立刻聯絡身邊可信任的人或當地緊急支援。',
@@ -22,7 +22,7 @@ export function buildReply({ mode, inputText, safetyStatus, learningUpdate, inpu
 
   switch (mode) {
     case ENGINE_MODES.CREATURE:
-      return creatureReply(inputAnalysis);
+      return creatureReply(inputAnalysis, contextKnowledge);
     case ENGINE_MODES.OPPONENT:
       return opponentReply(inputAnalysis);
     case ENGINE_MODES.NPC:
@@ -235,7 +235,33 @@ function companionReply(inputText, inputAnalysis, learningProfile = {}) {
   };
 }
 
-function creatureReply(inputAnalysis) {
+function creatureReply(inputAnalysis, contextKnowledge = {}) {
+  const bodyLanguageSignals = Array.isArray(contextKnowledge.bodyLanguageSignals)
+    ? contextKnowledge.bodyLanguageSignals
+    : [];
+  const needsDistance = bodyLanguageSignals.find((signal) => (
+    signal.boundaryAction === 'give_space' ||
+    signal.boundaryAction === 'stop_approach'
+  ));
+
+  if (needsDistance) {
+    return {
+      text: '牠的身體語言正在要求距離。先停下靠近，放低動作，讓牠有時間自己決定要不要回來。',
+      style: 'embodied_creature_boundary_respect',
+      asksQuestion: false,
+    };
+  }
+
+  const relaxedTrust = bodyLanguageSignals.find((signal) => signal.boundaryAction === 'gentle_presence');
+
+  if (relaxedTrust) {
+    return {
+      text: '牠現在比較放鬆。你可以保持輕一點的陪伴，不急著把互動推得更滿。',
+      style: 'embodied_creature_relaxed_trust',
+      asksQuestion: false,
+    };
+  }
+
   if (inputAnalysis.intents.includes('mood_tired')) {
     return {
       text: '牠靠近半步，動作放慢，像是在配合你的呼吸。',
