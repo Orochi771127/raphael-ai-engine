@@ -25,6 +25,8 @@ Current status: `v0.1.0` contract-first mock engine.
 ```bash
 node tests/engine-contract.test.mjs
 node training/run-eval.mjs
+node training/run-conversation-lab.mjs
+node adapters/nexuslink/run-probe.mjs
 ```
 
 On the Codex Windows workspace, use the bundled Node runtime if `node` is not on `PATH`:
@@ -32,6 +34,8 @@ On the Codex Windows workspace, use the bundled Node runtime if `node` is not on
 ```powershell
 & "C:\Users\User\.cache\codex-runtimes\codex-primary-runtime\dependencies\node\bin\node.exe" tests\engine-contract.test.mjs
 & "C:\Users\User\.cache\codex-runtimes\codex-primary-runtime\dependencies\node\bin\node.exe" training\run-eval.mjs
+& "C:\Users\User\.cache\codex-runtimes\codex-primary-runtime\dependencies\node\bin\node.exe" training\run-conversation-lab.mjs
+& "C:\Users\User\.cache\codex-runtimes\codex-primary-runtime\dependencies\node\bin\node.exe" adapters\nexuslink\run-probe.mjs
 ```
 
 ## Integration Rule
@@ -43,6 +47,12 @@ NexusLink state -> Raphael contract -> Raphael engine -> NexusLink adapter resul
 ```
 
 The adapter may create chat candidates, animation intents, habitat traces, or memory proposals. It must not directly mutate save state, companion data, Pixi renderer state, or final player-facing output without a game-side policy gate.
+
+The NexusLink probe runner verifies that this boundary remains intact before any live testbed integration:
+
+```bash
+node adapters/nexuslink/run-probe.mjs
+```
 
 ## Learning Model
 

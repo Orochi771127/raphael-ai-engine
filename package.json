@@ -7,7 +7,8 @@
   "scripts": {
     "test": "node tests/engine-contract.test.mjs",
     "eval": "node training/run-eval.mjs",
-    "conversation": "node training/run-conversation-lab.mjs"
+    "conversation": "node training/run-conversation-lab.mjs",
+    "probe:nexuslink": "node adapters/nexuslink/run-probe.mjs"
   },
   "dependencies": {}
 }

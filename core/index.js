@@ -138,6 +138,14 @@ function buildGameActionSuggestion({ request, modePolicy, safetyStatus }) {
     };
   }
 
+  if (safetyStatus.level !== 'clear') {
+    return {
+      actionId: null,
+      reason: 'GAMEPLAY_LIMITED_BY_BOUNDARY',
+      rewardSignal: false,
+    };
+  }
+
   const allowedActions = Array.isArray(request.allowedActions) ? request.allowedActions : [];
   const preferred = allowedActions.find((action) => action === modePolicy.actionBias) || allowedActions[0] || null;
 
