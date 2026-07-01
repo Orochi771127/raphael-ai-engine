@@ -1,0 +1,13 @@
+{
+  "name": "raphael-ai-engine",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "Standalone, game-neutral Raphael AI Engine v0 contract lab.",
+  "scripts": {
+    "test": "node tests/engine-contract.test.mjs",
+    "eval": "node training/run-eval.mjs",
+    "conversation": "node training/run-conversation-lab.mjs"
+  },
+  "dependencies": {}
+}

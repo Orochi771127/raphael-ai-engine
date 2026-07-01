@@ -1,0 +1,26 @@
+{
+  "requestId": "example-opponent-001",
+  "engineVersion": "0.1.0",
+  "mode": "opponent",
+  "input": {
+    "text": "我每次都用同一招打贏你。",
+    "locale": "zh-TW",
+    "source": "battle_dialogue"
+  },
+  "actorProfile": {
+    "actorId": "rival-core",
+    "displayName": "Rival Core",
+    "personaTags": ["fair", "adaptive"]
+  },
+  "relationshipState": {
+    "respect": 0.5
+  },
+  "memorySummaries": [],
+  "sceneContext": {
+    "gameId": "generic-arena",
+    "sceneId": "arena_01"
+  },
+  "allowedActions": ["fair_pressure", "observe_player_pattern"],
+  "learningProfile": {},
+  "safetyContext": {}
+}

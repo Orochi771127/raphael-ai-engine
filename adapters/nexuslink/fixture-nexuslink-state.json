@@ -1,0 +1,17 @@
+{
+  "state": {
+    "activeCompanionId": "greyshade-cat",
+    "currentSceneId": "moon_lake_camp",
+    "companionTrust": 0.42,
+    "companionCloseness": 0.35,
+    "habitatState": {
+      "mood": "quiet"
+    },
+    "memorySummaries": []
+  },
+  "companion": {
+    "id": "greyshade-cat",
+    "name": "灰影貓",
+    "personaTags": ["quiet", "boundary-aware"]
+  }
+}

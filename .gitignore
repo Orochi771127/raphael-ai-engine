@@ -1,0 +1,7 @@
+node_modules/
+.env
+.env.*
+.wrangler/
+coverage/
+*.log
+docs/reports/*.local.json

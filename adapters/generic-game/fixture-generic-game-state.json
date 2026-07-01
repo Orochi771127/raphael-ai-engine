@@ -1,0 +1,16 @@
+{
+  "actor": {
+    "id": "arena-rival",
+    "name": "Arena Rival",
+    "personaTags": ["fair", "adaptive"],
+    "relationshipState": {
+      "respect": 0.5
+    },
+    "memorySummaries": []
+  },
+  "world": {
+    "gameId": "generic-arena",
+    "sceneId": "arena_01",
+    "allowedActions": ["fair_pressure", "observe_player_pattern"]
+  }
+}

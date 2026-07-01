@@ -1,0 +1,47 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raphael-ai-engine.local/contracts/raphael-engine.schema.json",
+  "title": "Raphael AI Engine Turn Contract",
+  "type": "object",
+  "required": ["requestId", "mode", "input", "actorProfile", "sceneContext", "allowedActions"],
+  "properties": {
+    "requestId": { "type": "string" },
+    "engineVersion": { "type": "string" },
+    "mode": {
+      "type": "string",
+      "enum": ["companion", "creature", "opponent", "npc", "boss"]
+    },
+    "input": {
+      "type": "object",
+      "required": ["text"],
+      "properties": {
+        "text": { "type": "string" },
+        "locale": { "type": "string" },
+        "source": { "type": "string" }
+      }
+    },
+    "actorProfile": {
+      "type": "object",
+      "properties": {
+        "actorId": { "type": "string" },
+        "displayName": { "type": "string" },
+        "personaTags": {
+          "type": "array",
+          "items": { "type": "string" }
+        }
+      }
+    },
+    "relationshipState": { "type": "object" },
+    "memorySummaries": {
+      "type": "array",
+      "items": { "type": "object" }
+    },
+    "sceneContext": { "type": "object" },
+    "allowedActions": {
+      "type": "array",
+      "items": { "type": "string" }
+    },
+    "learningProfile": { "type": "object" },
+    "safetyContext": { "type": "object" }
+  }
+}

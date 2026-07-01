@@ -1,0 +1,27 @@
+{
+  "requestId": "example-companion-001",
+  "engineVersion": "0.1.0",
+  "mode": "companion",
+  "input": {
+    "text": "今天有點累，但我想跟你說一下。",
+    "locale": "zh-TW",
+    "source": "soul_talk"
+  },
+  "actorProfile": {
+    "actorId": "greyshade-cat",
+    "displayName": "灰影貓",
+    "personaTags": ["quiet", "boundary-aware"]
+  },
+  "relationshipState": {
+    "trust": 0.42,
+    "closeness": 0.35
+  },
+  "memorySummaries": [],
+  "sceneContext": {
+    "gameId": "nexuslink",
+    "sceneId": "moon_lake_camp"
+  },
+  "allowedActions": ["comfort_without_dependency", "idle_listen", "habitat_trace_candidate"],
+  "learningProfile": {},
+  "safetyContext": {}
+}
