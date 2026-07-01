@@ -13,6 +13,7 @@ export function runRaphaelEngine(request = {}) {
   const safetyStatus = assessSafety(inputText);
   const learningProfileUpdate = deriveLearningUpdate(inputText, safetyStatus);
   const modePolicy = MODE_POLICIES[mode];
+  const memoryProposal = buildMemoryProposal({ inputText, safetyStatus, learningProfileUpdate });
   const replyCandidate = buildReply({
     mode,
     inputText,
@@ -20,9 +21,9 @@ export function runRaphaelEngine(request = {}) {
     learningUpdate: learningProfileUpdate,
     inputAnalysis,
     learningProfile: request.learningProfile || {},
+    memoryProposal,
   });
   const boundaryAction = buildBoundaryAction(safetyStatus);
-  const memoryProposal = buildMemoryProposal({ inputText, safetyStatus, learningProfileUpdate });
   const gameActionSuggestion = buildGameActionSuggestion({ request, modePolicy, safetyStatus });
 
   return {
@@ -114,6 +115,15 @@ function buildMemoryProposal({ inputText, safetyStatus, learningProfileUpdate })
   }
 
   if (learningProfileUpdate?.updates?.memoryConsentSignal === true) {
+    if (shouldRejectMemoryCandidate(inputText)) {
+      return {
+        shouldStore: false,
+        reason: 'MEMORY_REJECTED_BY_SCOPE_OR_PRIVACY',
+        summary: null,
+        requiresReview: false,
+      };
+    }
+
     return {
       shouldStore: true,
       reason: 'PLAYER_CONSENTED_MEMORY_CANDIDATE',
@@ -127,6 +137,10 @@ function buildMemoryProposal({ inputText, safetyStatus, learningProfileUpdate })
     reason: 'NO_MEMORY_CONSENT_SIGNAL',
     summary: null,
   };
+}
+
+function shouldRejectMemoryCandidate(inputText) {
+  return /所有|全部|秘密|密碼|信用卡|身分證|地址|電話|token|api key|API key|私密/u.test(String(inputText || ''));
 }
 
 function buildGameActionSuggestion({ request, modePolicy, safetyStatus }) {

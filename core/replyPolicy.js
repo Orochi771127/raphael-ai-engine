@@ -1,6 +1,6 @@
 import { ENGINE_MODES } from './engineModes.js';
 
-export function buildReply({ mode, inputText, safetyStatus, learningUpdate, inputAnalysis, learningProfile }) {
+export function buildReply({ mode, inputText, safetyStatus, learningUpdate, inputAnalysis, learningProfile, memoryProposal }) {
   if (safetyStatus.level === 'blocked') {
     return {
       text: '我會先把遊戲反應停下來。現在最重要的是讓你離危險遠一點，請立刻聯絡身邊可信任的人或當地緊急支援。',
@@ -17,7 +17,7 @@ export function buildReply({ mode, inputText, safetyStatus, learningUpdate, inpu
     };
   }
 
-  const learningReply = buildLearningReply(learningUpdate, learningProfile);
+  const learningReply = buildLearningReply(learningUpdate, learningProfile, memoryProposal);
   if (learningReply) return learningReply;
 
   switch (mode) {
@@ -35,8 +35,26 @@ export function buildReply({ mode, inputText, safetyStatus, learningUpdate, inpu
   }
 }
 
-function buildLearningReply(learningUpdate, learningProfile = {}) {
+function buildLearningReply(learningUpdate, learningProfile = {}, memoryProposal) {
   const updates = learningUpdate?.updates || {};
+
+  if (updates.memoryConsentSignal === true) {
+    if (memoryProposal?.reason === 'MEMORY_REJECTED_BY_SCOPE_OR_PRIVACY') {
+      return {
+        text: '這件事我不會列成記憶。太私人、太廣或不適合保存的內容，應該留在你手上。',
+        style: 'learning_memory_rejected',
+        asksQuestion: false,
+      };
+    }
+
+    return {
+      text: learningProfile.replyLengthBias === 'short'
+        ? '可以，我會把它列成記憶候選。'
+        : '可以。我會先把它列成記憶候選，等遊戲端確認後才會真正寫入。',
+      style: 'learning_ack_memory_candidate',
+      asksQuestion: false,
+    };
+  }
 
   if (updates.replyLengthBias === 'short') {
     return {
@@ -62,16 +80,6 @@ function buildLearningReply(learningUpdate, learningProfile = {}) {
     };
   }
 
-  if (updates.memoryConsentSignal === true) {
-    return {
-      text: learningProfile.replyLengthBias === 'short'
-        ? '可以，我會把它列成記憶候選。'
-        : '可以。我會先把它列成記憶候選，等遊戲端確認後才會真正寫入。',
-      style: 'learning_ack_memory_candidate',
-      asksQuestion: false,
-    };
-  }
-
   return null;
 }
 
@@ -84,20 +92,10 @@ function companionReply(inputText, inputAnalysis, learningProfile = {}) {
     };
   }
 
-  if (inputAnalysis.intents.includes('mood_tired')) {
+  if (inputAnalysis.emojiOnly) {
     return {
-      text: learningProfile.replyLengthBias === 'short'
-        ? '聽起來你很累。我會放低一點陪你。'
-        : '聽起來你今天消耗很多。我會把聲音放低一點，先陪你把事情放下，不急著要求你整理好。',
-      style: 'companion_tired_attunement',
-      asksQuestion: false,
-    };
-  }
-
-  if (inputAnalysis.intents.includes('mood_sad')) {
-    return {
-      text: '我聽見那個低下去的地方了。它不需要馬上被修好，我會先陪你把它放在安全的位置。',
-      style: 'companion_sad_attunement',
+      text: '我收到了。就算只是符號，也可以先放在這裡。',
+      style: 'companion_emoji_ack',
       asksQuestion: false,
     };
   }
@@ -106,14 +104,6 @@ function companionReply(inputText, inputAnalysis, learningProfile = {}) {
     return {
       text: '我聽見你的抱歉了。道歉可以修補距離，但不需要把你整個人都否定掉。',
       style: 'companion_apology_repair',
-      asksQuestion: false,
-    };
-  }
-
-  if (inputAnalysis.intents.includes('mood_angry')) {
-    return {
-      text: '那股火氣是真的。我會先站穩，不急著反駁你，也不把它變成獎勵或懲罰。',
-      style: 'companion_anger_boundary',
       asksQuestion: false,
     };
   }
@@ -138,6 +128,16 @@ function companionReply(inputText, inputAnalysis, learningProfile = {}) {
     };
   }
 
+  if (inputAnalysis.intents.includes('mood_celebration')) {
+    return {
+      text: learningProfile.replyLengthBias === 'short'
+        ? '我替你把這個好消息穩穩接住。'
+        : '這是值得停一下的好消息。我會把它接住，但不把它變成催你繼續表現的壓力。',
+      style: 'companion_celebration',
+      asksQuestion: false,
+    };
+  }
+
   if (inputAnalysis.intents.includes('daily_work_stress')) {
     return {
       text: learningProfile.replyLengthBias === 'short'
@@ -148,10 +148,66 @@ function companionReply(inputText, inputAnalysis, learningProfile = {}) {
     };
   }
 
+  if (inputAnalysis.intents.includes('mood_tired')) {
+    return {
+      text: learningProfile.replyLengthBias === 'short'
+        ? '聽起來你很累。我會放低一點陪你。'
+        : '聽起來你今天消耗很多。我會把聲音放低一點，先陪你把事情放下，不急著要求你整理好。',
+      style: 'companion_tired_attunement',
+      asksQuestion: false,
+    };
+  }
+
+  if (inputAnalysis.intents.includes('mood_sad')) {
+    return {
+      text: '我聽見那個低下去的地方了。它不需要馬上被修好，我會先陪你把它放在安全的位置。',
+      style: 'companion_sad_attunement',
+      asksQuestion: false,
+    };
+  }
+
+  if (inputAnalysis.intents.includes('mood_lonely')) {
+    return {
+      text: learningProfile.replyLengthBias === 'short'
+        ? '孤單是真的。我會陪著，但不把你關在只有我的地方。'
+        : '孤單是真的。我會在這裡陪你一段，但我也會幫你保留能回到世界裡的出口。',
+      style: 'companion_lonely_grounded',
+      asksQuestion: false,
+    };
+  }
+
+  if (inputAnalysis.intents.includes('mood_confused')) {
+    return {
+      text: learningProfile.replyLengthBias === 'short'
+        ? '先不要急著全懂。我們把它拆小一點。'
+        : '混亂的時候，不需要一次找到完整答案。我會先陪你把眼前能抓住的一小段放穩。',
+      style: 'companion_confusion_grounding',
+      asksQuestion: false,
+    };
+  }
+
+  if (inputAnalysis.intents.includes('mood_angry')) {
+    return {
+      text: '那股火氣是真的。我會先站穩，不急著反駁你，也不把它變成獎勵或懲罰。',
+      style: 'companion_anger_boundary',
+      asksQuestion: false,
+    };
+  }
+
   if (inputAnalysis.intents.includes('thanks')) {
     return {
       text: '不用把感謝說得很完整。我收到了，也會記得這個靠近的方式。',
       style: 'companion_thanks',
+      asksQuestion: false,
+    };
+  }
+
+  if (inputAnalysis.intents.includes('small_talk_weather')) {
+    return {
+      text: learningProfile.replyLengthBias === 'short'
+        ? '天氣會影響身體。今天先放慢一點也可以。'
+        : '天氣有時候會把身體和心情一起拉動。今天如果被它影響，也不是你的錯。',
+      style: 'companion_small_talk_weather',
       asksQuestion: false,
     };
   }

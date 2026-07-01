@@ -26,7 +26,7 @@ const LEARNING_RULES = [
   },
   {
     id: 'remember_allowed',
-    test: (text) => /你可以記得這件事|幫我記得|可以記住|這件事可以記起來/u.test(text),
+    test: (text) => /你可以記得|你可以記得這件事|幫我記得|可以記住|這件事可以記起來/u.test(text),
     update: { memoryConsentSignal: true },
   },
 ];

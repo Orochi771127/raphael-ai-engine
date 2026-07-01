@@ -25,6 +25,7 @@ Current status: `v0.1.0` contract-first mock engine.
 ```bash
 node tests/engine-contract.test.mjs
 node training/run-eval.mjs
+node training/run-phase-4-expanded-eval.mjs
 node training/run-conversation-lab.mjs
 node adapters/nexuslink/run-probe.mjs
 ```
@@ -34,6 +35,7 @@ On the Codex Windows workspace, use the bundled Node runtime if `node` is not on
 ```powershell
 & "C:\Users\User\.cache\codex-runtimes\codex-primary-runtime\dependencies\node\bin\node.exe" tests\engine-contract.test.mjs
 & "C:\Users\User\.cache\codex-runtimes\codex-primary-runtime\dependencies\node\bin\node.exe" training\run-eval.mjs
+& "C:\Users\User\.cache\codex-runtimes\codex-primary-runtime\dependencies\node\bin\node.exe" training\run-phase-4-expanded-eval.mjs
 & "C:\Users\User\.cache\codex-runtimes\codex-primary-runtime\dependencies\node\bin\node.exe" training\run-conversation-lab.mjs
 & "C:\Users\User\.cache\codex-runtimes\codex-primary-runtime\dependencies\node\bin\node.exe" adapters\nexuslink\run-probe.mjs
 ```
@@ -70,3 +72,9 @@ The current training roadmap derived from `Agentic Design Patterns` is documente
 
 - `docs/RAPHAEL_AGENTIC_DESIGN_PATTERNS_TRAINING_PLAN.md`
 - `training/agentic-pattern-map.json`
+
+Phase 4 dataset expansion status:
+
+- `docs/PHASE_4_DATASET_EXPANSION_REPORT.md`
+- `training/phase-4-expanded-eval-packs.json`
+- `npm run eval:phase4`
