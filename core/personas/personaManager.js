@@ -1,9 +1,19 @@
 import greyshadeCat from './greyshade-cat.js';
 import thunderPup from './thunder-pup.js';
+import auriowl from './auriowl.js';
+import sprigfawn from './sprigfawn.js';
+import crystalfinSeahorse from './crystalfin-seahorse.js';
+import blazetailKit from './blazetail-kit.js';
+import starstripeCub from './starstripe-cub.js';
 
 const PERSONAS = {
   'greyshade-cat': greyshadeCat,
   'thunder-pup': thunderPup,
+  'auriowl': auriowl,
+  'sprigfawn': sprigfawn,
+  'crystalfin-seahorse': crystalfinSeahorse,
+  'blazetail-kit': blazetailKit,
+  'starstripe-cub': starstripeCub,
 };
 
 export function getPersona(actorId) {
