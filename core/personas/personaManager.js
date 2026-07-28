@@ -9,6 +9,11 @@ import wavecub from './wavecub.js';
 import starflamePhoenix from './starflame-phoenix.js';
 import starFoal from './star-foal.js';
 import goldensparkWyrm from './goldenspark-wyrm.js';
+import flameFlicker from './flame-flicker.js';
+import iceTalon from './ice-talon.js';
+import stoneShard from './stone-shard.js';
+import vineTwist from './vine-twist.js';
+import crystalRabbit from './crystal-rabbit.js';
 
 const PERSONAS = {
   'greyshade-cat': greyshadeCat,
@@ -22,6 +27,11 @@ const PERSONAS = {
   'starflame-phoenix': starflamePhoenix,
   'star-foal': starFoal,
   'goldenspark-wyrm': goldensparkWyrm,
+  'flame-flicker': flameFlicker,
+  'ice-talon': iceTalon,
+  'stone-shard': stoneShard,
+  'vine-twist': vineTwist,
+  'crystal-rabbit': crystalRabbit,
 };
 
 export function getPersona(actorId) {
