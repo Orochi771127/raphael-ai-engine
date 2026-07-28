@@ -42,6 +42,7 @@
       "items": { "type": "string" }
     },
     "learningProfile": { "type": "object" },
-    "safetyContext": { "type": "object" }
+    "safetyContext": { "type": "object" },
+    "internalState": { "type": "object" }
   }
 }

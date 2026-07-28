@@ -1,6 +1,6 @@
 {
   "baseState": {
-    "activeCompanionId": "greyshade-cat",
+    "activeCompanionId": "unknown-actor",
     "currentSceneId": "moon_lake_camp",
     "companionTrust": 0.42,
     "companionCloseness": 0.35,
@@ -19,8 +19,8 @@
     }
   },
   "companion": {
-    "id": "greyshade-cat",
-    "name": "灰影貓",
+    "id": "unknown-actor",
+    "name": "未知測試角色",
     "personaTags": ["quiet", "boundary-aware"]
   },
   "cases": [

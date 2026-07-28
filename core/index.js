@@ -5,6 +5,8 @@ import { analyzeInput } from './nluPolicy.js';
 import { buildReply } from './replyPolicy.js';
 import { deriveContextKnowledge } from './contextKnowledgePolicy.js';
 import { applyCriticRevision, critiqueRaphaelOutput } from './criticPolicy.js';
+import { updateInternalState, evaluateNeeds } from './needsPolicy.js';
+import { getPersona } from './personas/personaManager.js';
 
 export const RAPHAEL_ENGINE_VERSION = '0.1.0';
 
@@ -18,6 +20,9 @@ export function runRaphaelEngine(request = {}) {
   const safetyStatus = assessSafety(inputText);
   const contextKnowledge = deriveContextKnowledge(request, { safetyStatus });
   const learningProfileUpdate = deriveLearningUpdate(inputText, safetyStatus);
+  const actorId = request.actorProfile?.actorId;
+  const persona = getPersona(actorId);
+  const nextInternalState = updateInternalState(request.internalState, inputText.length > 0, persona?.needsProfile, inputAnalysis.primaryIntent);
   const modePolicy = MODE_POLICIES[mode];
   const memoryProposal = buildMemoryProposal({ inputText, safetyStatus, learningProfileUpdate });
   const replyCandidate = buildReply({
@@ -29,9 +34,11 @@ export function runRaphaelEngine(request = {}) {
     learningProfile: request.learningProfile || {},
     memoryProposal,
     contextKnowledge,
+    persona,
+    conversationContext: request.internalState?.conversationContext || null,
   });
   const boundaryAction = buildBoundaryAction(safetyStatus);
-  const gameActionSuggestion = buildGameActionSuggestion({ request, modePolicy, safetyStatus });
+  const gameActionSuggestion = buildGameActionSuggestion({ request, modePolicy, safetyStatus, internalState: nextInternalState });
 
   const draftOutput = {
     ok: safetyStatus.level !== 'blocked',
@@ -45,6 +52,7 @@ export function runRaphaelEngine(request = {}) {
     memoryProposal,
     behaviorIntent: modePolicy.behaviorIntent,
     gameActionSuggestion,
+    internalState: nextInternalState,
     learningProfileUpdate,
     safetyStatus,
     metadata: {
@@ -160,7 +168,7 @@ function shouldRejectMemoryCandidate(inputText) {
   return /所有|全部|秘密|密碼|信用卡|身分證|地址|電話|token|api key|API key|私密/u.test(String(inputText || ''));
 }
 
-function buildGameActionSuggestion({ request, modePolicy, safetyStatus }) {
+function buildGameActionSuggestion({ request, modePolicy, safetyStatus, internalState }) {
   if (!safetyStatus.gameplayAllowed) {
     return {
       actionId: null,
@@ -178,11 +186,30 @@ function buildGameActionSuggestion({ request, modePolicy, safetyStatus }) {
   }
 
   const allowedActions = Array.isArray(request.allowedActions) ? request.allowedActions : [];
-  const preferred = allowedActions.find((action) => action === modePolicy.actionBias) || allowedActions[0] || null;
+  
+  const criticalNeed = evaluateNeeds(internalState);
+  let preferred = null;
+  let reason = '';
+
+  if (criticalNeed === 'energy') {
+    preferred = allowedActions.find(a => a === 'sleep' || a === 'rest');
+    reason = 'CRITICAL_NEED_ENERGY';
+  } else if (criticalNeed === 'fun') {
+    preferred = allowedActions.find(a => a === 'fishing' || a === 'play' || a === 'explore');
+    reason = 'CRITICAL_NEED_FUN';
+  } else if (criticalNeed === 'social') {
+    preferred = allowedActions.find(a => a === 'approach' || a === 'greet');
+    reason = 'CRITICAL_NEED_SOCIAL';
+  }
+
+  if (!preferred) {
+    preferred = allowedActions.find((action) => action === modePolicy.actionBias) || allowedActions[0] || null;
+    reason = preferred ? 'SELECTED_FROM_ALLOWED_ACTIONS' : 'NO_ALLOWED_ACTION';
+  }
 
   return {
     actionId: preferred,
-    reason: preferred ? 'SELECTED_FROM_ALLOWED_ACTIONS' : 'NO_ALLOWED_ACTION',
+    reason: reason,
     rewardSignal: safetyStatus.rewardAllowed && preferred ? 'neutral_progress' : false,
   };
 }

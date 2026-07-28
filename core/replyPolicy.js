@@ -1,6 +1,7 @@
 import { ENGINE_MODES } from './engineModes.js';
+import { generatePersonaReply } from './personas/personaManager.js';
 
-export function buildReply({ mode, inputText, safetyStatus, learningUpdate, inputAnalysis, learningProfile, memoryProposal, contextKnowledge }) {
+export function buildReply({ mode, inputText, safetyStatus, learningUpdate, inputAnalysis, learningProfile, memoryProposal, contextKnowledge, persona, conversationContext }) {
   if (safetyStatus.level === 'blocked') {
     return {
       text: '我會先把遊戲反應停下來。現在最重要的是讓你離危險遠一點，請立刻聯絡身邊可信任的人或當地緊急支援。',
@@ -20,6 +21,17 @@ export function buildReply({ mode, inputText, safetyStatus, learningUpdate, inpu
   const learningReply = buildLearningReply(learningUpdate, learningProfile, memoryProposal);
   if (learningReply) return learningReply;
 
+  // 1. Try to get a persona-specific reply first
+  const personaReplyText = generatePersonaReply(persona, inputAnalysis?.intents, conversationContext);
+  if (personaReplyText) {
+    return {
+      text: personaReplyText,
+      style: `persona_${persona.actorId}`,
+      asksQuestion: false,
+    };
+  }
+
+  // 2. Fallback to generic mode replies
   switch (mode) {
     case ENGINE_MODES.CREATURE:
       return creatureReply(inputAnalysis, contextKnowledge);
