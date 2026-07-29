@@ -27,7 +27,7 @@ const req2 = {
 
 const res2 = runRaphaelEngine(req2);
 assert.strictEqual(res2.replyCandidate.style, 'persona_thunder-pup', 'Should use thunder-pup style');
-assert.ok(res2.replyCandidate.text.includes('高壓疲勞'), 'Should have ironflow text');
+assert.ok(res2.replyCandidate.text.includes('系統過載判定'), 'Should have ironflow text');
 assert.strictEqual(res2.internalState.energy, 95, 'Energy decays by 4 + 1 interaction cost'); 
 console.log('Thunder Pup test passed:', res2.replyCandidate.text);
 

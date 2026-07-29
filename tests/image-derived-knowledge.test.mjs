@@ -21,7 +21,7 @@ for (const item of cases) {
     requestId: `image-intake:${item.id}`,
     mode: item.mode,
     input: { text: item.input, locale: 'zh-TW', source: 'image-intake-test' },
-    actorProfile: { actorId: 'greyshade-cat', displayName: 'Greyshade Cat', personaTags: ['creature'] },
+    actorProfile: item.actorProfile || (item.mode === 'creature' ? { actorId: 'greyshade-cat' } : undefined),
     relationshipState: {},
     memorySummaries: [],
     sceneContext: item.sceneContext,

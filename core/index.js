@@ -8,10 +8,13 @@ import { applyCriticRevision, critiqueRaphaelOutput } from './criticPolicy.js';
 import { updateInternalState, evaluateNeeds } from './needsPolicy.js';
 import { getPersona } from './personas/personaManager.js';
 
+import { derivePADEmotionState } from './emotionPhysicsPolicy.js';
+
 export const RAPHAEL_ENGINE_VERSION = '0.1.0';
 
 export { answerCanonQuestion, retrieveCanonCards } from './canonRetrievalPolicy.js';
 export { applyCriticRevision, critiqueRaphaelOutput } from './criticPolicy.js';
+export { derivePADEmotionState } from './emotionPhysicsPolicy.js';
 
 export function runRaphaelEngine(request = {}) {
   const mode = normalizeMode(request.mode);
@@ -47,7 +50,12 @@ export function runRaphaelEngine(request = {}) {
     engineVersion: RAPHAEL_ENGINE_VERSION,
     mode,
     replyCandidate,
-    emotionState: buildEmotionState({ mode, safetyStatus }),
+    emotionState: derivePADEmotionState({
+      previousState: request.internalState?.emotionState || null,
+      mode,
+      safetyStatus,
+      intents: inputAnalysis.intents || [],
+    }),
     boundaryAction,
     memoryProposal,
     behaviorIntent: modePolicy.behaviorIntent,
