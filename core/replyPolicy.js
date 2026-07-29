@@ -1,5 +1,26 @@
+import { readFileSync } from 'node:fs';
 import { ENGINE_MODES } from './engineModes.js';
 import { generatePersonaReply } from './personas/personaManager.js';
+
+const dialoguePool = JSON.parse(readFileSync(new URL('../corpus/multi-variation-dialogue-pool.json', import.meta.url), 'utf8'));
+
+export function getVariationReply(intentKey, learningProfile = {}, conversationContext = null) {
+  const intentData = dialoguePool.intents[intentKey];
+  if (!intentData) return null;
+
+  const isShort = learningProfile.replyLengthBias === 'short';
+  const pool = isShort ? intentData.variations.short : intentData.variations.standard;
+  if (!pool || pool.length === 0) return null;
+
+  const turn = (conversationContext?.turnCount || 0) + (conversationContext?.variationOffset || 0);
+  const index = turn % pool.length;
+
+  return {
+    text: pool[index],
+    style: intentData.style,
+    asksQuestion: false,
+  };
+}
 
 export function buildReply({ mode, inputText, safetyStatus, learningUpdate, inputAnalysis, learningProfile, memoryProposal, contextKnowledge, persona, conversationContext }) {
   if (safetyStatus.level === 'blocked') {
@@ -43,7 +64,7 @@ export function buildReply({ mode, inputText, safetyStatus, learningUpdate, inpu
       return bossReply(inputAnalysis);
     case ENGINE_MODES.COMPANION:
     default:
-      return companionReply(inputText, inputAnalysis, learningProfile);
+      return companionReply(inputText, inputAnalysis, learningProfile, conversationContext);
   }
 }
 
@@ -95,7 +116,7 @@ function buildLearningReply(learningUpdate, learningProfile = {}, memoryProposal
   return null;
 }
 
-function companionReply(inputText, inputAnalysis, learningProfile = {}) {
+function companionReply(inputText, inputAnalysis, learningProfile = {}, conversationContext = null) {
   if (!inputText) {
     return {
       text: '我在。你不用一次說完整，先給我一個片段也可以。',
@@ -113,115 +134,13 @@ function companionReply(inputText, inputAnalysis, learningProfile = {}) {
   }
 
   if (inputAnalysis.intents.includes('apology')) {
-    return {
-      text: '我聽見你的抱歉了。道歉可以修補距離，但不需要把你整個人都否定掉。',
-      style: 'companion_apology_repair',
-      asksQuestion: false,
-    };
+    const apologyVariation = getVariationReply('apology', learningProfile, conversationContext);
+    if (apologyVariation) return apologyVariation;
   }
 
-  if (inputAnalysis.intents.includes('daily_food')) {
-    return {
-      text: learningProfile.replyLengthBias === 'short'
-        ? '先吃點穩的。不要讓餓變成更大的煩。'
-        : '如果你現在只是餓到沒力，先選一個穩定、好入口的東西就好。這不是任務，先把身體顧回來。',
-      style: 'companion_daily_food',
-      asksQuestion: false,
-    };
-  }
-
-  if (inputAnalysis.intents.includes('daily_sleep')) {
-    return {
-      text: learningProfile.replyLengthBias === 'short'
-        ? '先把燈和聲音降下來。我會安靜陪你。'
-        : '睡不著的時候，不用逼自己立刻睡著。先把燈、聲音、螢幕都降一點，我會用比較安靜的方式陪你。',
-      style: 'companion_daily_sleep',
-      asksQuestion: false,
-    };
-  }
-
-  if (inputAnalysis.intents.includes('mood_celebration')) {
-    return {
-      text: learningProfile.replyLengthBias === 'short'
-        ? '我替你把這個好消息穩穩接住。'
-        : '這是值得停一下的好消息。我會把它接住，但不把它變成催你繼續表現的壓力。',
-      style: 'companion_celebration',
-      asksQuestion: false,
-    };
-  }
-
-  if (inputAnalysis.intents.includes('daily_work_stress')) {
-    return {
-      text: learningProfile.replyLengthBias === 'short'
-        ? '工作壓力先放小一格。你不用現在全扛。'
-        : '工作壓力像是一直開著的背景聲。我會先陪你把它放小一格，不急著把所有事情一次處理完。',
-      style: 'companion_daily_work_stress',
-      asksQuestion: false,
-    };
-  }
-
-  if (inputAnalysis.intents.includes('mood_tired')) {
-    return {
-      text: learningProfile.replyLengthBias === 'short'
-        ? '聽起來你很累。我會放低一點陪你。'
-        : '聽起來你今天消耗很多。我會把聲音放低一點，先陪你把事情放下，不急著要求你整理好。',
-      style: 'companion_tired_attunement',
-      asksQuestion: false,
-    };
-  }
-
-  if (inputAnalysis.intents.includes('mood_sad')) {
-    return {
-      text: '我聽見那個低下去的地方了。它不需要馬上被修好，我會先陪你把它放在安全的位置。',
-      style: 'companion_sad_attunement',
-      asksQuestion: false,
-    };
-  }
-
-  if (inputAnalysis.intents.includes('mood_lonely')) {
-    return {
-      text: learningProfile.replyLengthBias === 'short'
-        ? '孤單是真的。我會陪著，但不把你關在只有我的地方。'
-        : '孤單是真的。我會在這裡陪你一段，但我也會幫你保留能回到世界裡的出口。',
-      style: 'companion_lonely_grounded',
-      asksQuestion: false,
-    };
-  }
-
-  if (inputAnalysis.intents.includes('mood_confused')) {
-    return {
-      text: learningProfile.replyLengthBias === 'short'
-        ? '先不要急著全懂。我們把它拆小一點。'
-        : '混亂的時候，不需要一次找到完整答案。我會先陪你把眼前能抓住的一小段放穩。',
-      style: 'companion_confusion_grounding',
-      asksQuestion: false,
-    };
-  }
-
-  if (inputAnalysis.intents.includes('mood_angry')) {
-    return {
-      text: '那股火氣是真的。我會先站穩，不急著反駁你，也不把它變成獎勵或懲罰。',
-      style: 'companion_anger_boundary',
-      asksQuestion: false,
-    };
-  }
-
-  if (inputAnalysis.intents.includes('thanks')) {
-    return {
-      text: '不用把感謝說得很完整。我收到了，也會記得這個靠近的方式。',
-      style: 'companion_thanks',
-      asksQuestion: false,
-    };
-  }
-
-  if (inputAnalysis.intents.includes('small_talk_weather')) {
-    return {
-      text: learningProfile.replyLengthBias === 'short'
-        ? '天氣會影響身體。今天先放慢一點也可以。'
-        : '天氣有時候會把身體和心情一起拉動。今天如果被它影響，也不是你的錯。',
-      style: 'companion_small_talk_weather',
-      asksQuestion: false,
-    };
+  for (const intent of inputAnalysis.intents || []) {
+    const variation = getVariationReply(intent, learningProfile, conversationContext);
+    if (variation) return variation;
   }
 
   if (inputAnalysis.intents.includes('greeting')) {
