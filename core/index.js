@@ -12,6 +12,9 @@ import { derivePADEmotionState } from './emotionPhysicsPolicy.js';
 import { evaluateProactiveInitiative } from './autonomyProactivePolicy.js';
 import { runSelfReflectionSidecar } from './selfReflectionSidecar.js';
 
+import { deriveVoiceToneParams } from './voiceTonePolicy.js';
+import { evaluateAgenticQuality } from './ra3AutonomyEvalBridge.js';
+
 export const RAPHAEL_ENGINE_VERSION = '0.1.0';
 
 export { answerCanonQuestion, retrieveCanonCards } from './canonRetrievalPolicy.js';
@@ -19,6 +22,8 @@ export { applyCriticRevision, critiqueRaphaelOutput } from './criticPolicy.js';
 export { derivePADEmotionState } from './emotionPhysicsPolicy.js';
 export { evaluateProactiveInitiative } from './autonomyProactivePolicy.js';
 export { runSelfReflectionSidecar } from './selfReflectionSidecar.js';
+export { deriveVoiceToneParams } from './voiceTonePolicy.js';
+export { evaluateAgenticQuality } from './ra3AutonomyEvalBridge.js';
 
 export function runRaphaelEngine(request = {}) {
   const mode = normalizeMode(request.mode);
