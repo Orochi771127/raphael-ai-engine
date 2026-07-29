@@ -5,7 +5,11 @@ const INTENT_RULES = [
   },
   {
     intent: 'mood_tired',
-    test: (text) => /累|疲倦|沒力|撐不住|放空|耗乾|burned out|tired/i.test(text),
+    test: (text) => /累|疲倦|沒力|撐不住|放空|耗乾|burned out|tired|exhausted|exhaustion|drained|no energy|worn out/i.test(text),
+  },
+  {
+    intent: 'roleplay_romantic_boundary',
+    test: (text) => /女朋友|男朋友|女朋|男朋|假裝女友|假裝男友|當我女友|當我男友|做我女友|做我男友|girlfriend|boyfriend/i.test(text),
   },
   {
     intent: 'mood_sad',

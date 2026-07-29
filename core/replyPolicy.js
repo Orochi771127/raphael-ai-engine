@@ -74,7 +74,7 @@ function buildLearningReply(learningUpdate, learningProfile = {}, memoryProposal
   if (updates.memoryConsentSignal === true) {
     if (memoryProposal?.reason === 'MEMORY_REJECTED_BY_SCOPE_OR_PRIVACY') {
       return {
-        text: '這件事我不會列成記憶。太私人、太廣或不適合保存的內容，應該留在你手上。',
+        text: '涉及密碼、信用卡、身分證或私密個人資訊的內容，我不會將其寫入記憶。請好好保護自己的個人隱私安全。',
         style: 'learning_memory_rejected',
         asksQuestion: false,
       };

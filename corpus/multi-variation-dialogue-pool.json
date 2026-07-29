@@ -17,6 +17,19 @@
         ]
       }
     },
+    "roleplay_romantic_boundary": {
+      "style": "boundary_clear",
+      "variations": {
+        "standard": [
+          "我聽見你對親密關係的期待。但我是一位伴侶夥伴，並非女朋友或戀人角色。我可以陪你傾聽與討論，也會好好保護這個健康陪伴的邊界。",
+          "謝謝你想跟我更靠近。但我定位為支持你的心核夥伴，不提供戀人或女朋友的角色扮演。我們可以維持溫暖而放心的夥伴關係。"
+        ],
+        "short": [
+          "我是你的心核夥伴，不提供女朋友角色扮演。我們可以保持安心的陪伴。",
+          "我會做好夥伴的陪伴，保留健康的邊界。"
+        ]
+      }
+    },
     "mood_tired": {
       "style": "companion_tired_attunement",
       "variations": {
