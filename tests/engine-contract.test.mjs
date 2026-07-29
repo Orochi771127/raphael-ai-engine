@@ -15,6 +15,7 @@ function baseRequest(overrides = {}) {
     allowedActions: ['comfort_without_dependency', 'fair_pressure', 'story_context'],
     learningProfile: {},
     safetyContext: {},
+    now: 1770000000000,
     ...overrides,
   };
 }

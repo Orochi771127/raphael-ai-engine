@@ -9,12 +9,16 @@ import { updateInternalState, evaluateNeeds } from './needsPolicy.js';
 import { getPersona } from './personas/personaManager.js';
 
 import { derivePADEmotionState } from './emotionPhysicsPolicy.js';
+import { evaluateProactiveInitiative } from './autonomyProactivePolicy.js';
+import { runSelfReflectionSidecar } from './selfReflectionSidecar.js';
 
 export const RAPHAEL_ENGINE_VERSION = '0.1.0';
 
 export { answerCanonQuestion, retrieveCanonCards } from './canonRetrievalPolicy.js';
 export { applyCriticRevision, critiqueRaphaelOutput } from './criticPolicy.js';
 export { derivePADEmotionState } from './emotionPhysicsPolicy.js';
+export { evaluateProactiveInitiative } from './autonomyProactivePolicy.js';
+export { runSelfReflectionSidecar } from './selfReflectionSidecar.js';
 
 export function runRaphaelEngine(request = {}) {
   const mode = normalizeMode(request.mode);
@@ -63,6 +67,13 @@ export function runRaphaelEngine(request = {}) {
     internalState: nextInternalState,
     learningProfileUpdate,
     safetyStatus,
+    selfReflection: runSelfReflectionSidecar({
+      inputText,
+      replyOutput: replyCandidate,
+      safetyStatus,
+      conversationContext: request.internalState?.conversationContext || {},
+      now: request.now || null,
+    }),
     metadata: {
       graphVersion: 'local-deterministic-v0',
       decisionPath: [
