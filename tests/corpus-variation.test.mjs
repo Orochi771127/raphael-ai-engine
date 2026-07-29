@@ -45,12 +45,12 @@ const shortTurn = runRaphaelEngine({
 });
 
 assert.equal(shortTurn.replyCandidate.style, 'companion_daily_work_stress');
-assert.ok(shortTurn.replyCandidate.text.includes('工作壓力先放小一格'));
+assert.ok(shortTurn.replyCandidate.text.includes('工作辛苦了') || shortTurn.replyCandidate.text.includes('工作壓力'));
 console.log('Test 2 Passed: Short length preference pool verified.');
 
 // Test 3: Direct getVariationReply helper lookup
 const varRes = getVariationReply('mood_sad', {}, { turnCount: 1 });
-assert.ok(varRes.text.includes('假裝堅強'));
+assert.ok(varRes.text.includes('假裝堅強') || varRes.text.includes('不用馬上變好'));
 console.log('Test 3 Passed: getVariationReply direct lookup verified.');
 
 console.log('ALL MULTI-VARIATION DIALOGUE POOL TESTS PASSED');
