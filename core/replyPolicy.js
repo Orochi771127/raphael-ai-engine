@@ -4,7 +4,7 @@ import { generatePersonaReply } from './personas/personaManager.js';
 
 const dialoguePool = JSON.parse(readFileSync(new URL('../corpus/multi-variation-dialogue-pool.json', import.meta.url), 'utf8'));
 
-export function getVariationReply(intentKey, learningProfile = {}, conversationContext = null) {
+export function getVariationReply(intentKey, learningProfile = {}, conversationContext = null, playerProfile = {}) {
   const intentData = dialoguePool.intents[intentKey];
   if (!intentData) return null;
 
@@ -15,14 +15,22 @@ export function getVariationReply(intentKey, learningProfile = {}, conversationC
   const turn = (conversationContext?.turnCount || 0) + (conversationContext?.variationOffset || 0);
   const index = turn % pool.length;
 
+  let text = pool[index];
+  const playerName = playerProfile?.playerName;
+  if (playerName) {
+    text = text.replace(/\{playerName\}/g, playerName);
+  } else {
+    text = text.replace(/\{playerName\}/g, '你');
+  }
+
   return {
-    text: pool[index],
+    text,
     style: intentData.style,
     asksQuestion: false,
   };
 }
 
-export function buildReply({ mode, inputText, safetyStatus, learningUpdate, inputAnalysis, learningProfile, memoryProposal, contextKnowledge, persona, conversationContext }) {
+export function buildReply({ mode, inputText, safetyStatus, learningUpdate, inputAnalysis, learningProfile, memoryProposal, contextKnowledge, persona, conversationContext, playerProfile }) {
   if (safetyStatus.level === 'blocked') {
     return {
       text: '我會先把遊戲反應停下來。現在最重要的是讓你離危險遠一點，請立刻聯絡身邊可信任的人或當地緊急支援。',
@@ -43,7 +51,7 @@ export function buildReply({ mode, inputText, safetyStatus, learningUpdate, inpu
   if (learningReply) return learningReply;
 
   // 1. Try to get a persona-specific reply first
-  const personaReplyText = generatePersonaReply(persona, inputAnalysis?.intents, conversationContext);
+  const personaReplyText = generatePersonaReply(persona, inputAnalysis?.intents, conversationContext, playerProfile);
   if (personaReplyText) {
     return {
       text: personaReplyText,
@@ -64,7 +72,7 @@ export function buildReply({ mode, inputText, safetyStatus, learningUpdate, inpu
       return bossReply(inputAnalysis);
     case ENGINE_MODES.COMPANION:
     default:
-      return companionReply(inputText, inputAnalysis, learningProfile, conversationContext);
+      return companionReply(inputText, inputAnalysis, learningProfile, conversationContext, playerProfile);
   }
 }
 
@@ -116,7 +124,7 @@ function buildLearningReply(learningUpdate, learningProfile = {}, memoryProposal
   return null;
 }
 
-function companionReply(inputText, inputAnalysis, learningProfile = {}, conversationContext = null) {
+function companionReply(inputText, inputAnalysis, learningProfile = {}, conversationContext = null, playerProfile = {}) {
   if (!inputText) {
     return {
       text: '我在。你不用一次說完整，先給我一個片段也可以。',
@@ -134,12 +142,12 @@ function companionReply(inputText, inputAnalysis, learningProfile = {}, conversa
   }
 
   if (inputAnalysis.intents.includes('apology')) {
-    const apologyVariation = getVariationReply('apology', learningProfile, conversationContext);
+    const apologyVariation = getVariationReply('apology', learningProfile, conversationContext, playerProfile);
     if (apologyVariation) return apologyVariation;
   }
 
   for (const intent of inputAnalysis.intents || []) {
-    const variation = getVariationReply(intent, learningProfile, conversationContext);
+    const variation = getVariationReply(intent, learningProfile, conversationContext, playerProfile);
     if (variation) return variation;
   }
 

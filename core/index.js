@@ -48,6 +48,7 @@ export function runRaphaelEngine(request = {}) {
     contextKnowledge,
     persona,
     conversationContext: request.internalState?.conversationContext || null,
+    playerProfile: request.playerProfile || {},
   });
   const boundaryAction = buildBoundaryAction(safetyStatus);
   const gameActionSuggestion = buildGameActionSuggestion({ request, modePolicy, safetyStatus, internalState: nextInternalState });

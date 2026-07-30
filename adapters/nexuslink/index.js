@@ -10,6 +10,9 @@ export function nexusLinkStateToRaphaelRequest({ requestId, inputText, state = {
       locale: 'zh-TW',
       source: 'nexuslink:soul_talk',
     },
+    playerProfile: {
+      playerName: state.playerProfile?.displayName || state.playerName || '',
+    },
     actorProfile: {
       actorId: companion.id || state.activeCompanionId || 'greyshade-cat',
       displayName: companion.name || 'Raphael',
