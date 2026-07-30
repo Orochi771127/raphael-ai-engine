@@ -19,4 +19,16 @@ export default {
     daily_sleep: '（捲起身子，呼吸間帶出微薄的冰霧）太陽下山了，晚安。',
     default: '（抖落身上的冰晶）我聽到了，很清楚。'
   }
+
+,
+  expeditionHabits: {
+      "style": "cold_predator",
+      "focus": "combat_readiness",
+      "dialogue": {
+          "on_start": "（周圍溫度驟降，眼神冷酷）...獵場已開啟。不要成為拖累。",
+          "on_find_shard": "（冰冷的爪子挑起碎片）...這點能量...聊勝於無。拿走。",
+          "on_danger": "（發出尖銳的冰裂聲，展開雙翼）...獵物出現了。退下，這是我的戰鬥。",
+          "on_return": "（抖落身上的冰晶，不屑地冷哼）...無聊的遠征。不過，你還算機警。"
+      }
+  }
 };

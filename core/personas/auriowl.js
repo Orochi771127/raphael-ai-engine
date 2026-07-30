@@ -19,4 +19,16 @@ export default {
     daily_sleep: '（輕巧地飛上枝頭，閉上雙眼）...讓光芒暫時收斂，我們明天見。',
     default: '（微微偏頭，眼底閃爍著金光）...我聽見了，一切都在秩序之中。'
   }
+
+,
+  expeditionHabits: {
+      "style": "wise_observer",
+      "focus": "knowledge_gathering",
+      "dialogue": {
+          "on_start": "（拍動羽翼，飛到高處）...我們從這裡開始。讓我先為你探清前方的路。",
+          "on_find_shard": "（歪著頭，用睿智的雙眼端詳）...這塊碎片中蘊含著古老的記憶，值得收藏。",
+          "on_danger": "（發出銳利的鳴叫）...注意！前方的氣流改變了，有未知威脅靠近。",
+          "on_return": "（輕盈地停在你的肩上）...這次的旅途收穫頗豐。我們可以慢慢整理這些見聞。"
+      }
+  }
 };

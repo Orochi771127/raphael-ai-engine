@@ -17,6 +17,7 @@ import { evaluateAgenticQuality } from './ra3AutonomyEvalBridge.js';
 import { analyzePragmaticContext } from './nluPragmaticPolicy.js';
 import { evaluateCompanionBehavior } from './companionBehaviorPolicy.js';
 import { realizeSurfaceText } from './surfaceRealizerPolicy.js';
+import { evaluateExpeditionBehavior } from './expeditionPolicy.js';
 
 export const RAPHAEL_ENGINE_VERSION = '0.1.0';
 
@@ -30,6 +31,7 @@ export { evaluateAgenticQuality } from './ra3AutonomyEvalBridge.js';
 export { analyzePragmaticContext } from './nluPragmaticPolicy.js';
 export { evaluateCompanionBehavior } from './companionBehaviorPolicy.js';
 export { realizeSurfaceText } from './surfaceRealizerPolicy.js';
+export { evaluateExpeditionBehavior } from './expeditionPolicy.js';
 
 export function runRaphaelEngine(request = {}) {
   const mode = normalizeMode(request.mode);
@@ -81,6 +83,23 @@ export function runRaphaelEngine(request = {}) {
     safetyStatus,
   });
 
+  let expeditionBehavior = null;
+  if (mode === 'expedition' || request.expeditionEvent) {
+    const eventType = request.expeditionEvent || 'start';
+    expeditionBehavior = evaluateExpeditionBehavior({
+      persona,
+      expeditionState: request.internalState?.expeditionVault || {},
+      eventType
+    });
+    
+    // Override or append to replyCandidate if it's purely an expedition event
+    if (request.expeditionEvent) {
+       replyCandidate.text = expeditionBehavior.text;
+       replyCandidate.microAction = expeditionBehavior.microAction;
+       emotionState.primary = expeditionBehavior.mood;
+    }
+  }
+
   const boundaryAction = buildBoundaryAction(safetyStatus);
   const gameActionSuggestion = buildGameActionSuggestion({ request, modePolicy, safetyStatus, internalState: nextInternalState });
 
@@ -98,6 +117,7 @@ export function runRaphaelEngine(request = {}) {
     memoryProposal,
     behaviorIntent: modePolicy.behaviorIntent,
     gameActionSuggestion,
+    expeditionBehavior,
     internalState: nextInternalState,
     learningProfileUpdate,
     safetyStatus,

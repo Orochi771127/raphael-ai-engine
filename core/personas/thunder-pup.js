@@ -19,4 +19,16 @@ export default {
     daily_sleep: '（發出短促的低鳴，啟動休眠模式）防線設定完成。系統降頻，晚安。',
     default: '（電光一閃而過，進入待命）收到指令。神經網運作正常。'
   }
+
+,
+  expeditionHabits: {
+      "style": "aggressive_vanguard",
+      "focus": "clearing_threats",
+      "dialogue": {
+          "on_start": "（電火花在毛髮間竄動，雙眼閃過數據流）警告：防護網已擴張。我們出發，我會擊潰所有障礙。",
+          "on_find_shard": "（發出短促的低鳴，用鼻子將碎片推向你）偵測到能量反應。目標已回收，請指示。",
+          "on_danger": "（露出獠牙，雷電劈啪作響）威脅等級上升！神經網鎖定目標，準備發動致命電擊！",
+          "on_return": "（電光一閃而過，進入待命）防線設定完成，區域已確認安全。系統降頻，請休息。"
+      }
+  }
 };

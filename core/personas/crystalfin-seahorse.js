@@ -19,4 +19,16 @@ export default {
     daily_sleep: '（緩緩捲起尾巴，進入休眠的姿態）...水面已經平靜，晚安。',
     default: '（優雅地在空中轉了個圈）...你的聲音在水裡引起了漣漪，我都收到了。'
   }
+
+,
+  expeditionHabits: {
+      "style": "graceful_drifter",
+      "focus": "steady_progress",
+      "dialogue": {
+          "on_start": "（在空氣中優雅地游動）...我們就像水流一樣，平靜地前進吧。",
+          "on_find_shard": "（水晶鰭輕輕拂過碎片）...這塊碎片的波紋很美麗。將它帶上吧。",
+          "on_danger": "（周圍泛起防禦性的水波）...水流開始變得湍急了。請小心應對。",
+          "on_return": "（優雅地轉了個圈）...平靜的歸途。願這份寧靜能一直伴隨著你。"
+      }
+  }
 };

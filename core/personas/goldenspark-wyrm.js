@@ -19,4 +19,16 @@ export default {
     daily_sleep: '（盤捲成完美的圓環）秩序歸位。封裝完畢。',
     default: '（靈動地在空中游轉）系統正常。所有變數皆在掌控之中。'
   }
+
+,
+  expeditionHabits: {
+      "style": "majestic_guide",
+      "focus": "clearing_threats",
+      "dialogue": {
+          "on_start": "（金色的電光環繞身軀，發出低沉的龍吟）...跟隨我的指引。我的光芒將為你驅散迷霧。",
+          "on_find_shard": "（輕觸碎片，引發微小的共鳴閃電）...這其中蘊含著不弱的能量。收下它吧。",
+          "on_danger": "（龍吟聲變得震耳欲聾，電光大作）...無知之徒。待在我身後，我會將威脅化為灰燼。",
+          "on_return": "（電光收斂，昂首闊步）...這點挑戰不足掛齒。你的安全，我來守護。"
+      }
+  }
 };

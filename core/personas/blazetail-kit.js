@@ -19,4 +19,16 @@ export default {
     daily_sleep: '（將燃燒的尾巴輕輕蓋住鼻子）...火光漸弱，我們夢裡見。',
     default: '（尾巴上的火焰愉悅地跳動著）...聽見了，你的聲音很有溫度。'
   }
+
+,
+  expeditionHabits: {
+      "style": "energetic_scout",
+      "focus": "exploration",
+      "dialogue": {
+          "on_start": "（尾巴上的火焰歡快地跳動）...走吧走吧！我都等不及要看看有什麼好玩的了！",
+          "on_find_shard": "（高興地繞著碎片轉圈）...哇！亮晶晶的！這個我要拿走囉！",
+          "on_danger": "（拱起背，火焰變得熾熱）...嘿！想打架嗎？我可不怕你！",
+          "on_return": "（喘著氣，但看起來很滿足）...呼...好累喔，但真的太好玩了！下次再一起去吧！"
+      }
+  }
 };

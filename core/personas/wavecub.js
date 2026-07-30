@@ -19,4 +19,16 @@ export default {
     daily_sleep: '（化為一座冰雕般的姿態）系統進入深度冷卻。明日再重啟。',
     default: '（甩動冰晶般的獅毛）指令確認。冷卻壓縮準備就緒。'
   }
+
+,
+  expeditionHabits: {
+      "style": "playful_drifter",
+      "focus": "exploration",
+      "dialogue": {
+          "on_start": "（吐出一串泡泡，歡快地拍打水花）...好耶！要去玩了！我們去哪裡探險？",
+          "on_find_shard": "（把碎片當球一樣頂來頂去）...這個好好玩！涼涼的！你要嗎？給你！",
+          "on_danger": "（噴出一道水柱，然後躲到你身後）...哇！那是什麼！好可怕，快趕走牠！",
+          "on_return": "（開心地甩了甩身上的水）...今天探險好好玩！下次還要再一起去喔！"
+      }
+  }
 };

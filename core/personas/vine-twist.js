@@ -19,4 +19,16 @@ export default {
     daily_sleep: '（將藤蔓收攏在身體周圍，像一個綠色的繭）行光合作用結束，晚安。',
     default: '（頭上的嫩葉開心地抖動）聽見啦，青藤收到了！'
   }
+
+,
+  expeditionHabits: {
+      "style": "sneaky_infiltrator",
+      "focus": "evasion",
+      "dialogue": {
+          "on_start": "（藤蔓悄無聲息地在地表蔓延）...我們走暗路。別弄出聲響嘻嘻...",
+          "on_find_shard": "（用藤蔓將碎片捲起，悄悄遞給你）...好東西。別人沒發現。拿好。",
+          "on_danger": "（藤蔓瞬間收縮，偽裝成周圍的植物）...噓！有動靜。裝死，別動。",
+          "on_return": "（藤蔓放鬆下來，開出一朵小花）...嘻嘻，誰也沒發現我們。真是完美的一票。"
+      }
+  }
 };

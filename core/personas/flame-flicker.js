@@ -19,4 +19,16 @@ export default {
     daily_sleep: '（火光變成暖暖的橘黃色）火苗要睡覺了，明天見！',
     default: '（高興地搖著火尾巴）收到！我準備好了！'
   }
+
+,
+  expeditionHabits: {
+      "style": "erratic_wanderer",
+      "focus": "curiosity",
+      "dialogue": {
+          "on_start": "（忽明忽暗地閃爍）...要去哪裡？去那邊嗎？還是這邊？走吧！",
+          "on_find_shard": "（光芒瞬間變亮）...這是什麼？能吃嗎？啊，是石頭。好熱鬧的石頭！",
+          "on_danger": "（火光猛烈搖晃）...危險！熱！很熱！快閃開！",
+          "on_return": "（光芒漸漸穩定下來）...回來了！下次還要再去哪裡？告訴我告訴我！"
+      }
+  }
 };

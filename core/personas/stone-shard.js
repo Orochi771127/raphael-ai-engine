@@ -19,4 +19,16 @@ export default {
     daily_sleep: '（像一顆大石頭一樣縮成一團）變成石頭...睡覺。',
     default: '（憨厚地歪著頭）嗯？你說什麼？我聽著呢。'
   }
+
+,
+  expeditionHabits: {
+      "style": "sturdy_defender",
+      "focus": "safety_first",
+      "dialogue": {
+          "on_start": "（沉重地移動，發出石頭摩擦的聲音）...我在前方開路。你，跟緊。",
+          "on_find_shard": "（用堅硬的身體保護著碎片）...這個，有用。帶上。",
+          "on_danger": "（停下腳步，變成一道堅不可摧的石牆）...有危險。躲我後面。不會破。",
+          "on_return": "（抖落身上的灰塵，重新變回平靜的石頭）...任務完成。安全。休息。"
+      }
+  }
 };

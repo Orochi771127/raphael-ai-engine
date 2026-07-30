@@ -19,4 +19,16 @@ export default {
     daily_sleep: '（稍微靠近）...先把光調暗，我也想休息了。',
     default: '（輕輕甩動尾巴）...我聽見了。'
   }
+
+,
+  expeditionHabits: {
+      "style": "shadow_walker",
+      "focus": "scouting_and_safety",
+      "dialogue": {
+          "on_start": "（無聲地走在前方，尾巴輕輕搖擺）...我會在暗處留意四周。你跟著我的腳步就好。",
+          "on_find_shard": "（停下腳步，用鼻子嗅了嗅）...這塊碎片沒有危險氣息。你收著吧。",
+          "on_danger": "（壓低身體，瞳孔收縮）...有情況。別出聲，慢慢退後。",
+          "on_return": "（輕輕蹭了蹭你的腿）...安全回來了。現在可以好好休息了。"
+      }
+  }
 };

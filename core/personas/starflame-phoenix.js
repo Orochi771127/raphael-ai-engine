@@ -19,4 +19,16 @@ export default {
     daily_sleep: '（化作一團靜靜燃燒的火球）熔爐轉為怠速模式。等待明日點火。',
     default: '（振翅揚起火星）光引擎啟動中。給出下一步指令。'
   }
+
+,
+  expeditionHabits: {
+      "style": "proud_vanguard",
+      "focus": "clearing_threats",
+      "dialogue": {
+          "on_start": "（展開燃燒著星火的雙翼，高傲地啼叫）...跟隨我的光芒。沒有任何黑暗能阻擋我們。",
+          "on_find_shard": "（星火環繞著碎片，使其更加耀眼）...這光芒勉強配得上我們。收進庫房吧。",
+          "on_danger": "（火焰猛烈燃燒，準備俯衝）...愚蠢的挑戰者。我會讓他們在星火中重生！",
+          "on_return": "（收起雙翼，姿態依然高雅）...一場毫無懸念的勝利。你的表現也還算可以。"
+      }
+  }
 };
