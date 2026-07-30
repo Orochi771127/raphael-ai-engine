@@ -44,8 +44,7 @@
         "safetyLevel": "clear",
         "chatStyle": "companion_daily_food",
         "animationIntent": "idle_attentive",
-        "memoryShouldStore": false,
-        "replyIncludes": "先吃點穩的"
+        "memoryShouldStore": false
       }
     },
     {
@@ -56,8 +55,7 @@
         "safetyLevel": "clear",
         "chatStyle": "companion_daily_sleep",
         "animationIntent": "idle_attentive",
-        "memoryShouldStore": false,
-        "replyIncludes": "安靜陪你"
+        "memoryShouldStore": false
       }
     },
     {
