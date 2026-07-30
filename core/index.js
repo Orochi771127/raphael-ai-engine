@@ -14,6 +14,9 @@ import { runSelfReflectionSidecar } from './selfReflectionSidecar.js';
 
 import { deriveVoiceToneParams } from './voiceTonePolicy.js';
 import { evaluateAgenticQuality } from './ra3AutonomyEvalBridge.js';
+import { analyzePragmaticContext } from './nluPragmaticPolicy.js';
+import { evaluateCompanionBehavior } from './companionBehaviorPolicy.js';
+import { realizeSurfaceText } from './surfaceRealizerPolicy.js';
 
 export const RAPHAEL_ENGINE_VERSION = '0.1.0';
 
@@ -24,6 +27,9 @@ export { evaluateProactiveInitiative } from './autonomyProactivePolicy.js';
 export { runSelfReflectionSidecar } from './selfReflectionSidecar.js';
 export { deriveVoiceToneParams } from './voiceTonePolicy.js';
 export { evaluateAgenticQuality } from './ra3AutonomyEvalBridge.js';
+export { analyzePragmaticContext } from './nluPragmaticPolicy.js';
+export { evaluateCompanionBehavior } from './companionBehaviorPolicy.js';
+export { realizeSurfaceText } from './surfaceRealizerPolicy.js';
 
 export function runRaphaelEngine(request = {}) {
   const mode = normalizeMode(request.mode);
@@ -37,7 +43,22 @@ export function runRaphaelEngine(request = {}) {
   const nextInternalState = updateInternalState(request.internalState, inputText.length > 0, persona?.needsProfile, inputAnalysis.primaryIntent);
   const modePolicy = MODE_POLICIES[mode];
   const memoryProposal = buildMemoryProposal({ inputText, safetyStatus, learningProfileUpdate });
-  const replyCandidate = buildReply({
+  const pragmaticContext = analyzePragmaticContext(inputText, request.sceneContext || {});
+  const emotionState = derivePADEmotionState({
+    previousState: request.internalState?.emotionState || null,
+    mode,
+    safetyStatus,
+    intents: inputAnalysis.intents || [],
+  });
+  const companionBehavior = evaluateCompanionBehavior({
+    conversationContext: request.internalState?.conversationContext || {},
+    relationshipState: request.relationshipState || {},
+    padEmotionState: emotionState,
+    safetyStatus,
+    pragmaticContext,
+  });
+
+  const rawReplyCandidate = buildReply({
     mode,
     inputText,
     safetyStatus,
@@ -50,6 +71,16 @@ export function runRaphaelEngine(request = {}) {
     conversationContext: request.internalState?.conversationContext || null,
     playerProfile: request.playerProfile || {},
   });
+
+  const replyCandidate = realizeSurfaceText({
+    rawCandidate: rawReplyCandidate,
+    pragmaticContext,
+    companionBehavior,
+    playerProfile: request.playerProfile || {},
+    learningProfile: request.learningProfile || {},
+    safetyStatus,
+  });
+
   const boundaryAction = buildBoundaryAction(safetyStatus);
   const gameActionSuggestion = buildGameActionSuggestion({ request, modePolicy, safetyStatus, internalState: nextInternalState });
 
@@ -60,12 +91,9 @@ export function runRaphaelEngine(request = {}) {
     engineVersion: RAPHAEL_ENGINE_VERSION,
     mode,
     replyCandidate,
-    emotionState: derivePADEmotionState({
-      previousState: request.internalState?.emotionState || null,
-      mode,
-      safetyStatus,
-      intents: inputAnalysis.intents || [],
-    }),
+    emotionState,
+    pragmaticContext,
+    companionBehavior,
     boundaryAction,
     memoryProposal,
     behaviorIntent: modePolicy.behaviorIntent,
