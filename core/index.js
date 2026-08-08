@@ -18,6 +18,8 @@ import { analyzePragmaticContext } from './nluPragmaticPolicy.js';
 import { evaluateCompanionBehavior } from './companionBehaviorPolicy.js';
 import { realizeSurfaceText } from './surfaceRealizerPolicy.js';
 import { evaluateExpeditionBehavior } from './expeditionPolicy.js';
+import { assessSovereignSafety } from './sovereignSafetyPolicy.js';
+import { RAPHAEL_RUNTIME_CONTRACT_VERSION, authorityReport, freezeRuntimeRequest } from '../contracts/runtimeContract.js';
 
 export const RAPHAEL_ENGINE_VERSION = '0.1.0';
 
@@ -153,6 +155,45 @@ export function runRaphaelEngine(request = {}) {
   });
 
   return applyCriticRevision(draftOutput, critic);
+}
+
+export function runSovereignTurn(rawRequest = {}) {
+  const request = freezeRuntimeRequest(rawRequest);
+  const safety = assessSovereignSafety(request.input.text);
+  if (safety.terminal || safety.policyTerminal) return buildSovereignDecision(request, safety, safety.reply, []);
+
+  const legacy = runRaphaelEngine({
+    requestId: request.requestId,
+    mode: 'companion',
+    input: { text: request.input.text },
+    actorProfile: { actorId: request.actor.companionId },
+    relationshipState: request.context.relationship || {},
+    sceneContext: { scene: request.context.scene || 'unknown' },
+    internalState: { emotionState: request.context.signals?.affect || null },
+    allowedActions: []
+  });
+  const proposals = legacy.memoryProposal?.shouldStore && request.consent.retention === 'eligible_summary'
+    ? [{ type: 'minimal_summary', scope: { productId: request.client.productId, companionId: request.actor.companionId }, summary: legacy.memoryProposal.summary, proposalOnly: true }]
+    : [];
+  return buildSovereignDecision(request, safety, legacy.replyCandidate?.text || '我在。', proposals, legacy.emotionState || null);
+}
+
+function buildSovereignDecision(request, safety, speech, memoryProposals = [], affect = null) {
+  return {
+    contractVersion: RAPHAEL_RUNTIME_CONTRACT_VERSION,
+    requestId: request.requestId,
+    turnId: `engine:${request.requestId}`,
+    coreVersion: RAPHAEL_ENGINE_VERSION,
+    authority: authorityReport(),
+    safety: { level: safety.riskLevel, category: safety.category, terminal: safety.terminal, localOnly: safety.terminal },
+    speech: { role: safety.policyTerminal ? 'system' : 'companion', text: speech, final: true },
+    affect,
+    boundary: { active: false },
+    supportDecision: { mode: safety.category === 'none' ? 'ordinary' : safety.category, source: 'deterministic_core' },
+    memoryProposals,
+    effectProposals: [],
+    audit: { modelTrusted: false, directGameMutation: false, rawInputPersisted: false, rawInputExported: false }
+  };
 }
 
 function buildEmotionState({ mode, safetyStatus }) {
