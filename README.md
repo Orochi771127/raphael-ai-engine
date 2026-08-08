@@ -1,14 +1,29 @@
-# Raphael AI Engine
+# RaphaelCore Engine / Raphael 核心認知引擎
 
-Raphael AI Engine is a standalone, game-neutral companion cognition engine. It is designed so NexusLink can remain the first official testbed while future games can connect through adapters instead of copying NexusLink internals.
+Raphael AI Engine is the canonical target repository for the standalone, game-neutral RaphaelCore cognition kernel and versioned client contracts. Nexus Link remains the first official client and the mature live authority until parity gates pass.
 
-Current status: `v0.1.0` contract-first mock engine.
+Raphael AI Engine 是獨立、遊戲中立 RaphaelCore 認知核心與版本化客戶端契約的 canonical 目標儲存庫。Nexus Link 是第一個正式客戶端；在 parity gate 通過前，成熟的遊戲內 Core 仍是 live authority。
+
+Current status / 目前狀態: `v0.1.x lab + Sovereign Platform V1 contract foundation`. This is not yet a production model service and must not replace the live Nexus Link Core before sealed parity passes.
 
 - No OpenAI, Anthropic, Grok, or external model API.
 - No LangGraph runtime dependency in NexusLink.
 - No NexusLink DOM, Pixi, store, or save dependency inside `core/`.
-- Engine output is advisory and structured; game adapters decide what can be applied.
+- Model candidates are always `trusted:false`; RaphaelCore produces the final speech decision, while game adapters decide which allowlisted effects can be applied.
 - Safety, boundary, memory proposals, and learning metadata stay explicit and auditable.
+
+## Repository family / 儲存庫家族
+
+| Repository / 儲存庫 | Owns / 擁有權威 | Must not own / 不得擁有 |
+|---|---|---|
+| `raphael-ai-engine` | cognition, safety, boundary, speech, memory eligibility, public contracts / 認知、安全、邊界、最終語句、記憶資格、公開契約 | product saves, rewards, model hosting / 產品存檔、獎勵、模型託管 |
+| `raphael-HMAX` | private hosted auth, tenant isolation, rate/policy gates, bounded model and memory ports / 私有託管認證、租戶隔離、政策閘門、受限模型與記憶 ports | core constitution or game mutation / Core 憲法或遊戲狀態修改 |
+| `NexusLink` | first-party client projection, allowed-effect validation, atomic gameplay reducer / 第一方客戶端投影、效果驗證、原子遊戲 reducer | hosted identity claims or model authority / 託管身分 claims 或模型權威 |
+| `aiforge-raphael-corpus` | reviewed source corpus and historical semantic material / 經審閱來源語料與歷史材料 | executable policy / 可執行政策 |
+
+Players never enter a model-provider key. Hosted credentials belong to HMAX service infrastructure; access claims are server-verified and never accepted from request-body identity fields.
+
+玩家不需輸入模型供應商金鑰。託管憑證屬於 HMAX 服務基礎設施；身分 claims 只能由伺服器驗證，不能相信 request body 自報欄位。
 
 ## Structure
 
@@ -16,7 +31,8 @@ Current status: `v0.1.0` contract-first mock engine.
 - `contracts/`: game-neutral request/response schema and examples.
 - `adapters/nexuslink/`: NexusLink-specific adapter boundary.
 - `adapters/generic-game/`: reference adapter for future games.
-- `gateway/`: future backend and LangGraph workflow notes.
+- `gateway/`: deprecated mock/lab notes retained for regression history; production hosted work belongs in private `raphael-HMAX`.
+- `corpus/`: reviewed, versioned runtime/eval snapshots; the source-of-truth corpus lives in `aiforge-raphael-corpus`.
 - `training/`: eval cases and deterministic local evaluation.
 - `tests/`: engine and adapter contract tests.
 
@@ -67,6 +83,10 @@ NexusLink state -> Raphael contract -> Raphael engine -> NexusLink adapter resul
 ```
 
 The adapter may create chat candidates, animation intents, habitat traces, or memory proposals. It must not directly mutate save state, companion data, Pixi renderer state, or final player-facing output without a game-side policy gate.
+
+The standalone kernel becomes live only after safety, boundary, memory eligibility, effect proposal, conversation and autonomy parity pass against the sealed Nexus Link fixtures. Repository location alone does not grant runtime authority.
+
+獨立核心只有在 safety、boundary、memory eligibility、effect proposal、conversation 與 autonomy 對 sealed Nexus Link fixtures 達成 parity 後，才能成為 live runtime；儲存庫位置本身不代表已取得執行權威。
 
 The NexusLink probe runner verifies that this boundary remains intact before any live testbed integration:
 
