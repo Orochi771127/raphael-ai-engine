@@ -15,7 +15,7 @@ export function validateRuntimeRequest(request) {
   return request;
 }
 export function freezeRuntimeRequest(request) { validateRuntimeRequest(request); return deepFreeze(typeof structuredClone === "function" ? structuredClone(request) : JSON.parse(JSON.stringify(request))); }
-export function authorityReport() { return { cognition: "RaphaelCore", speech: "RaphaelCore", memoryEligibility: "RaphaelCore", persistence: "MemoryPort", gameMutation: "ClientReducer" }; }
+export function authorityReport() { return { cognition: "RaphaelCore", speech: "RaphaelCore", memoryEligibility: "RaphaelCore", persistence: "MemoryPort", gameMutation: "NexusLinkReducer" }; }
 function object(value, path) { if (!value || typeof value !== "object" || Array.isArray(value)) fail(`invalid_object:${path}`); }
 function unknown(value, allowed, path) { for (const key of Object.keys(value)) if (!allowed.has(key)) fail(`unknown_field:${path}.${key}`); }
 function rejectAuthority(value, path = "$request") { if (!value || typeof value !== "object") return; for (const [key, child] of Object.entries(value)) { if (FORBIDDEN_AUTHORITY.has(key)) fail(`body_authority_forbidden:${path}.${key}`); rejectAuthority(child, `${path}.${key}`); } }
