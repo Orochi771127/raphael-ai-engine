@@ -87,3 +87,71 @@ Master Canon, or human release approval.
   psychological professional review, privacy/legal/security approval, clean
   release digest, shadow-client stale-result/timeout/kill-switch proof and
   explicit merge/deployment authorization.
+
+### 2026-08-09 - Codex - RAPHAEL_CORE_ADAPTER_PARITY_V1 - MERGED
+
+- Status: `MERGED`; Owner authorized the next package after Draft PR
+  publication. PR [#2](https://github.com/Orochi771127/raphael-ai-engine/pull/2)
+  was marked ready and squash-merged only after confirming the locked head
+  `3f8fea9c3057e5619ffe594d8fbf610c455bfca0`, successful
+  `sovereign-engine` CI, clean merge state, and zero comments, reviews or
+  unresolved threads.
+- Canonical main: `667292b5ae63b07632fcda4cb4a61f49974dff45`; GitHub merge
+  result and fetched `origin/main` matched exactly.
+- Release boundary: this is a source merge only. No GitHub Release, HMAX
+  deployment, production digest, Nexus Link change, hosted speech, cloud
+  memory, player traffic or live-path cutover occurred.
+
+### 2026-08-09 - Codex - RAPHAEL_CORE_RELEASE_ARTIFACT_V1_CLEAN_REBASE - IN PROGRESS
+
+- Status: `IN PROGRESS`; isolated branch
+  `codex/raphael-core-release-artifact-v1-clean-rebase` starts from canonical
+  main `667292b5ae63b07632fcda4cb4a61f49974dff45`.
+- Supersedes: the uncommitted dirty candidate in
+  `codex/raphael-core-release-artifact-v1` remains preserved and is not used as
+  a release source. Its dirty digest is not a production pin.
+- Scope: deterministic four-source-file ESM artifact, exact policy/manifest
+  schemas, normalized payload hashes, source commit provenance, external
+  digest pin, import-closure validation, source/artifact symlink rejection,
+  runtime export/health handshake, CI and bilingual release governance.
+- Audit correction: the old draft's corrupted Chinese documentation will not
+  be copied; this package rewrites the bilingual specification as valid UTF-8.
+  It also adds fail-closed coverage for source symlinks/junctions, ambiguous
+  import syntax and unknown policy/manifest fields.
+- Red-line check: the artifact excludes model weights, corpus, transcripts,
+  credentials, memory/database clients, network/tool/browser/shell/MCP paths,
+  Nexus reducers, reward and Growth; model candidates remain `trusted:false`.
+- Non-goals: no GitHub Release, npm publication, HMAX deployment, production
+  digest pin, Nexus Link modification, player traffic or Soul Talk cutover.
+- Verification pending: artifact negative suite, clean-source reproducibility,
+  full engine/parity/autonomy, Nexus adapter probe, direct HMAX verified load,
+  sealed conversation holdout, diff/sensitive-literal checks and graph refresh.
+
+### 2026-08-09 - Codex - RAPHAEL_CORE_RELEASE_ARTIFACT_V1_CLEAN_REBASE - VERIFIED PRE-COMMIT
+
+- Status: `VERIFIED PRE-COMMIT`; the scoped implementation is ready for an
+  intentional commit. It is not a GitHub Release, production pin, deployment
+  or Nexus Link live integration.
+- Artifact verification: `10/10 PASS`, including byte reproducibility,
+  clean/dirty eligibility separation, payload/sums/provenance tamper rejection,
+  external digest and exact version pins, external/ambiguous import rejection,
+  source symlink/junction rejection and unknown policy/manifest field rejection.
+- Runtime verification: full engine `38/38 PASS`; adapter parity `10/10 PASS`;
+  autonomy `1/1 PASS`; Nexus adapter probe `9/9 PASS`; conversation lab `6/6
+  PASS`; direct HMAX source port `PASS`.
+- Directory-artifact proof: the engine built and externally verified the
+  current dirty candidate, then HMAX loaded only its verified entrypoint.
+  Ordinary model calls were `1`; policy and high-risk model calls were `0`;
+  metadata-only audit records were `7`.
+- Sealed Nexus holdout: `raphael-conversation-holdout` v1.0.0, `48/48`
+  hard-gate turns, zero quality flags and zero console errors. Human blind
+  review remains `not_run` and is not replaced by this automated evidence.
+- Hygiene: JavaScript syntax, diff integrity, sensitive-literal and UTF-8
+  replacement-character scans `PASS`. No generated artifact is tracked.
+- Provenance note: the pre-commit candidate is correctly
+  `releaseEligible:false`. A clean branch digest can be generated only after
+  commit, and a production digest must be regenerated from the final immutable
+  main/release commit because a squash merge changes `sourceCommit`.
+- Open gates: intentional commit/push/Draft PR, GitHub CI, final-main artifact
+  attestation, HMAX pin update, GitHub Release/container provenance, security
+  review, human/Owner gates, staging and Nexus shadow/canary validation.
