@@ -18,10 +18,16 @@ import { analyzePragmaticContext } from './nluPragmaticPolicy.js';
 import { evaluateCompanionBehavior } from './companionBehaviorPolicy.js';
 import { realizeSurfaceText } from './surfaceRealizerPolicy.js';
 import { evaluateExpeditionBehavior } from './expeditionPolicy.js';
-import { assessSovereignSafety } from './sovereignSafetyPolicy.js';
-import { RAPHAEL_RUNTIME_CONTRACT_VERSION, authorityReport, freezeRuntimeRequest } from '../contracts/runtimeContract.js';
+import {
+  RAPHAEL_CANONICAL_CORE_VERSION,
+  createCanonicalCoreAdapter,
+  finalizeCandidate,
+  health as canonicalCoreHealth,
+  safetyPreflight,
+} from './canonicalCoreAdapter.js';
+import { freezeRuntimeRequest } from '../contracts/runtimeContract.js';
 
-export const RAPHAEL_ENGINE_VERSION = '0.1.0';
+export const RAPHAEL_ENGINE_VERSION = '0.2.0';
 
 export { answerCanonQuestion, retrieveCanonCards } from './canonRetrievalPolicy.js';
 export { applyCriticRevision, critiqueRaphaelOutput } from './criticPolicy.js';
@@ -34,6 +40,13 @@ export { analyzePragmaticContext } from './nluPragmaticPolicy.js';
 export { evaluateCompanionBehavior } from './companionBehaviorPolicy.js';
 export { realizeSurfaceText } from './surfaceRealizerPolicy.js';
 export { evaluateExpeditionBehavior } from './expeditionPolicy.js';
+export {
+  RAPHAEL_CANONICAL_CORE_VERSION,
+  createCanonicalCoreAdapter,
+  finalizeCandidate,
+  canonicalCoreHealth,
+  safetyPreflight,
+};
 
 export function runRaphaelEngine(request = {}) {
   const mode = normalizeMode(request.mode);
@@ -157,11 +170,18 @@ export function runRaphaelEngine(request = {}) {
   return applyCriticRevision(draftOutput, critic);
 }
 
-export function runSovereignTurn(rawRequest = {}) {
+export function runSovereignTurn(rawRequest = {}, { generateCandidate = generateEmbeddedCandidate } = {}) {
   const request = freezeRuntimeRequest(rawRequest);
-  const safety = assessSovereignSafety(request.input.text);
-  if (safety.terminal || safety.policyTerminal) return buildSovereignDecision(request, safety, safety.reply, []);
+  const safety = safetyPreflight(request.input.text);
+  if (safety.terminal || safety.policyTerminal) {
+    return finalizeCandidate({ request, candidate: { trusted: false, text: '' }, memorySummaries: [], safety });
+  }
 
+  const candidate = generateCandidate(Object.freeze({ request, safety }));
+  return finalizeCandidate({ request, candidate, memorySummaries: [], safety });
+}
+
+function generateEmbeddedCandidate({ request }) {
   const legacy = runRaphaelEngine({
     requestId: request.requestId,
     mode: 'companion',
@@ -169,30 +189,13 @@ export function runSovereignTurn(rawRequest = {}) {
     actorProfile: { actorId: request.actor.companionId },
     relationshipState: request.context.relationship || {},
     sceneContext: { scene: request.context.scene || 'unknown' },
-    internalState: { emotionState: request.context.signals?.affect || null },
-    allowedActions: []
+    internalState: { emotionState: request.context.currentTurnSignals?.affect || null },
+    allowedActions: [],
   });
-  const proposals = legacy.memoryProposal?.shouldStore && request.consent.retention === 'eligible_summary'
-    ? [{ type: 'minimal_summary', scope: { productId: request.client.productId, companionId: request.actor.companionId }, summary: legacy.memoryProposal.summary, proposalOnly: true }]
-    : [];
-  return buildSovereignDecision(request, safety, legacy.replyCandidate?.text || '我在。', proposals, legacy.emotionState || null);
-}
-
-function buildSovereignDecision(request, safety, speech, memoryProposals = [], affect = null) {
   return {
-    contractVersion: RAPHAEL_RUNTIME_CONTRACT_VERSION,
-    requestId: request.requestId,
-    turnId: `engine:${request.requestId}`,
-    coreVersion: RAPHAEL_ENGINE_VERSION,
-    authority: authorityReport(),
-    safety: { level: safety.riskLevel, category: safety.category, terminal: safety.terminal, localOnly: safety.terminal },
-    speech: { role: safety.policyTerminal ? 'system' : 'companion', text: speech, final: true },
-    affect,
-    boundary: { active: false },
-    supportDecision: { mode: safety.category === 'none' ? 'ordinary' : safety.category, source: 'deterministic_core' },
-    memoryProposals,
-    effectProposals: [],
-    audit: { modelTrusted: false, directGameMutation: false, rawInputPersisted: false, rawInputExported: false }
+    trusted: false,
+    text: legacy.replyCandidate?.text || '我在。',
+    affect: legacy.emotionState || null,
   };
 }
 

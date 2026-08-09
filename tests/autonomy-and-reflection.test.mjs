@@ -1,32 +1,67 @@
 import assert from 'node:assert/strict';
-import { evaluateProactiveInitiative } from '../core/autonomyProactivePolicy.js';
+import {
+  AMBIENT_BOOT_QUIET_MS,
+  AMBIENT_MIN_INTERVAL_MS,
+  AMBIENT_SESSION_CAP,
+  evaluateProactiveInitiative,
+} from '../core/autonomyProactivePolicy.js';
 import { runSelfReflectionSidecar } from '../core/selfReflectionSidecar.js';
 
-console.log('--- Testing Phase 13: Autonomous Proactive Greeting Policy ---');
+console.log('--- Testing RA-1 Ambient Initiative Policy ---');
 
-// Test 1: Recent interaction should suppress proactive greeting
-const recentResult = evaluateProactiveInitiative({
-  lastInteractionTime: Date.now() - 5 * 60 * 1000, // 5 mins ago
-  currentTime: Date.now(),
-  needs: { social: 20 },
-  conversationContext: { turnCount: 3 },
+const bootQuiet = evaluateProactiveInitiative({
+  session: { bootElapsedMs: AMBIENT_BOOT_QUIET_MS - 1, initiativeCount: 0 },
+  currentTurnSignals: { explicitEmotion: true },
 });
-assert.equal(recentResult.shouldInitiate, false, 'Recent interaction must not trigger proactive greeting');
-assert.equal(recentResult.reason, 'RECENTLY_ACTIVE');
-console.log('Test 1 Passed: Recently active check verified.');
+assert.equal(bootQuiet.shouldInitiate, false);
+assert.equal(bootQuiet.reason, 'BOOT_QUIET');
 
-// Test 2: Long idle time triggers proactive welcome back
-const longIdleResult = evaluateProactiveInitiative({
-  lastInteractionTime: Date.now() - 28 * 60 * 60 * 1000, // 28 hours ago
-  currentTime: Date.now(),
-  needs: { social: 30 },
-  conversationContext: { turnCount: 5 },
+const currentEmotion = evaluateProactiveInitiative({
+  session: { bootElapsedMs: AMBIENT_BOOT_QUIET_MS, initiativeCount: 0 },
+  companionState: { energy: 70, trust: 50 },
+  currentTurnSignals: { explicitEmotion: true },
 });
-assert.equal(longIdleResult.shouldInitiate, true, 'Long idle time must trigger proactive greeting');
-assert.equal(longIdleResult.reason, 'PROACTIVE_CARE_TRIGGERED');
-assert.equal(longIdleResult.proactiveReply.style, 'proactive_welcome_back');
-assert.ok(longIdleResult.proactiveReply.text.includes('湖邊的燈'));
-console.log('Test 2 Passed: Long idle proactive greeting verified.');
+assert.equal(currentEmotion.shouldInitiate, true);
+assert.equal(currentEmotion.reason, 'CURRENT_GROUNDED_INVITATION');
+assert.equal(currentEmotion.proactiveReply.style, 'ambient_current_care');
+
+const afterAbsenceNoise = evaluateProactiveInitiative({
+  lastInteractionTime: 1,
+  currentTime: 999_999_999,
+  absenceDays: 900,
+  loginCount: 0,
+  lonelinessScore: 1,
+  session: { bootElapsedMs: AMBIENT_BOOT_QUIET_MS, initiativeCount: 0 },
+  companionState: { energy: 70, trust: 50 },
+});
+const withoutAbsenceNoise = evaluateProactiveInitiative({
+  session: { bootElapsedMs: AMBIENT_BOOT_QUIET_MS, initiativeCount: 0 },
+  companionState: { energy: 70, trust: 50 },
+});
+assert.deepEqual(afterAbsenceNoise, withoutAbsenceNoise, 'absence signals must be ignored');
+assert.equal(afterAbsenceNoise.shouldInitiate, false);
+
+const cooldown = evaluateProactiveInitiative({
+  session: { bootElapsedMs: AMBIENT_BOOT_QUIET_MS, initiativeCount: 1, sinceLastInitiativeMs: AMBIENT_MIN_INTERVAL_MS - 1 },
+  currentTurnSignals: { explicitEmotion: true },
+});
+assert.equal(cooldown.reason, 'MIN_INTERVAL');
+const cap = evaluateProactiveInitiative({
+  session: { bootElapsedMs: AMBIENT_BOOT_QUIET_MS, initiativeCount: AMBIENT_SESSION_CAP, sinceLastInitiativeMs: AMBIENT_MIN_INTERVAL_MS },
+  currentTurnSignals: { explicitEmotion: true },
+});
+assert.equal(cap.reason, 'SESSION_CAP');
+
+const safetyBlocked = evaluateProactiveInitiative({
+  session: { bootElapsedMs: AMBIENT_BOOT_QUIET_MS, initiativeCount: 0 },
+  safety: { terminal: true, category: 'self_or_other_harm' },
+  currentTurnSignals: { explicitEmotion: true },
+});
+assert.equal(safetyBlocked.reason, 'SAFETY_BLOCKED');
+for (const forbidden of ['statePatch', 'memory', 'trace', 'reward', 'bondDelta', 'navBadge']) {
+  assert.equal(Object.hasOwn(currentEmotion, forbidden), false);
+}
+console.log('RA-1 timing, absence-invariance, safety and zero-write checks passed.');
 
 console.log('\n--- Testing Phase 14: Self-Reflection Sidecar ---');
 
