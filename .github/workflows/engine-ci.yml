@@ -31,3 +31,5 @@ jobs:
           npm run test:parity
           npm run test:autonomy
           npm run probe:nexuslink
+          npm run test:release-artifact
+          npm run check:core-artifact

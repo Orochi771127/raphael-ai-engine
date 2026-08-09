@@ -1,0 +1,24 @@
+{
+  "schemaVersion": "raphael-core-release-policy:v1",
+  "artifactFormat": "raphael-core-esm-directory:v1",
+  "repository": "Orochi771127/raphael-ai-engine",
+  "entrypoint": "adapters/hmax/index.js",
+  "requiredFiles": [
+    "adapters/hmax/index.js",
+    "contracts/runtimeContract.js",
+    "core/canonicalCoreAdapter.js",
+    "core/sovereignSafetyPolicy.js"
+  ],
+  "requiredExports": [
+    "contractVersion",
+    "coreVersion",
+    "finalizeCandidate",
+    "health",
+    "safetyPreflight"
+  ],
+  "authority": {
+    "modelTrusted": false,
+    "directGameMutation": false,
+    "tools": []
+  }
+}

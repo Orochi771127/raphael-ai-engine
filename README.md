@@ -35,6 +35,8 @@ Players never enter a model-provider key. Hosted credentials belong to HMAX serv
 - `gateway/`: deprecated mock/lab notes retained for regression history; production hosted work belongs in private `raphael-HMAX`.
 - `corpus/`: reviewed, versioned runtime/eval snapshots; the source-of-truth corpus lives in `aiforge-raphael-corpus`.
 - `training/`: eval cases and deterministic local evaluation.
+- `release/`: allowlisted artifact policy; it is not runtime code.
+- `scripts/`: deterministic artifact builder and fail-closed verifier.
 - `tests/`: engine and adapter contract tests.
 
 ## Run
@@ -56,6 +58,8 @@ node training/run-critic-reflection-eval.mjs
 node training/run-gateway-maturity-eval.mjs
 node training/run-conversation-lab.mjs
 node adapters/nexuslink/run-probe.mjs
+npm run test:release-artifact
+npm run check:core-artifact
 ```
 
 On the Codex Windows workspace, use the bundled Node runtime if `node` is not on `PATH`:
@@ -94,6 +98,39 @@ The HMAX adapter surface is documented in
 the Edge before any model call. A model can supply wording only and every
 candidate remains `trusted:false` until the canonical Core returns the final
 decision.
+
+## Core release artifact / Core 發行物
+
+`RAPHAEL_CORE_RELEASE_ARTIFACT_V1` packages the allowlisted HMAX adapter closure
+as a deterministic ESM directory. It contains only the HMAX entrypoint,
+runtime contract, canonical critic/finalizer, and sovereign safety policy. It
+does not contain a model, corpus, transcript, credential, database client,
+browser, tool runner, or game reducer.
+
+`RAPHAEL_CORE_RELEASE_ARTIFACT_V1` 會把經 allowlist 核准的 HMAX adapter
+依賴閉包製作成可重現的 ESM 目錄。內容只有 HMAX 入口、runtime contract、
+canonical critic／finalizer 與 sovereign safety policy；不包含模型、語料、
+聊天原文、憑證、資料庫 client、瀏覽器、工具執行器或遊戲 reducer。
+
+```bash
+npm run test:release-artifact
+npm run check:core-artifact
+npm run build:core-artifact
+node scripts/verify-core-artifact.mjs \
+  --artifact dist/raphael-core/0.2.0-adapter-parity-v1 \
+  --expected-digest sha256:<approved-release-digest> \
+  --expected-core-version 0.2.0-adapter-parity-v1 \
+  --expected-contract-version 1.0.0-draft.1
+```
+
+The normal builder refuses a dirty source tree. `--allow-dirty` can only
+produce a visibly `releaseEligible:false` local candidate. HMAX deployment
+must pin a digest produced from a clean, reviewed, immutable engine commit.
+The digest and allowlist provide integrity, not a JavaScript sandbox; every
+release still requires source review and operator-owned pin approval.
+
+完整規則與停止條件請見
+`docs/RAPHAEL_CORE_RELEASE_ARTIFACT_V1.md`。
 
 獨立核心只有在 safety、boundary、memory eligibility、effect proposal、conversation 與 autonomy 對 sealed Nexus Link fixtures 達成 parity 後，才能成為 live runtime；儲存庫位置本身不代表已取得執行權威。
 

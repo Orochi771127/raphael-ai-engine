@@ -2,6 +2,8 @@ node_modules/
 .env
 .env.*
 .wrangler/
+.codebase-memory/
 coverage/
+dist/
 *.log
 docs/reports/*.local.json
