@@ -4,7 +4,7 @@ Raphael AI Engine is the canonical target repository for the standalone, game-ne
 
 Raphael AI Engine 是獨立、遊戲中立 RaphaelCore 認知核心與版本化客戶端契約的 canonical 目標儲存庫。Nexus Link 是第一個正式客戶端；在 parity gate 通過前，成熟的遊戲內 Core 仍是 live authority。
 
-Current status / 目前狀態: `v0.1.x lab + Sovereign Platform V1 contract foundation`. This is not yet a production model service and must not replace the live Nexus Link Core before sealed parity passes.
+Current status / 目前狀態: `v0.2.x canonical adapter parity candidate`. This is not yet a production model service and must not replace the live Nexus Link Core before sealed parity and shadow-client gates pass.
 
 - No OpenAI, Anthropic, Grok, or external model API.
 - No LangGraph runtime dependency in NexusLink.
@@ -30,6 +30,7 @@ Players never enter a model-provider key. Hosted credentials belong to HMAX serv
 - `core/`: pure Raphael logic.
 - `contracts/`: game-neutral request/response schema and examples.
 - `adapters/nexuslink/`: NexusLink-specific adapter boundary.
+- `adapters/hmax/`: narrow HMAX safety/final-critic wiring; no hosted dependency.
 - `adapters/generic-game/`: reference adapter for future games.
 - `gateway/`: deprecated mock/lab notes retained for regression history; production hosted work belongs in private `raphael-HMAX`.
 - `corpus/`: reviewed, versioned runtime/eval snapshots; the source-of-truth corpus lives in `aiforge-raphael-corpus`.
@@ -39,6 +40,8 @@ Players never enter a model-provider key. Hosted credentials belong to HMAX serv
 ## Run
 
 ```bash
+node --test "tests/*.test.mjs"
+node --test tests/core-adapter-parity-v1.test.mjs
 node tests/engine-contract.test.mjs
 node tests/image-derived-knowledge.test.mjs
 node tests/local-learning-sidecar.test.mjs
@@ -85,6 +88,12 @@ NexusLink state -> Raphael contract -> Raphael engine -> NexusLink adapter resul
 The adapter may create chat candidates, animation intents, habitat traces, or memory proposals. It must not directly mutate save state, companion data, Pixi renderer state, or final player-facing output without a game-side policy gate.
 
 The standalone kernel becomes live only after safety, boundary, memory eligibility, effect proposal, conversation and autonomy parity pass against the sealed Nexus Link fixtures. Repository location alone does not grant runtime authority.
+
+The HMAX adapter surface is documented in
+`docs/RAPHAEL_CORE_ADAPTER_PARITY_V1.md`. High-risk input must be terminated at
+the Edge before any model call. A model can supply wording only and every
+candidate remains `trusted:false` until the canonical Core returns the final
+decision.
 
 獨立核心只有在 safety、boundary、memory eligibility、effect proposal、conversation 與 autonomy 對 sealed Nexus Link fixtures 達成 parity 後，才能成為 live runtime；儲存庫位置本身不代表已取得執行權威。
 

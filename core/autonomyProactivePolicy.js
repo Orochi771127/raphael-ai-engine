@@ -1,94 +1,101 @@
 /**
- * Phase 13: Autonomous Proactive Greeting & Initiative Policy
- * 
- * Determines whether RAPHAEL companion should proactively initiate a conversation / greeting
- * based on idle duration, 3D PAD emotion state, and needs levels.
+ * Ambient initiative policy aligned with the sealed RA-1 contract.
+ * Player absence, login frequency and inferred loneliness are deliberately
+ * absent from the decision path.
  */
 
 import { derivePADEmotionState } from './emotionPhysicsPolicy.js';
 
+export const AMBIENT_BOOT_QUIET_MS = 90_000;
+export const AMBIENT_MIN_INTERVAL_MS = 240_000;
+export const AMBIENT_SESSION_CAP = 2;
+
 export function evaluateProactiveInitiative({
-  lastInteractionTime = 0,
-  currentTime = Date.now(),
-  needs = { energy: 100, social: 100, fun: 100 },
-  conversationContext = {},
-  learningProfile = {}
+  session = {},
+  companionState = {},
+  currentTurnSignals = {},
+  currentGameEvent = null,
+  surface = {},
+  safety = {},
+  learningProfile = {},
 } = {}) {
-  const idleMs = currentTime - (lastInteractionTime || currentTime);
-  const idleHours = idleMs / (1000 * 60 * 60);
+  const blocked = blockReason({ session, companionState, surface, safety });
+  if (blocked) return silent(blocked);
 
-  // If interacted within the last 15 minutes, do not trigger proactive greeting
-  if (idleMs < 15 * 60 * 1000 && conversationContext.turnCount > 0) {
-    return {
-      shouldInitiate: false,
-      reason: 'RECENTLY_ACTIVE',
-      proactiveReply: null,
-      initiativeScore: 0,
-    };
-  }
-
-  // Calculate initiative score based on social need decay and idle time
-  const socialDecayScore = Math.min(1.0, (100 - (needs.social ?? 100)) / 100);
-  const idleScore = Math.min(1.0, idleHours / 12);
-  const initiativeScore = Number((socialDecayScore * 0.5 + idleScore * 0.5).toFixed(2));
-
-  // Determine threshold based on learning profile
-  const threshold = learningProfile.questionTolerance === 'decrease' ? 0.75 : 0.45;
-
-  if (initiativeScore < threshold) {
-    return {
-      shouldInitiate: false,
-      reason: 'INITIATIVE_BELOW_THRESHOLD',
-      proactiveReply: null,
-      initiativeScore,
-    };
-  }
+  const trigger = deriveCurrentTrigger(currentTurnSignals, currentGameEvent);
+  if (!trigger) return silent('NO_CURRENT_GROUNDED_TRIGGER');
 
   const padState = derivePADEmotionState({
-    currentPAD: conversationContext.padState || { pleasure: 0, arousal: 0, dominance: 0 },
-    lastIntent: 'proactive_initiative',
+    previousState: companionState.padState || null,
+    mode: 'companion',
+    safetyStatus: { level: 'clear' },
+    intents: trigger === 'current_emotion_signal' ? ['comfort'] : ['observe'],
+  });
+  const proactiveCandidate = buildProactiveText({
+    trigger,
+    energy: Number(companionState.energy ?? 100),
+    isShort: learningProfile.replyLengthBias === 'short',
   });
 
-  const proactiveCandidate = buildProactiveGreetingText(idleHours, padState, learningProfile);
-
-  return {
+  return Object.freeze({
     shouldInitiate: true,
-    reason: 'PROACTIVE_CARE_TRIGGERED',
-    initiativeScore,
-    proactiveReply: {
+    reason: 'CURRENT_GROUNDED_INVITATION',
+    initiativeScore: trigger === 'current_emotion_signal' ? 0.7 : 0.55,
+    proactiveReply: Object.freeze({
       text: proactiveCandidate.text,
       style: proactiveCandidate.style,
       animationHint: padState.animationHint,
       padState,
-    },
+    }),
+  });
+}
+
+function blockReason({ session, companionState, surface, safety }) {
+  if (Number(session.bootElapsedMs ?? 0) < AMBIENT_BOOT_QUIET_MS) return 'BOOT_QUIET';
+  if (Number(session.initiativeCount ?? 0) >= AMBIENT_SESSION_CAP) return 'SESSION_CAP';
+  if (Number(session.initiativeCount ?? 0) > 0
+    && Number(session.sinceLastInitiativeMs ?? 0) < AMBIENT_MIN_INTERVAL_MS) return 'MIN_INTERVAL';
+  if (session.playerDeclined === true) return 'PLAYER_DECLINED';
+  if (surface.onboarding === true || surface.firstLoop === true || surface.soulTalkFocused === true
+    || surface.panelOpen === true) return 'SURFACE_BLOCKED';
+  if (safety.terminal === true || safety.safeHarborMode === true || safety.category && safety.category !== 'none') return 'SAFETY_BLOCKED';
+  if (Number(companionState.defense ?? 0) >= 75) return 'DEFENSE_BLOCKED';
+  if (Number(companionState.touchFatigue ?? 0) >= 75) return 'TOUCH_FATIGUE_BLOCKED';
+  if (Number(companionState.trust ?? 100) < 20) return 'LOW_TRUST_BLOCKED';
+  if (['defensive', 'distant'].includes(companionState.mood)) return 'MOOD_BLOCKED';
+  return null;
+}
+
+function deriveCurrentTrigger(signals, event) {
+  if (signals.explicitEmotion === true || signals.emotionSignal === true) return 'current_emotion_signal';
+  if (event && typeof event === 'object' && event.current === true && typeof event.type === 'string') return 'current_game_event';
+  return null;
+}
+
+function buildProactiveText({ trigger, energy, isShort }) {
+  if (energy < 30) {
+    return {
+      text: isShort ? '我想先安靜坐一會。' : '我今天想把步子放慢一點，先在這裡安靜坐一會。',
+      style: 'ambient_self_rest',
+    };
+  }
+  if (trigger === 'current_emotion_signal') {
+    return {
+      text: isShort ? '我在旁邊。' : '我注意到你這一刻有些不好受。我先待在旁邊，不催你開口。',
+      style: 'ambient_current_care',
+    };
+  }
+  return {
+    text: isShort ? '湖面剛亮了一下。' : '湖面剛亮了一下，我停下來看了一會。',
+    style: 'ambient_current_event',
   };
 }
 
-function buildProactiveGreetingText(idleHours, padState, learningProfile) {
-  const isShort = learningProfile.replyLengthBias === 'short';
-
-  if (idleHours > 24) {
-    return {
-      text: isShort
-        ? '湖邊的燈一直亮著。你來了就好。'
-        : '有一陣子沒看見你了。湖邊的燈一直留著，隨時累了都可以過來坐坐。',
-      style: 'proactive_welcome_back',
-    };
-  }
-
-  if (padState.arousal < 0) {
-    return {
-      text: isShort
-        ? '風很輕。需要安靜坐一會嗎？'
-        : '看見你靠近了。現在空氣很安靜，不需要特別找話題，我們就這樣待著。',
-      style: 'proactive_quiet_care',
-    };
-  }
-
-  return {
-    text: isShort
-      ? '我在這。今天過得順利嗎？'
-      : '我在這留了一個位置。今天過得還順利嗎？想聊聊或是單純放空都可以。',
-    style: 'proactive_gentle_inquiry',
-  };
+function silent(reason) {
+  return Object.freeze({
+    shouldInitiate: false,
+    reason,
+    proactiveReply: null,
+    initiativeScore: 0,
+  });
 }

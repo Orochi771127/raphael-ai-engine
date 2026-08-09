@@ -28,6 +28,6 @@ jobs:
       - name: Run contract and sovereign suites
         run: |
           npm test
-          node tests/sovereign-runtime-v1.test.mjs
-          node tests/shadow-runner.test.mjs
+          npm run test:parity
+          npm run test:autonomy
           npm run probe:nexuslink
