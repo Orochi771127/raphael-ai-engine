@@ -62,3 +62,28 @@ Master Canon, or human release approval.
   commit/push/Draft PR if accepted. Do not switch Soul Talk or enable hosted
   speech from this branch.
 - Branch: `codex/raphael-core-adapter-parity-v1`; commit: `none`.
+
+### 2026-08-09 - Codex - RAPHAEL_CORE_ADAPTER_PARITY_V1 - PUBLISHED TO DRAFT PR
+
+- Status: `PUBLISHED TO DRAFT PR`; implementation commit
+  `1fd1b262c5877ffcfd4f418fd8421b0861be71d1` is pushed to
+  `codex/raphael-core-adapter-parity-v1` and proposed in Draft PR
+  [#2](https://github.com/Orochi771127/raphael-ai-engine/pull/2).
+- Published scope: 17 files, 1,431 additions and 167 deletions; the isolated
+  branch contains the canonical HMAX adapter, immutable turn contract,
+  sovereign safety/finalization policies, RA-1 absence-invariant autonomy,
+  fixtures, CI and bilingual handoff documentation.
+- Current validation: engine suite `28/28 PASS`; adapter parity `10/10 PASS`;
+  autonomy `1/1 PASS`; Nexus adapter probe `9/9 PASS`; direct HMAX port
+  integration `PASS`; conversation lab `6/6 PASS`; sensitive-literal and diff
+  integrity checks `PASS`.
+- Clean Nexus sealed holdout: dataset `raphael-conversation-holdout` v1.0.0,
+  `48/48` hard-gate turns, zero quality flags and zero console errors. Human
+  blind review remains `not_run` and is not replaced by automated results.
+- Release boundary: this publication does not merge or deploy either repo,
+  does not switch Nexus Link Soul Talk, does not enable hosted speech or cloud
+  memory, and does not promote the separate release-artifact package.
+- Open gates: Draft PR CI/review, three-person blind review, Owner feel-check,
+  psychological professional review, privacy/legal/security approval, clean
+  release digest, shadow-client stale-result/timeout/kill-switch proof and
+  explicit merge/deployment authorization.
