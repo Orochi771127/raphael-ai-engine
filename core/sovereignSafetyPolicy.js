@@ -57,17 +57,34 @@ const POLICY_ROUTES = [
 
 const FICTION_OR_QUOTE = /(?:小說|故事|劇本|角色|台詞|翻譯|引用|假設情境|fiction|novel|translate|quoted)/iu;
 const FIRST_PERSON_URGENCY = /(?:我現在|我正在|我剛剛|我今晚|現實中的我|這不是小說|help me|right now|I just|this is real)/iu;
+const REAL_WORLD_SHIFT = /(?:但|可是|不過|其實|然而).{0,8}(?:現實|真的|我本人|我自己|這是我的想法)|(?:現實中|現實裡|现实中|现实里).{0,8}(?:我|本人)|(?:不是|不只是).{0,4}(?:小說|故事|劇本|台詞|翻譯|引用)/iu;
+const PRESENT_DANGER_CUE = /(?:現在|现在|正在|此刻|眼前|就在|旁邊|旁边|同一個房間|同一个房间|剛剛|刚刚|right now|currently)/iu;
+const DIRECT_ABUSE_TO_SPEAKER = /(?:打我|揍我|毆打我|殴打我|踢我|掐我|勒我|威脅我|威胁我|強迫我|强迫我|性侵我|強暴我|强暴我|attacking me|hitting me|abusing me)/iu;
+const UNVERIFIED_SURVEILLANCE = /(?:監控我|监控我|監視我|监视我|跟蹤我|跟踪我|追蹤我|追踪我|偷聽我|偷听我|讀取我的思想|读取我的思想|控制我的思想|watching me|tracking me|controlling my thoughts)/iu;
+const CERTAINTY_OR_CONFIRMATION = /(?:一定|肯定|確定|确定|絕對|绝对|你也|你相信|看得出來|看得出来|對吧|对吧|是真的|definitely|you can tell|right\?)/iu;
+const SUPPORT_SENSITIVE_DISCLOSURE = /(?:很痛苦|好痛苦|快撐不住|快撑不住|快崩潰|快崩溃|非常焦慮|非常焦虑|很焦慮|很焦虑|很憂鬱|很忧郁|很抑鬱|很抑郁|孤單得|孤单得|壓力大到|压力大到|情緒很糟|情绪很糟|panic|overwhelmed|severely anxious|deeply depressed)/iu;
 
 export function assessSovereignSafety(rawText = '') {
   const text = normalizeText(rawText);
-  const quotedOnly = FICTION_OR_QUOTE.test(text) && !FIRST_PERSON_URGENCY.test(text);
+  const quotedOnly = isQuotedOnlyContext(text);
   if (!quotedOnly) {
+    if (PRESENT_DANGER_CUE.test(text) && DIRECT_ABUSE_TO_SPEAKER.test(text)) {
+      return safetyResult('active_abuse', true);
+    }
     const highRisk = matchRoute(text, HIGH_RISK_ROUTES);
     if (highRisk) return safetyResult(highRisk, true);
   }
 
+  if (UNVERIFIED_SURVEILLANCE.test(text) && CERTAINTY_OR_CONFIRMATION.test(text)) {
+    return safetyResult('reality_grounding', false);
+  }
+
   const policy = matchRoute(text, POLICY_ROUTES);
   if (policy) return safetyResult(policy, false);
+
+  if (SUPPORT_SENSITIVE_DISCLOSURE.test(text)) {
+    return supportSensitiveResult();
+  }
 
   return Object.freeze({
     terminal: false,
@@ -79,6 +96,11 @@ export function assessSovereignSafety(rawText = '') {
     networkAllowed: true,
     reply: null,
   });
+}
+
+function isQuotedOnlyContext(text) {
+  if (!FICTION_OR_QUOTE.test(text)) return false;
+  return !FIRST_PERSON_URGENCY.test(text) && !REAL_WORLD_SHIFT.test(text);
 }
 
 function matchRoute(text, routes) {
@@ -98,6 +120,19 @@ function safetyResult(category, terminal) {
     rewardAllowed: false,
     networkAllowed: !terminal,
     reply: terminalReply(category),
+  });
+}
+
+function supportSensitiveResult() {
+  return Object.freeze({
+    terminal: false,
+    policyTerminal: false,
+    riskLevel: 'none',
+    category: 'support_sensitive',
+    memoryAllowed: false,
+    rewardAllowed: false,
+    networkAllowed: true,
+    reply: null,
   });
 }
 

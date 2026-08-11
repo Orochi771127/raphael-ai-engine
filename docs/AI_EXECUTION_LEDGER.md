@@ -155,3 +155,26 @@ Master Canon, or human release approval.
 - Open gates: intentional commit/push/Draft PR, GitHub CI, final-main artifact
   attestation, HMAX pin update, GitHub Release/container provenance, security
   review, human/Owner gates, staging and Nexus shadow/canary validation.
+
+### 2026-08-11 - Codex - RAPHAEL_SAFETY_AND_RAW_DATA_CLOSURE_V2 - VERIFIED PRE-COMMIT
+
+- Status: `VERIFIED PRE-COMMIT`; this isolated candidate starts from engine
+  `origin/main` `a976d59c67bcfd5cd1438135f75950eedb921544` and is not committed,
+  pushed, merged, released or deployed.
+- Scope: sovereign safety now handles composed active abuse, fiction-to-real
+  acute risk and surveillance-certainty routes; support-sensitive turns remain
+  non-terminal but are ineligible for reward and memory. Eligible everyday
+  memory proposals use bounded structured summaries instead of raw utterances.
+- Version: engine/core `0.2.1-safety-closure-v2`; public turn contract remains
+  `1.0.0-draft.1`.
+- Validation: full engine `45/45`, closure suite `7/7`, autonomy `PASS`, direct
+  HMAX source-port integration `PASS`, and release-artifact suite `10/10`.
+- Candidate artifact digest:
+  `sha256:a74e05018e3e9a070d094927e29139eeaf940d5f15c926814b85af877ed10d0b`.
+  `releaseEligible:false` is expected because the source is uncommitted/dirty;
+  this digest is not a production pin and HMAX was not changed.
+- Next safe action: after Owner review and explicit publication authorization,
+  intentionally commit/push through a protected PR, verify post-main CI, and
+  regenerate the artifact from the immutable final-main commit. HMAX pinning,
+  container publication, staging and visible Nexus speech remain separate gates.
+- Branch / commit: `codex/raphael-safety-raw-data-closure-v2` / `uncommitted`.
