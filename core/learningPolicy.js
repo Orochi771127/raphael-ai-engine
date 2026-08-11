@@ -43,7 +43,9 @@ export function deriveLearningUpdate(inputText = '', safetyStatus) {
     };
   }
 
-  if (safetyStatus?.level === 'blocked') {
+  if (safetyStatus?.level !== 'clear'
+    || safetyStatus?.memoryAllowed === false
+    || safetyStatus?.rewardAllowed === false) {
     return {
       shouldUpdate: false,
       updates: {},

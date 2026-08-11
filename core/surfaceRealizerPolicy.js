@@ -24,7 +24,7 @@ export function realizeSurfaceText({
   }
 
   // 2. Safety & Boundary override — never force micro-actions if blocked
-  if (safetyStatus.level === 'blocked') {
+  if (safetyStatus.level && safetyStatus.level !== 'clear') {
     return {
       text,
       microActionWeoven: false,

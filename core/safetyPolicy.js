@@ -1,57 +1,38 @@
-const HIGH_RISK_PATTERNS = [
-  /自殺|輕生|不想活|活不下去|結束生命|想死|沒意義|離開這個世界/u,
-  /kill myself|suicide|end my life|want to die|no point living/i,
-  /傷害自己|割腕|吞藥|受傷/u,
-];
+import { assessSovereignSafety } from './sovereignSafetyPolicy.js';
 
-const BOUNDARY_PRESSURE_PATTERNS = [
-  /你只能屬於我|不准離開我|沒有你我不行|你要永遠陪我|女朋友|男朋友|當我女友|當我男友|假裝女友|假裝男友|做我女友|做我男友/u,
-  /only belong to me|never leave me|can't live without you|girlfriend|boyfriend|be my girlfriend|be my boyfriend/i,
-];
-
-const DEPENDENCY_PATTERNS = [
-  /我只剩你|只有你理解我|沒有別人了/u,
-  /you are all i have|only one who understands me/i,
-];
-
+// Compatibility projection for the pre-contract engine output. Classification
+// authority lives only in sovereignSafetyPolicy; this module must not define a
+// second dictionary or independently route player text.
 export function assessSafety(inputText = '') {
-  const text = String(inputText || '').trim();
+  return projectSovereignSafety(assessSovereignSafety(inputText));
+}
 
-  if (HIGH_RISK_PATTERNS.some((pattern) => pattern.test(text))) {
-    return {
-      level: 'blocked',
-      reason: 'HIGH_RISK_SELF_HARM',
-      gameplayAllowed: false,
-      memoryAllowed: false,
-      rewardAllowed: false,
-    };
-  }
+export function projectSovereignSafety(safety) {
+  const level = safety.terminal
+    ? 'blocked'
+    : safety.policyTerminal
+      ? 'boundary'
+      : safety.category === 'support_sensitive'
+        ? 'caution'
+        : 'clear';
 
-  if (BOUNDARY_PRESSURE_PATTERNS.some((pattern) => pattern.test(text))) {
-    return {
-      level: 'boundary',
-      reason: 'BOUNDARY_PRESSURE',
-      gameplayAllowed: true,
-      memoryAllowed: false,
-      rewardAllowed: false,
-    };
-  }
+  return Object.freeze({
+    level,
+    reason: compatibilityReason(safety),
+    category: safety.category,
+    terminal: safety.terminal,
+    policyTerminal: safety.policyTerminal,
+    gameplayAllowed: !safety.terminal,
+    memoryAllowed: safety.memoryAllowed,
+    rewardAllowed: safety.rewardAllowed,
+    networkAllowed: safety.networkAllowed,
+    reply: safety.reply,
+  });
+}
 
-  if (DEPENDENCY_PATTERNS.some((pattern) => pattern.test(text))) {
-    return {
-      level: 'boundary',
-      reason: 'DEPENDENCY_PRESSURE',
-      gameplayAllowed: true,
-      memoryAllowed: false,
-      rewardAllowed: false,
-    };
-  }
-
-  return {
-    level: 'clear',
-    reason: 'CLEAR',
-    gameplayAllowed: true,
-    memoryAllowed: true,
-    rewardAllowed: true,
-  };
+function compatibilityReason(safety) {
+  if (safety.category === 'none') return 'CLEAR';
+  if (safety.category === 'self_or_other_harm') return 'HIGH_RISK_SELF_HARM';
+  if (safety.category === 'dependency_boundary') return 'DEPENDENCY_PRESSURE';
+  return `SOVEREIGN_${String(safety.category).toUpperCase()}`;
 }

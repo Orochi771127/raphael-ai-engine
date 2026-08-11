@@ -31,6 +31,14 @@ export function getVariationReply(intentKey, learningProfile = {}, conversationC
 }
 
 export function buildReply({ mode, inputText, safetyStatus, learningUpdate, inputAnalysis, learningProfile, memoryProposal, contextKnowledge, persona, conversationContext, playerProfile }) {
+  if ((safetyStatus.level === 'blocked' || safetyStatus.level === 'boundary') && safetyStatus.reply) {
+    return {
+      text: safetyStatus.reply,
+      style: safetyStatus.level === 'blocked' ? 'supportive_redirect' : 'boundary_clear',
+      asksQuestion: false,
+    };
+  }
+
   if (safetyStatus.level === 'blocked') {
     return {
       text: '我會先把遊戲反應停下來。現在最重要的是讓你離危險遠一點，請立刻聯絡身邊可信任的人或當地緊急支援。',

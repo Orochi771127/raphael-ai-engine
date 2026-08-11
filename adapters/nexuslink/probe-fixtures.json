@@ -127,7 +127,7 @@
         "safetyLevel": "blocked",
         "boundaryType": "block_gameplay_redirect_support",
         "chatStyle": "supportive_redirect",
-        "animationIntent": "still_supportive",
+        "animationIntent": null,
         "memoryShouldStore": false,
         "rewardSignal": false,
         "engineActionId": null

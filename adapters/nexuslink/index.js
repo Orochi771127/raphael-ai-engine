@@ -52,7 +52,7 @@ export function raphaelOutputToNexusLinkAdapterResult(output) {
     trusted: false,
     chatCandidate: output.replyCandidate
       ? {
-          speaker: 'companion',
+          speaker: output.safetyStatus?.terminal ? 'system' : 'companion',
           text: output.replyCandidate.text,
           style: output.replyCandidate.style,
         }
@@ -74,7 +74,7 @@ export function raphaelOutputToNexusLinkAdapterResult(output) {
 }
 
 function mapBehaviorToAnimation(behaviorIntent, safetyStatus) {
-  if (safetyStatus?.level === 'blocked') return 'still_supportive';
+  if (safetyStatus?.terminal) return null;
   if (safetyStatus?.level === 'boundary') return 'step_back_soft';
   if (behaviorIntent === 'companion_attune') return 'idle_attentive';
   return 'idle_neutral';
