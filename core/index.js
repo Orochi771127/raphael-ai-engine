@@ -27,7 +27,7 @@ import {
 } from './canonicalCoreAdapter.js';
 import { freezeRuntimeRequest } from '../contracts/runtimeContract.js';
 
-export const RAPHAEL_ENGINE_VERSION = '0.2.1';
+export const RAPHAEL_ENGINE_VERSION = '0.2.2';
 
 export { answerCanonQuestion, retrieveCanonCards } from './canonRetrievalPolicy.js';
 export { applyCriticRevision, critiqueRaphaelOutput } from './criticPolicy.js';
@@ -53,11 +53,14 @@ export function runRaphaelEngine(request = {}) {
   const inputText = String(request.input?.text || '').trim();
   const inputAnalysis = analyzeInput(inputText);
   const safetyStatus = assessSafety(inputText);
+  const stateMutationSuppressed = shouldSuppressStateMutation(safetyStatus);
   const contextKnowledge = deriveContextKnowledge(request, { safetyStatus });
   const learningProfileUpdate = deriveLearningUpdate(inputText, safetyStatus);
   const actorId = request.actorProfile?.actorId;
   const persona = getPersona(actorId);
-  const nextInternalState = updateInternalState(request.internalState, inputText.length > 0, persona?.needsProfile, inputAnalysis.primaryIntent);
+  const nextInternalState = stateMutationSuppressed
+    ? cloneUnchangedState(request.internalState)
+    : updateInternalState(request.internalState, inputText.length > 0, persona?.needsProfile, inputAnalysis.primaryIntent);
   const modePolicy = MODE_POLICIES[mode];
   const memoryProposal = buildMemoryProposal({ inputText, safetyStatus, learningProfileUpdate });
   const pragmaticContext = analyzePragmaticContext(inputText, request.sceneContext || {});
@@ -99,7 +102,7 @@ export function runRaphaelEngine(request = {}) {
   });
 
   let expeditionBehavior = null;
-  if (mode === 'expedition' || request.expeditionEvent) {
+  if (!stateMutationSuppressed && (mode === 'expedition' || request.expeditionEvent)) {
     const eventType = request.expeditionEvent || 'start';
     expeditionBehavior = evaluateExpeditionBehavior({
       persona,
@@ -130,7 +133,7 @@ export function runRaphaelEngine(request = {}) {
     companionBehavior,
     boundaryAction,
     memoryProposal,
-    behaviorIntent: modePolicy.behaviorIntent,
+    behaviorIntent: safetyStatus.terminal ? null : modePolicy.behaviorIntent,
     gameActionSuggestion,
     expeditionBehavior,
     internalState: nextInternalState,
@@ -243,8 +246,22 @@ function buildBoundaryAction(safetyStatus) {
   return {
     type: 'none',
     reason: 'CLEAR',
-    rewardAllowed: true,
+    rewardAllowed: safetyStatus.rewardAllowed,
   };
+}
+
+function shouldSuppressStateMutation(safetyStatus) {
+  return safetyStatus.terminal
+    || safetyStatus.policyTerminal
+    || safetyStatus.memoryAllowed === false
+    || safetyStatus.rewardAllowed === false;
+}
+
+function cloneUnchangedState(state) {
+  if (state == null) return null;
+  return typeof structuredClone === 'function'
+    ? structuredClone(state)
+    : JSON.parse(JSON.stringify(state));
 }
 
 function buildMemoryProposal({ inputText, safetyStatus, learningProfileUpdate }) {

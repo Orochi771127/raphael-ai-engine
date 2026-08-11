@@ -178,3 +178,33 @@ Master Canon, or human release approval.
   regenerate the artifact from the immutable final-main commit. HMAX pinning,
   container publication, staging and visible Nexus speech remain separate gates.
 - Branch / commit: `codex/raphael-safety-raw-data-closure-v2` / `uncommitted`.
+
+### 2026-08-12 - Codex - RAPHAEL_ENGINE_SINGLE_SOVEREIGN_PATH_V1 - VERIFIED PRE-COMMIT
+
+- Status: `VERIFIED PRE-COMMIT`; isolated branch
+  `codex/raphael-engine-single-sovereign-path-v1` starts from exact engine
+  `origin/main` `b0a12512f09eb77ff35d86a3ada3fec3fd610ec9`. The original engine worktree and
+  its unrelated untracked diagnostics remain untouched.
+- Scope: `runRaphaelEngine`, Nexus and generic adapters now derive safety from
+  the same `sovereignSafetyPolicy` used by `safetyPreflight` and
+  `runSovereignTurn`. The old safety module is a shape-only compatibility
+  projection with no independent pattern dictionary.
+- Safety closure: acute terminals suppress learning, legacy internal-state
+  advancement, memory, reward, action, behavior and expedition override;
+  Nexus terminal speech is system-authored and proposes no animation. Policy
+  and support-sensitive routes also suppress learning, memory, reward and game
+  actions.
+- Version: engine `0.2.2`, canonical Core `0.2.2-single-sovereign-v1`; public
+  turn contract remains `1.0.0-draft.1`.
+- Validation: full engine `53/53`, new single-sovereign regression `8/8`,
+  parity `10/10` plus `18` sovereign assertions, autonomy `PASS`, Nexus probe
+  `9/9`, direct HMAX critic port `PASS`, and release-artifact suite `10/10`.
+- Artifact boundary: the pre-commit check correctly produced only a
+  `releaseEligible:false` candidate. No dirty digest is a production pin. A
+  clean final-main artifact must be regenerated after protected merge before
+  HMAX context/digest closure.
+- Non-goals: no model attachment/training, HMAX modification, deployment,
+  player traffic, public ingress, Soul Talk cutover, external provider, memory
+  database, game reducer, reward or Growth authority.
+- Branch / commit: `codex/raphael-engine-single-sovereign-path-v1` /
+  `uncommitted`.

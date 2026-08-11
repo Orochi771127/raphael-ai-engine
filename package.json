@@ -1,6 +1,6 @@
 {
   "name": "raphael-ai-engine",
-  "version": "0.2.1",
+  "version": "0.2.2",
   "private": true,
   "type": "module",
   "description": "Canonical game-neutral RaphaelCore kernel and bounded HMAX/client contracts.",

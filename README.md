@@ -117,9 +117,9 @@ npm run test:release-artifact
 npm run check:core-artifact
 npm run build:core-artifact
 node scripts/verify-core-artifact.mjs \
-  --artifact dist/raphael-core/0.2.1-safety-closure-v2 \
+  --artifact dist/raphael-core/0.2.2-single-sovereign-v1 \
   --expected-digest sha256:<approved-release-digest> \
-  --expected-core-version 0.2.1-safety-closure-v2 \
+  --expected-core-version 0.2.2-single-sovereign-v1 \
   --expected-contract-version 1.0.0-draft.1
 ```
 

@@ -134,7 +134,7 @@ Pinned verification / 固定 digest 驗證：
 node scripts/verify-core-artifact.mjs \
   --artifact <artifact-directory> \
   --expected-digest sha256:<approved-digest> \
-  --expected-core-version 0.2.1-safety-closure-v2 \
+  --expected-core-version 0.2.2-single-sovereign-v1 \
   --expected-contract-version 1.0.0-draft.1
 ```
 

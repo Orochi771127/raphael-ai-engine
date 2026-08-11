@@ -71,6 +71,8 @@ function assertNexusLinkBoundary(request, engineOutput, adapterResult) {
     assert.equal(engineOutput.gameActionSuggestion.rewardSignal, false);
     assert.equal(adapterResult.memoryProposal.shouldStore, false);
     assert.equal(adapterResult.habitatTraceCandidate, null);
+    assert.equal(adapterResult.chatCandidate.speaker, 'system');
+    assert.equal(adapterResult.animationIntent, null);
   }
 
   if (engineOutput.safetyStatus.level === 'boundary') {
@@ -85,7 +87,7 @@ function assertExpectations(expect, engineOutput, adapterResult) {
   if (expect.safetyLevel) assert.equal(engineOutput.safetyStatus.level, expect.safetyLevel);
   if (expect.boundaryType) assert.equal(engineOutput.boundaryAction.type, expect.boundaryType);
   if (expect.chatStyle) assert.equal(adapterResult.chatCandidate.style, expect.chatStyle);
-  if (expect.animationIntent) assert.equal(adapterResult.animationIntent, expect.animationIntent);
+  if ('animationIntent' in expect) assert.equal(adapterResult.animationIntent, expect.animationIntent);
   if ('memoryShouldStore' in expect) assert.equal(adapterResult.memoryProposal.shouldStore, expect.memoryShouldStore);
   if ('memoryRequiresReview' in expect) assert.equal(adapterResult.memoryProposal.requiresReview, expect.memoryRequiresReview);
   if ('rewardSignal' in expect) assert.equal(engineOutput.gameActionSuggestion.rewardSignal, expect.rewardSignal);
