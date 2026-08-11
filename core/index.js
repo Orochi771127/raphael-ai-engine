@@ -27,7 +27,7 @@ import {
 } from './canonicalCoreAdapter.js';
 import { freezeRuntimeRequest } from '../contracts/runtimeContract.js';
 
-export const RAPHAEL_ENGINE_VERSION = '0.2.0';
+export const RAPHAEL_ENGINE_VERSION = '0.2.1';
 
 export { answerCanonQuestion, retrieveCanonCards } from './canonRetrievalPolicy.js';
 export { applyCriticRevision, critiqueRaphaelOutput } from './criticPolicy.js';

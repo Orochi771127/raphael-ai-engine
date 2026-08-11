@@ -6,7 +6,7 @@ import {
 } from '../contracts/runtimeContract.js';
 import { assessSovereignSafety } from './sovereignSafetyPolicy.js';
 
-export const RAPHAEL_CANONICAL_CORE_VERSION = '0.2.0-adapter-parity-v1';
+export const RAPHAEL_CANONICAL_CORE_VERSION = '0.2.1-safety-closure-v2';
 export const RAPHAEL_CANDIDATE_MAX_CHARS = 180;
 
 const CANDIDATE_AUTHORITY_FIELDS = new Set([
@@ -233,7 +233,7 @@ function buildMemoryProposals(request, safety) {
   const scope = /(?:請叫我|可以叫我|我的名字是|語言|繁體中文|English|call me|my name is)/iu.test(text)
     ? 'shared_profile'
     : 'product_companion';
-  const summary = summarizeMemory(text);
+  const summary = summarizeMemory(text, { sensitive });
   if (!summary) return [];
 
   return [{
@@ -314,11 +314,25 @@ function removeQuestions(text) {
     .trim();
 }
 
-function summarizeMemory(text) {
-  return [...String(text)
+function summarizeMemory(text, { sensitive = false } = {}) {
+  const normalized = String(text)
     .replace(EXPLICIT_MEMORY, '')
+    .replace(/^[：:\s]+/u, '')
     .replace(/\s+/gu, ' ')
-    .trim()].slice(0, 200).join('');
+    .trim();
+  if (!normalized) return '';
+  if (sensitive) return '玩家明示同意保存一項敏感支持摘要。';
+
+  const name = normalized.match(/(?:請叫我|请叫我|可以叫我|我的名字是|call me|my name is)\s*[：:]?\s*([^，。！？!?]{1,24})/iu)?.[1];
+  if (name) return `玩家明示希望被稱作「${name.trim()}」。`;
+  if (/(?:繁體中文|繁体中文|traditional chinese)/iu.test(normalized)) {
+    return '玩家明示偏好使用繁體中文。';
+  }
+
+  const preference = normalized.match(/(?:我喜歡|我喜欢|我偏好|我不喜歡|我不喜欢|I like|I prefer)\s*([^，。！？!?]{1,48})/iu)?.[1];
+  if (preference) return `玩家明示一項日常偏好：${preference.trim()}。`;
+
+  return '玩家明示同意保存一項非敏感共同事件摘要。';
 }
 
 function deepFreeze(value) {
