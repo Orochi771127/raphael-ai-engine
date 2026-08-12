@@ -1,6 +1,6 @@
 {
   "name": "raphael-ai-engine",
-  "version": "0.2.4",
+  "version": "0.2.5",
   "private": true,
   "type": "module",
   "description": "Canonical game-neutral RaphaelCore kernel and bounded HMAX/client contracts.",
@@ -13,6 +13,9 @@
     "build:core-artifact": "node scripts/build-core-artifact.mjs",
     "verify:core-artifact": "node scripts/verify-core-artifact.mjs",
     "check:core-artifact": "node scripts/check-core-artifact.mjs",
+    "canon:build": "node scripts/build-canon-bundle.mjs",
+    "canon:check": "node scripts/build-canon-bundle.mjs --check",
+    "test:canon": "node --test tests/canon-catalog-v1.test.mjs tests/canon-bundle-v1.test.mjs",
     "test:image-knowledge": "node tests/image-derived-knowledge.test.mjs",
     "test:local-learning": "node tests/local-learning-sidecar.test.mjs",
     "test:canon-retrieval": "node tests/canon-retrieval.test.mjs",

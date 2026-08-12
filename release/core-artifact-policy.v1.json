@@ -6,12 +6,15 @@
   "requiredFiles": [
     "adapters/hmax/index.js",
     "contracts/runtimeContract.js",
+    "core/canonCatalogPolicy.js",
     "core/canonicalCoreAdapter.js",
     "core/sovereignSafetyPolicy.js"
   ],
   "requiredExports": [
+    "canonCatalogSchemaVersion",
     "contractVersion",
     "coreVersion",
+    "createCanonCatalog",
     "finalizeCandidate",
     "health",
     "safetyPreflight"

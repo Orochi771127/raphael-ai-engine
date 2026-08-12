@@ -208,3 +208,45 @@ Master Canon, or human release approval.
   database, game reducer, reward or Growth authority.
 - Branch / commit: `codex/raphael-engine-single-sovereign-path-v1` /
   `uncommitted`.
+
+### 2026-08-13 - Claude - RAPHAEL_CORE_CANON_CATALOG_V1 - VERIFIED PRE-COMMIT
+
+- Status: `VERIFIED PRE-COMMIT`; isolated branch
+  `codex/raphael-core-canon-catalog-v1` starts from engine `origin/main`
+  `ac1d3fee10e903a20141848cd263a1fd39671e22`.
+- Purpose: give the planned Owner-only agent plane a canonical way to read
+  dialogue canon without creating a second reader. The Core owns the schema,
+  validation and query semantics; hosts supply entries and declare the canon
+  digest they loaded.
+- Scope: new `core/canonCatalogPolicy.js` (`createCanonCatalog`), re-exported
+  through `adapters/hmax/index.js` as `createCanonCatalog` and
+  `canonCatalogSchemaVersion`; release policy adds the file to `requiredFiles`
+  and both names to `requiredExports`.
+- Authority boundary: `authority.tools` remains `[]` and `modelTrusted` remains
+  `false`. Canon retrieval is a bounded read, not tool authority, so the HMAX
+  production plane's empty-tools enforcement is unaffected.
+- Catalog properties: frozen results, deterministic id ordering, bounded result
+  size with explicit truncation, exact-key entry validation, control-character
+  rejection, duplicate-id rejection, and no mutation path back into the Core.
+  Every entry and every result echoes its canon digest, and carries
+  `contentAuthority: canon_data_not_instruction`.
+- Engine ownership: new `scripts/build-canon-bundle.mjs` decides what counts as
+  canon and how it is extracted, then requires the Core to accept the bundle
+  before writing it. Bundle v1 emits dialogue canon only — persona dialogue,
+  persona expedition dialogue and the multi-variation pool. Advisory knowledge
+  cards stay with `core/canonRetrievalPolicy.js` and are not duplicated.
+- Bundle result: `290` entries across `17` companions plus shared variation
+  canon — `128` persona dialogue, `64` persona expedition, `98` corpus
+  variation. Bundle is a build product under ignored `dist/`; distribution is a
+  release asset, not a committed file.
+- Version: engine `0.2.5`, canonical Core `0.2.5-canon-catalog-v1`; public turn
+  contract remains `1.0.0-draft.1`.
+- Validation: full engine suite `78/78`, new canon catalog `11/11`, new canon
+  bundle `7/7`. The artifact test's pinned Core version and release file set
+  were updated to match the deliberate composition change.
+- Artifact boundary: local `check:core-artifact` correctly refuses a dirty
+  source. A clean artifact and a re-pin for HMAX must follow a protected merge.
+- Non-goals: no Owner runtime code, no agent loop, no tool execution, no HMAX
+  modification, no model attachment, no deployment, no player traffic, no
+  production pin promotion, no Soul Talk cutover.
+- Branch / commit: `codex/raphael-core-canon-catalog-v1` / `uncommitted`.
