@@ -6,7 +6,7 @@ import {
 } from '../contracts/runtimeContract.js';
 import { assessSovereignSafety } from './sovereignSafetyPolicy.js';
 
-export const RAPHAEL_CANONICAL_CORE_VERSION = '0.2.4-category-precedence-v1';
+export const RAPHAEL_CANONICAL_CORE_VERSION = '0.2.5-canon-catalog-v1';
 export const RAPHAEL_CANDIDATE_MAX_CHARS = 180;
 
 const CANDIDATE_AUTHORITY_FIELDS = new Set([

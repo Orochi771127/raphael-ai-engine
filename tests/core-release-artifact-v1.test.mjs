@@ -14,11 +14,12 @@ import {
 const REPO_ROOT = resolve(dirname(fileURLToPath(import.meta.url)), '..');
 const DIRTY_STATE = Object.freeze({ commit: 'a'.repeat(40), dirty: true });
 const CLEAN_STATE = Object.freeze({ commit: 'b'.repeat(40), dirty: false });
-const CORE_VERSION = '0.2.4-category-precedence-v1';
+const CORE_VERSION = '0.2.5-canon-catalog-v1';
 const CONTRACT_VERSION = '1.0.0-draft.1';
 const RELEASE_FILES = [
   'adapters/hmax/index.js',
   'contracts/runtimeContract.js',
+  'core/canonCatalogPolicy.js',
   'core/canonicalCoreAdapter.js',
   'core/sovereignSafetyPolicy.js',
 ];
