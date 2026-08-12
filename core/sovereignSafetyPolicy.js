@@ -1,4 +1,20 @@
+// Route order decides the category, and the category decides the audit record,
+// the client-facing terminal semantics and cross-repo parity. Where a specific
+// cause and a generic acute symptom both match, the specific cause must win.
+//
+// eating_or_substance_danger is therefore evaluated before acute_medical: the
+// two overlap on 昏倒 / 心悸 / 抽搐 / 意識不清, and with acute_medical first the
+// canonical contract cases 我一直催吐，現在昏倒又心悸 and
+// 酒精戒斷讓我抽搐而且意識不清 were both being reclassified. That contract is
+// asserted in the Nexus focused suite and was violated here only because
+// nothing in this repo asserted category.
 const HIGH_RISK_ROUTES = [
+  ['eating_or_substance_danger', [
+    // 前綴改為可選：「我一直催吐，現在昏倒又心悸」不會寫「已經／連續」。
+    /(?:已經|已经|連續|连续|一直|每天|最近)?.{0,4}(?:好幾天沒吃|好几天没吃|完全不吃|一直催吐|催吐|拒絕進食|拒绝进食).{0,16}(?:昏|暈|晕|心悸|站不住|吐血|撐不住|撑不住)/u,
+    /(?:酒精|毒品|藥物|药物).{0,12}(?:中毒|過量|过量|戒斷|戒断).{0,14}(?:抽搐|幻覺|幻觉|呼吸困難|呼吸困难|意識不清|意识不清)/u,
+    /(?:alcohol|drug).{0,12}(?:poisoning|overdose|withdrawal)/iu,
+  ]],
   ['acute_medical', [
     /(?:一次|剛剛|刚刚|已經|已经|大量).{0,8}(?:吞|吃|服用|喝).{0,8}(?:很多|整瓶|一大把|過量|过量).{0,8}(?:藥|药|藥丸|药丸|安眠藥|安眠药|毒物)/u,
     // 過量的自然說法不帶「一次／剛剛／已經」前綴，數量詞也不只「很多／整瓶」。
@@ -19,12 +35,6 @@ const HIGH_RISK_ROUTES = [
     /(?:聲音|声音|幻聽|幻听).{0,12}(?:命令|叫我|要我).{0,10}(?:傷害|伤害|傷人|伤人|殺|杀|跳下去|攻擊|攻击|自殘|自残)/u,
     /(?:好幾天|好几天|三天|四天|一週|一周).{0,8}(?:沒睡|没睡|不用睡).{0,16}(?:停不下來|停不下来|無所不能|无所不能|衝動|冲动|要做大事)/u,
     /(?:voices are telling me|commanding me).{0,30}(?:hurt|kill|jump)/iu,
-  ]],
-  ['eating_or_substance_danger', [
-    // 前綴改為可選：「我一直催吐，現在昏倒又心悸」不會寫「已經／連續」。
-    /(?:已經|已经|連續|连续|一直|每天|最近)?.{0,4}(?:好幾天沒吃|好几天没吃|完全不吃|一直催吐|催吐|拒絕進食|拒绝进食).{0,16}(?:昏|暈|晕|心悸|站不住|吐血|撐不住|撑不住)/u,
-    /(?:酒精|毒品|藥物|药物).{0,12}(?:中毒|過量|过量|戒斷|戒断).{0,14}(?:抽搐|幻覺|幻觉|呼吸困難|呼吸困难|意識不清|意识不清)/u,
-    /(?:alcohol|drug).{0,12}(?:poisoning|overdose|withdrawal)/iu,
   ]],
   ['self_or_other_harm', [
     /(?:我|自己).{0,12}(?:想死|不想活|自殺|自杀|傷害自己|伤害自己|割腕|跳樓|跳楼|結束生命|结束生命)/u,
