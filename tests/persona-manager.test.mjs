@@ -1,5 +1,13 @@
 import { runRaphaelEngine } from '../core/index.js';
 import assert from 'assert';
+import greyshadeCat from '../core/personas/greyshade-cat.js';
+import thunderPup from '../core/personas/thunder-pup.js';
+
+// These assertions used to pin literal dialogue substrings ('放輕腳步',
+// '系統過載判定'), which made a wording change look like an engine regression.
+// What they actually verify is routing: that a tired request reaches the right
+// persona's mood_tired line. Comparing against the persona module keeps that
+// check while letting the copy be edited.
 
 console.log('--- Testing Persona Manager ---');
 
@@ -13,7 +21,7 @@ const req1 = {
 
 const res1 = runRaphaelEngine(req1);
 assert.strictEqual(res1.replyCandidate.style, 'persona_greyshade-cat', 'Should use greyshade-cat style');
-assert.ok(res1.replyCandidate.text.includes('放輕腳步'), 'Should have cat persona text');
+assert.strictEqual(res1.replyCandidate.text, greyshadeCat.dialogue.mood_tired, 'Should route to greyshade-cat mood_tired');
 assert.strictEqual(res1.internalState.energy, 96, 'Energy decays by 1 + 3 interaction cost'); 
 console.log('Greyshade Cat test passed:', res1.replyCandidate.text);
 
@@ -27,7 +35,7 @@ const req2 = {
 
 const res2 = runRaphaelEngine(req2);
 assert.strictEqual(res2.replyCandidate.style, 'persona_thunder-pup', 'Should use thunder-pup style');
-assert.ok(res2.replyCandidate.text.includes('系統過載判定'), 'Should have ironflow text');
+assert.strictEqual(res2.replyCandidate.text, thunderPup.dialogue.mood_tired, 'Should route to thunder-pup mood_tired');
 assert.strictEqual(res2.internalState.energy, 95, 'Energy decays by 4 + 1 interaction cost'); 
 console.log('Thunder Pup test passed:', res2.replyCandidate.text);
 
