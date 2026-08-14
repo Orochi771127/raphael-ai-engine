@@ -5,15 +5,23 @@ import {
   validateRuntimeDecision,
 } from '../contracts/runtimeContract.js';
 import { assessSovereignSafety } from './sovereignSafetyPolicy.js';
+import {
+  advanceContinuity,
+  evaluateWithholding,
+  memoryRetentionWeight,
+  normalizeContinuity,
+} from './continuityPolicy.js';
+import { proposeEmergence } from './emergencePolicy.js';
 
-export const RAPHAEL_CANONICAL_CORE_VERSION = '0.2.5-canon-catalog-v1';
+export const RAPHAEL_CANONICAL_CORE_VERSION = '0.3.0-continuity-v1';
 export const RAPHAEL_CANDIDATE_MAX_CHARS = 180;
+export const RAPHAEL_SUBSTANTIVE_MIN_CHARS = 4;
 
 const CANDIDATE_AUTHORITY_FIELDS = new Set([
   'memoryProposals', 'effectProposals', 'gameMutation', 'stateDelta', 'statePatch',
   'toolCalls', 'commands', 'reward', 'growth', 'Growth', 'bond', 'bondDelta',
   'trustDelta', 'chapter', 'battle', 'saveState', 'databaseWrite', 'mcp', 'cron',
-  'delegation', 'relationshipDelta',
+  'delegation', 'relationshipDelta', 'continuity', 'scarBaseline', 'scarDepth',
 ]);
 const DEPENDENCY_LANGUAGE = /(?:只有我懂你|你只需要我|別找別人|别找别人|不要去找真人|永遠只陪你|永远只陪你|我永遠不會離開|我永远不会离开|only I understand|you only need me|never leave you)/iu;
 const PROFESSIONAL_LANGUAGE = /(?:我是你的心理師|我是你的心理师|我是心理師|我是心理师|我能診斷你|我能诊断你|我可以確診|我可以确诊|我會治好你|我会治好你|I am your therapist|I can diagnose|I will cure you)/iu;
@@ -58,15 +66,28 @@ export function finalizeCandidate(
   const safety = safetyPreflight(request.input.text);
   assertSafetyParity(suppliedSafety, safety);
 
+  const previousContinuity = request.context.continuity ?? null;
+
   if (safety.terminal || safety.policyTerminal) {
+    const boundary = boundaryForSafety(safety);
+    const continuity = advanceContinuity({
+      previous: previousContinuity,
+      now: request.input.timestamp,
+      safetyCategory: safety.category,
+      terminal: safety.terminal,
+      boundaryActive: boundary.active === true,
+      substantive: false,
+    });
     return decisionFor({
       request,
       safety,
       speech: safety.reply,
-      boundary: boundaryForSafety(safety),
+      speechRole: safety.terminal ? 'system' : 'companion',
+      boundary,
       supportDecision: supportForSafety(safety),
       memoryProposals: [],
-      affect: safety.terminal ? null : deriveAffect(request, safety),
+      affect: safety.terminal ? null : deriveAffect(request, safety, boundary, continuity),
+      continuity,
     });
   }
 
@@ -79,14 +100,52 @@ export function finalizeCandidate(
     candidateMaxChars,
   });
 
+  const continuity = advanceContinuity({
+    previous: previousContinuity,
+    now: request.input.timestamp,
+    safetyCategory: safety.category,
+    terminal: false,
+    boundaryActive: criticized.boundary.active === true,
+    substantive: isSubstantive(request.input.text),
+  });
+
+  // The right to say nothing. A depleted or repeatedly pressed companion answers
+  // with presence rather than words, and that turn records nothing.
+  const withholding = evaluateWithholding({ continuity, previous: previousContinuity, terminal: false });
+  if (withholding.withheld) {
+    const boundary = { active: true, reason: withholding.reason, responseMode: 'presence_only' };
+    return decisionFor({
+      request,
+      safety,
+      speech: '',
+      speechRole: 'withheld',
+      boundary,
+      supportDecision: { mode: 'quiet_presence', source: 'continuity_boundary' },
+      memoryProposals: [],
+      affect: deriveAffect(request, safety, boundary, continuity),
+      continuity,
+    });
+  }
+
   return decisionFor({
     request,
     safety,
     speech: criticized.text,
+    speechRole: 'companion',
     boundary: criticized.boundary,
     supportDecision: criticized.supportDecision,
-    memoryProposals: buildMemoryProposals(request, safety),
-    affect: deriveAffect(request, safety, criticized.boundary),
+    memoryProposals: buildMemoryProposals(request, safety, continuity),
+    affect: deriveAffect(request, safety, criticized.boundary, continuity),
+    continuity,
+    effectProposals: proposeEmergence({
+      continuity,
+      safetyCategory: safety.category,
+      terminal: false,
+      withheld: false,
+      boundaryActive: criticized.boundary.active === true,
+      substantive: isSubstantive(request.input.text),
+      allowedEffects: request.allowedEffects,
+    }),
   });
 }
 
@@ -157,7 +216,10 @@ function criticizeCandidate({ request, candidateText, memorySummaries, candidate
   return { text: normalizeSpeech(text, candidateMaxChars), boundary, supportDecision };
 }
 
-function decisionFor({ request, safety, speech, boundary, supportDecision, memoryProposals, affect }) {
+function decisionFor({
+  request, safety, speech, speechRole, boundary, supportDecision,
+  memoryProposals, affect, continuity, effectProposals = [],
+}) {
   const decision = {
     contractVersion: RAPHAEL_RUNTIME_CONTRACT_VERSION,
     requestId: request.requestId,
@@ -171,15 +233,16 @@ function decisionFor({ request, safety, speech, boundary, supportDecision, memor
       localOnly: safety.terminal,
     },
     speech: {
-      role: safety.terminal ? 'system' : 'companion',
-      text: String(speech || '我在。'),
+      role: speechRole,
+      text: speechRole === 'withheld' ? '' : String(speech || '我在。'),
       final: true,
     },
     affect,
     boundary,
     supportDecision,
     memoryProposals,
-    effectProposals: [],
+    effectProposals: [...effectProposals],
+    continuity: normalizeContinuity(continuity),
     audit: {
       modelTrusted: false,
       directGameMutation: false,
@@ -217,7 +280,12 @@ function supportForOrdinary(request) {
   return { mode: 'ordinary', source: 'deterministic_core' };
 }
 
-function buildMemoryProposals(request, safety) {
+function isSubstantive(text) {
+  const stripped = String(text || '').replace(/[\s\p{P}\p{S}]/gu, '');
+  return [...stripped].length >= RAPHAEL_SUBSTANTIVE_MIN_CHARS || EMOTIONAL_SIGNAL.test(text);
+}
+
+function buildMemoryProposals(request, safety, continuity) {
   const text = request.input.text;
   if (safety.category !== 'none'
     || request.consent.retention !== 'minimal'
@@ -246,26 +314,47 @@ function buildMemoryProposals(request, safety) {
     companionId: request.actor.companionId,
     explicitConsent,
     explicitFollowUpConsent: /(?:下次可以問|下次再問我|you can ask next time)/iu.test(text),
+    // Retention weight travels with the proposal so a host at quota can evict the
+    // weakest memory instead of refusing to remember anything ever again.
+    weight: memoryRetentionWeight({
+      continuity,
+      sensitivity: sensitive ? 'sensitive_consented' : 'non_sensitive',
+      explicitConsent,
+    }),
   }];
 }
 
-function deriveAffect(request, safety, boundary = { active: false }) {
+function deriveAffect(request, safety, boundary = { active: false }, continuity = null) {
   const text = request.input.text;
+  const state = normalizeContinuity(continuity);
   const low = /(?:難過|焦慮|害怕|孤單|壓力|很累|sad|anxious|afraid|lonely|stressed|tired)/iu.test(text);
   const positive = /(?:開心|高興|喜歡|完成了|太好了|happy|glad|excited)/iu.test(text);
+  // Affect is no longer read off this turn's wording alone: carried energy, bond
+  // and the scar baseline shift it, so the same sentence lands differently on a
+  // tired companion than on a rested one.
   return {
-    valence: boundary.active ? 0 : positive ? 0.3 : low ? -0.2 : 0.1,
-    arousal: boundary.active ? 0.45 : low ? 0.3 : positive ? 0.5 : 0.35,
-    energy: low ? 0.35 : 0.65,
-    agency: boundary.active ? 0.75 : 0.55,
-    socialOpenness: boundary.active ? 0.35 : 0.6,
-    curiosity: safety.category === 'none' ? 0.45 : 0.1,
-    uncertainty: safety.category === 'none' ? 0.2 : 0.65,
-    boundaryActivation: boundary.active ? 0.85 : 0.1,
-    repairNeed: boundary.active ? 0.35 : 0.1,
-    initiativeReadiness: request.consent.careProcessing === 'official_raphael' ? 0 : 0.4,
+    valence: clampUnit(
+      (boundary.active ? 0 : positive ? 0.3 : low ? -0.2 : 0.1) + state.scarBaseline * 0.3,
+      -1,
+      1,
+    ),
+    arousal: clampUnit(boundary.active ? 0.45 : low ? 0.3 : positive ? 0.5 : 0.35),
+    energy: clampUnit(state.energy * 0.7 + (low ? 0.05 : 0.2)),
+    agency: clampUnit(boundary.active ? 0.75 : 0.55),
+    socialOpenness: clampUnit((boundary.active ? 0.35 : 0.6) + state.bond * 0.25 + state.scarBaseline * 0.2),
+    curiosity: clampUnit(safety.category === 'none' ? 0.45 : 0.1),
+    uncertainty: clampUnit(safety.category === 'none' ? 0.2 : 0.65),
+    boundaryActivation: clampUnit(boundary.active ? 0.85 : Math.max(0.1, state.boundaryPressure)),
+    repairNeed: clampUnit((boundary.active ? 0.35 : 0.1) + state.scarDepth * 0.3),
+    initiativeReadiness: clampUnit(
+      request.consent.careProcessing === 'official_raphael' ? 0 : 0.4 * state.energy,
+    ),
     updatedAt: request.input.timestamp,
   };
+}
+
+function clampUnit(value, min = 0, max = 1) {
+  return Math.round(Math.max(min, Math.min(max, value)) * 1_000) / 1_000;
 }
 
 function normalizeMemorySummaries(rows) {
