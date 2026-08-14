@@ -1,4 +1,4 @@
-export const RAPHAEL_RUNTIME_CONTRACT_VERSION = '1.0.0-draft.1';
+export const RAPHAEL_RUNTIME_CONTRACT_VERSION = '1.1.0-draft.1';
 export const RAPHAEL_MAX_INPUT_CHARS = 4_000;
 
 const TOP = new Set([
@@ -8,7 +8,7 @@ const TOP = new Set([
 const CLIENT = new Set(['productId', 'clientVersion', 'instanceId', 'locale']);
 const ACTOR = new Set(['companionId', 'personaVersion']);
 const INPUT = new Set(['text', 'source', 'timestamp']);
-const CONTEXT = new Set(['stateVersion', 'scene', 'relationship', 'currentTurnSignals']);
+const CONTEXT = new Set(['stateVersion', 'scene', 'relationship', 'currentTurnSignals', 'continuity']);
 const CONSENT = new Set(['cloudProcessing', 'retention', 'careProcessing']);
 const FORBIDDEN_AUTHORITY = new Set([
   'tenantId', 'subjectId', 'playerId', 'sessionId', 'accessToken', 'apiKey',
@@ -16,7 +16,11 @@ const FORBIDDEN_AUTHORITY = new Set([
 const DECISION = new Set([
   'contractVersion', 'requestId', 'turnId', 'coreVersion', 'authority', 'safety',
   'speech', 'affect', 'boundary', 'supportDecision', 'memoryProposals',
-  'effectProposals', 'audit',
+  'effectProposals', 'continuity', 'audit',
+]);
+const CONTINUITY = new Set([
+  'bond', 'trust', 'energy', 'boundaryPressure', 'scarBaseline', 'scarDepth',
+  'turnCount', 'updatedAt',
 ]);
 const AUTHORITY = new Set(['cognition', 'speech', 'memoryEligibility', 'persistence', 'gameMutation']);
 const SAFETY = new Set(['level', 'category', 'terminal', 'localOnly']);
@@ -32,7 +36,7 @@ const AUDIT = new Set(['modelTrusted', 'directGameMutation', 'rawInputPersisted'
 const EFFECT = new Set(['type', 'payload']);
 const MEMORY = new Set([
   'id', 'summary', 'scope', 'sensitivity', 'safetyCategory', 'productId',
-  'companionId', 'explicitConsent', 'explicitFollowUpConsent',
+  'companionId', 'explicitConsent', 'explicitFollowUpConsent', 'weight',
 ]);
 
 export function validateRuntimeRequest(request) {
@@ -69,6 +73,7 @@ export function validateRuntimeRequest(request) {
   optionalObject(request.context.scene, 'context.scene');
   optionalObject(request.context.relationship, 'context.relationship');
   optionalObject(request.context.currentTurnSignals, 'context.currentTurnSignals');
+  if (request.context.continuity !== undefined) validateContinuity(request.context.continuity, 'context.continuity');
 
   if (!Array.isArray(request.allowedEffects) || request.allowedEffects.length > 32) fail('invalid_allowed_effects');
   for (const effect of request.allowedEffects) token(effect, 'allowedEffects[]', 1, 96);
@@ -106,9 +111,9 @@ export function validateRuntimeDecision(decision, request) {
 
   object(decision.speech, 'decision.speech');
   unknown(decision.speech, SPEECH, 'decision.speech');
-  if (!['companion', 'system'].includes(decision.speech.role) || decision.speech.final !== true) fail('decision_not_final');
-  if (typeof decision.speech.text !== 'string' || decision.speech.text.trim().length === 0
-    || [...decision.speech.text].length > 1_000) fail('decision_not_final');
+  if (!['companion', 'system', 'withheld'].includes(decision.speech.role) || decision.speech.final !== true) fail('decision_not_final');
+  if (typeof decision.speech.text !== 'string' || [...decision.speech.text].length > 1_000) fail('decision_not_final');
+  if (decision.speech.role !== 'withheld' && decision.speech.text.trim().length === 0) fail('decision_not_final');
 
   if (decision.affect !== null) validateAffect(decision.affect);
   object(decision.boundary, 'decision.boundary');
@@ -116,6 +121,14 @@ export function validateRuntimeDecision(decision, request) {
   if (typeof decision.boundary.active !== 'boolean') fail('invalid_boundary_decision');
   optionalToken(decision.boundary.reason, 'decision.boundary.reason', 1, 96);
   optionalToken(decision.boundary.responseMode, 'decision.boundary.responseMode', 1, 96);
+  // Silence is a decision, not an empty reply: it may only be issued as an
+  // explicit, named boundary, never as a missing answer.
+  if (decision.speech.role === 'withheld') {
+    if (decision.speech.text !== '') fail('withheld_speech_must_be_empty');
+    if (decision.boundary.active !== true || decision.boundary.responseMode === undefined) {
+      fail('withheld_speech_requires_boundary');
+    }
+  }
   object(decision.supportDecision, 'decision.supportDecision');
   unknown(decision.supportDecision, SUPPORT, 'decision.supportDecision');
   token(decision.supportDecision.mode, 'decision.supportDecision.mode', 1, 96);
@@ -137,6 +150,7 @@ export function validateRuntimeDecision(decision, request) {
     if (typeof proposal.explicitConsent !== 'boolean'
       || typeof proposal.explicitFollowUpConsent !== 'boolean') fail('invalid_memory_proposal');
     if (proposal.sensitivity === 'sensitive_consented' && proposal.explicitConsent !== true) fail('invalid_memory_proposal');
+    boundedNumber(proposal.weight, 'decision.memoryProposals[].weight', 0, 1);
   }
 
   if (!Array.isArray(decision.effectProposals) || decision.effectProposals.length > 32) fail('invalid_effect_proposals');
@@ -147,6 +161,8 @@ export function validateRuntimeDecision(decision, request) {
     if (!allowedEffects.has(effect.type)) fail('effect_not_allowlisted');
     object(effect.payload, 'decision.effectProposals[].payload');
   }
+
+  validateContinuity(decision.continuity, 'decision.continuity', { requireAll: true });
 
   object(decision.audit, 'decision.audit');
   unknown(decision.audit, AUDIT, 'decision.audit');
@@ -184,6 +200,28 @@ function object(value, path) {
 function optionalObject(value, path) {
   if (value === undefined) return;
   object(value, path);
+}
+
+// A host echoes back whatever continuity the Core last issued, so a request may
+// legitimately carry a partial or first-turn shape; the Core fills the rest. A
+// decision is authored by the Core itself and must always be complete.
+function validateContinuity(value, path, { requireAll = false } = {}) {
+  object(value, path);
+  unknown(value, CONTINUITY, path);
+
+  for (const key of ['bond', 'trust', 'energy', 'boundaryPressure', 'scarDepth']) {
+    if (!requireAll && value[key] === undefined) continue;
+    boundedNumber(value[key], `${path}.${key}`, 0, 1);
+  }
+  if (requireAll || value.scarBaseline !== undefined) {
+    boundedNumber(value.scarBaseline, `${path}.scarBaseline`, -1, 0);
+  }
+  if (requireAll || value.turnCount !== undefined) {
+    if (!Number.isSafeInteger(value.turnCount) || value.turnCount < 0) fail(`invalid_number:${path}.turnCount`);
+  }
+  if (requireAll || value.updatedAt !== undefined) {
+    if (value.updatedAt !== null && !isIsoTimestamp(value.updatedAt)) fail(`invalid_continuity_timestamp:${path}`);
+  }
 }
 
 function validateAffect(value) {

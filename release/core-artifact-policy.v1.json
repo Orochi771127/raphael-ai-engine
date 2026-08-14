@@ -8,15 +8,20 @@
     "contracts/runtimeContract.js",
     "core/canonCatalogPolicy.js",
     "core/canonicalCoreAdapter.js",
+    "core/continuityPolicy.js",
+    "core/emergencePolicy.js",
     "core/sovereignSafetyPolicy.js"
   ],
   "requiredExports": [
     "canonCatalogSchemaVersion",
+    "continuitySchemaVersion",
     "contractVersion",
     "coreVersion",
     "createCanonCatalog",
+    "emergenceSchemaVersion",
     "finalizeCandidate",
     "health",
+    "normalizeContinuity",
     "safetyPreflight"
   ],
   "authority": {

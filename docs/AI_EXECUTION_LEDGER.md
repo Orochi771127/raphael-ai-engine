@@ -250,3 +250,55 @@ Master Canon, or human release approval.
   modification, no model attachment, no deployment, no player traffic, no
   production pin promotion, no Soul Talk cutover.
 - Branch / commit: `codex/raphael-core-canon-catalog-v1` / `uncommitted`.
+
+### 2026-08-14 - Claude - RAPHAEL_CORE_CONTINUITY_AND_EMERGENCE_V1 - VERIFIED PRE-COMMIT
+
+- Status: `VERIFIED PRE-COMMIT`; isolated branch
+  `feat/core-continuity-and-emergence` from engine `origin/main`
+  `66227e3`. No model attachment, HMAX modification, deployment, player
+  traffic, production pin promotion or Soul Talk cutover.
+- Problem: the sealed Core was stateless per turn. `deriveAffect` read a regular
+  expression over the current utterance and nothing survived the reply, so the
+  shipped Core could not tire, could not refuse, and could not be changed by
+  what had already happened. The rich PAD/needs/persona logic lives on the
+  legacy `runRaphaelEngine` path, which is not in the artifact and never runs
+  in HMAX.
+- Scope: contract `1.1.0-draft.1`, Core `0.3.0-continuity-v1`. Sealed closure
+  grows from five to seven code files with `core/continuityPolicy.js` and
+  `core/emergencePolicy.js`; `requiredExports` adds `continuitySchemaVersion`,
+  `emergenceSchemaVersion` and `normalizeContinuity`.
+- Continuity: `context.continuity` in, `decision.continuity` out, following the
+  existing memory-proposal split - the Core decides, the host persists, and the
+  host never computes these numbers. Request continuity is validated leniently
+  because a first turn legitimately has none; decision continuity is validated
+  strictly because the Core always authors it.
+- The right to say nothing: `speech.role` accepts `withheld`, and only then may
+  `speech.text` be empty. Silence must be an explicit named boundary, never a
+  missing answer, so a withheld decision requires `boundary.active` and a
+  `responseMode`. Safety terminals can never be withheld. Crossing the line is
+  not a single-turn event: a companion that entered the turn past the line stays
+  quiet through it.
+- Scar: `scarDepth` is monotonic and `scarBaseline` recovers only to a residue
+  fraction of the deepest wound, so a healed boundary event permanently shifts
+  the baseline rather than flattening back to zero.
+- Memory weight: proposals now carry a bounded `weight`, so a host at scope
+  quota can evict the weakest memory instead of refusing to remember anything
+  further. The HMAX side of that change is not in this package.
+- Emergence: `effectProposals` was hardcoded empty. `proposeEmergence` now emits
+  host-allowlisted proposals only, filtered against `request.allowedEffects`,
+  suppressed by safety, boundary or silence, and unavailable on a turn without
+  substance. A bloom additionally requires that any scar has settled. The Core
+  proposes; the game reducer still decides.
+- Authority boundary unchanged: `authority.tools` remains `[]`, `modelTrusted`
+  remains `false`, `directGameMutation` remains `false`, and the candidate
+  authority scan now also rejects `continuity`, `scarBaseline` and `scarDepth`
+  so a model cannot smuggle relationship state through its wording.
+- Validation: full engine suite `97/97 PASS` (was 78; 19 new across
+  `tests/continuity-and-withholding-v1.test.mjs` and `tests/emergence-v1.test.mjs`),
+  parity PASS, autonomy PASS, NexusLink probe PASS, release-artifact suite PASS.
+  Local `check:core-artifact` correctly refuses the dirty source tree.
+- Artifact boundary: a clean artifact and an HMAX re-pin must follow a protected
+  merge. HMAX still pins `0.2.5-canon-catalog-v1` and its suite is unchanged at
+  `87/87 PASS`.
+- Branch / commit: `feat/core-continuity-and-emergence` / this entry's package
+  commit.
