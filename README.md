@@ -156,7 +156,7 @@ Project skills in `skills/` tell coding agents how to change this kernel without
 
 - `skills/raphael-constitution/SKILL.md` — safety, authority, `trusted:false`, adapter boundary
 - `skills/raphael-eval-author/SKILL.md` — deterministic eval cases and runners
-- `skills/raphael-canon-intake/SKILL.md` — reviewed canon cards and abstention
+- `skills/raphael-canon-intake/SKILL.md` — knowledge cards, persona dialogue bundle, abstention
 
 Cursor loads `.cursor/rules/raphael-core-skills.mdc` on every turn so these skills are found.
 

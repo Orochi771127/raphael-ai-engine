@@ -16,9 +16,7 @@ Before any global training data is accepted:
 4. A human approves the training item.
 5. The eval suite passes after inclusion.
 
-Current deterministic evaluation files:
-
-How to add cases: `skills/raphael-eval-author/SKILL.md`. Canon cards: `skills/raphael-canon-intake/SKILL.md`.
+How to add cases: `skills/raphael-eval-author/SKILL.md`. Canon cards vs persona dialogue: `skills/raphael-canon-intake/SKILL.md`.
 
 Current deterministic evaluation files:
 
