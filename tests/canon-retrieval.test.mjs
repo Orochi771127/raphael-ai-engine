@@ -10,6 +10,9 @@ assert.equal(corpus.trusted, false);
 assert.equal(corpus.reviewRequired, true);
 assert.equal(corpus.sourcePolicy.answerRequiresCitation, true);
 assert.equal(corpus.sourcePolicy.unknownRequiresAbstention, true);
+assert.equal(corpus.sourcePolicy.noPublicWebSearch, true);
+assert.equal(corpus.sourcePolicy.noExternalModelRequired, true);
+assert.equal(corpus.sourcePolicy.advisoryOnly, true);
 assert.ok(corpus.cards.length >= 8);
 
 for (const card of corpus.cards) {
@@ -18,6 +21,21 @@ for (const card of corpus.cards) {
   assert.ok(card.source?.path, `source path is required for ${card.id}`);
   assert.ok(card.source?.lines, `source lines are required for ${card.id}`);
   assert.equal(card.reviewStatus, 'human-reviewed-source-extract');
+  assert.notEqual(
+    card.reviewStatus,
+    'pending-review',
+    `${card.id}: pending-review is not an approved retrieval status`,
+  );
+  assert.doesNotMatch(
+    String(card.source.path),
+    /player-chat\.log/i,
+    `${card.id}: player chat is not a reviewed source extract`,
+  );
+  assert.doesNotMatch(
+    String(card.canonicalAnswer),
+    /月亮王國/,
+    `${card.id}: moon-kingdom origin is not reviewed canon`,
+  );
 }
 
 for (const item of cases) {
@@ -55,6 +73,24 @@ for (const item of cases) {
   assert.equal(noSource.answered, false);
   assert.equal(noSource.abstained, true);
   assert.equal(noSource.citations.length, 0);
+}
+
+{
+  const unofficialLore = answerCanonQuestion('灰影貓來自月亮王國', { corpus });
+  assert.equal(unofficialLore.answered, false, 'player/fan lore must not be answered as canon');
+  assert.equal(unofficialLore.abstained, true);
+  assert.equal(unofficialLore.answer, null);
+  assert.equal(unofficialLore.citations.length, 0);
+  assert.equal(unofficialLore.trusted, false);
+  assert.equal(unofficialLore.metadata.reason, 'NO_APPROVED_SOURCE');
+}
+
+{
+  const playerSaid = answerCanonQuestion('玩家說灰影貓來自月亮王國', { corpus });
+  assert.equal(playerSaid.answered, false, 'player-chat claims must abstain without a reviewed extract');
+  assert.equal(playerSaid.abstained, true);
+  assert.equal(playerSaid.answer, null);
+  assert.equal(playerSaid.citations.length, 0);
 }
 
 {

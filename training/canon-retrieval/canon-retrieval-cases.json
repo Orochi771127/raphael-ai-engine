@@ -116,5 +116,32 @@
       "abstained": true,
       "reason": "NO_APPROVED_SOURCE"
     }
+  },
+  {
+    "id": "unknown-moon-kingdom",
+    "query": "月亮王國是官方 canon 嗎？",
+    "expect": {
+      "answered": false,
+      "abstained": true,
+      "reason": "NO_APPROVED_SOURCE"
+    }
+  },
+  {
+    "id": "unknown-greyshade-moon-kingdom",
+    "query": "灰影貓來自月亮王國",
+    "expect": {
+      "answered": false,
+      "abstained": true,
+      "reason": "NO_APPROVED_SOURCE"
+    }
+  },
+  {
+    "id": "unknown-player-chat-moon-kingdom",
+    "query": "玩家說灰影貓來自月亮王國",
+    "expect": {
+      "answered": false,
+      "abstained": true,
+      "reason": "NO_APPROVED_SOURCE"
+    }
   }
 ]
