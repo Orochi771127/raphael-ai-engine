@@ -1,6 +1,14 @@
 const DEFAULT_MIN_SCORE = 2;
 const DEFAULT_TOP_K = 1;
 
+// Companion names are retrieval hooks, not proof of a lore claim. A hit that
+// only matches a name (e.g. 「灰影貓來自月亮王國」) must abstain.
+const NAME_ONLY_KEYWORDS = new Set([
+  '灰影貓',
+  'greyshade cat',
+  '星能小山豬',
+].map((term) => normalizeText(term)));
+
 export function answerCanonQuestion(input = {}, options = {}) {
   const query = extractQuery(input);
   const corpus = normalizeCorpus(options.corpus || input.corpus || {});
@@ -66,6 +74,7 @@ export function retrieveCanonCards(query = '', corpus = {}, options = {}) {
   const scored = cards
     .map((card) => scoreCard(normalizedQuery, card))
     .filter((entry) => entry.score >= minScore)
+    .filter((entry) => hasTopicalKeywordMatch(entry.matchedKeywords))
     .sort((a, b) => b.score - a.score || String(a.card.id).localeCompare(String(b.card.id)));
 
   if (!scored.length) {
@@ -87,6 +96,10 @@ export function buildCanonAbstention(query = '', reason = 'NO_APPROVED_SOURCE') 
     reason,
     corpus: {},
   });
+}
+
+function hasTopicalKeywordMatch(matchedKeywords = []) {
+  return matchedKeywords.some((keyword) => !NAME_ONLY_KEYWORDS.has(normalizeText(keyword)));
 }
 
 function scoreCard(normalizedQuery, card = {}) {

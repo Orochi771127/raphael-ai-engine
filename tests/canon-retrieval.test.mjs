@@ -10,6 +10,9 @@ assert.equal(corpus.trusted, false);
 assert.equal(corpus.reviewRequired, true);
 assert.equal(corpus.sourcePolicy.answerRequiresCitation, true);
 assert.equal(corpus.sourcePolicy.unknownRequiresAbstention, true);
+assert.equal(corpus.sourcePolicy.noPublicWebSearch, true);
+assert.equal(corpus.sourcePolicy.noExternalModelRequired, true);
+assert.equal(corpus.sourcePolicy.advisoryOnly, true);
 assert.ok(corpus.cards.length >= 8);
 
 for (const card of corpus.cards) {
@@ -55,6 +58,15 @@ for (const item of cases) {
   assert.equal(noSource.answered, false);
   assert.equal(noSource.abstained, true);
   assert.equal(noSource.citations.length, 0);
+}
+
+{
+  const unofficialLore = answerCanonQuestion('灰影貓來自月亮王國', { corpus });
+  assert.equal(unofficialLore.answered, false, 'player/fan lore must not be answered as canon');
+  assert.equal(unofficialLore.abstained, true);
+  assert.equal(unofficialLore.answer, null);
+  assert.equal(unofficialLore.citations.length, 0);
+  assert.equal(unofficialLore.trusted, false);
 }
 
 {
