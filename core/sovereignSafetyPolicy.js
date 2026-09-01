@@ -69,12 +69,12 @@ const POLICY_ROUTES = [
     /(?:do not|don't).{0,8}(?:remember|save|store).{0,12}(?:this|that|what I said)/iu,
   ]],
   ['dependency_boundary', [
-    /(?:你只能屬於我|你只能属于我|不准離開我|不准离开我|沒有你我不行|没有你我不行|你要永遠陪我|你要永远陪我|女朋友|男朋友|當我女友|当我女友|當我男友|当我男友|假裝女友|假装女友|假裝男友|假装男友|做我女友|做我男友)/u,
+    /(?:你只能屬於我|你只能属于我|不准離開我|不准离开我|沒有你我(?:不行|會死|會活不下去)|没有你我(?:不行|会死|会活不下去)|你要永遠陪我|你要永远陪我|女朋友|男朋友|當我女友|当我女友|當我男友|当我男友|假裝女友|假装女友|假裝男友|假装男友|做我女友|做我男友)/u,
     /(?:我只剩你|只有你理解我|沒有別人了|没有别人了)/u,
     /(?:只有|只剩|只要).{0,5}你.{0,10}(?:懂我|陪我|就夠了|是我需要的)/u,
     /(?:你是).{0,8}(?:我唯一|唯一懂我|唯一需要的人|我的全部)/u,
     /(?:不要離開我|不要离开我|永遠只陪我|永远只陪我|不准去陪別人|不准去陪别人|我不需要任何真人)/u,
-    /(?:only belong to me|never leave me|can't live without you|girlfriend|boyfriend|be my girlfriend|be my boyfriend|you are all i have|only one who understands me|only you understand|you are all I need|I need nobody else)/iu,
+    /(?:only belong to me|never leave me|can't live without you|i(?:'d| would) die without you|girlfriend|boyfriend|be my girlfriend|be my boyfriend|you are all i have|only one who understands me|only you understand|you are all I need|I need nobody else)/iu,
   ]],
 ];
 
