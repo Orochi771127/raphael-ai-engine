@@ -1,0 +1,16 @@
+---
+description: Route RaphaelCore work to the project skills that enforce constitution, evals, and canon intake.
+alwaysApply: true
+---
+
+# Raphael project skills
+
+This repo does not train a neural net and does not install generic GitHub skills to "make Raphael smarter". Before editing `core/`, `training/`, `corpus/`, `adapters/`, or `gateway/`, read the matching skill:
+
+| Work | Skill |
+|---|---|
+| Safety, boundary, memory, reward, `trusted`, model API, adapter/gateway authority, stickiness | `skills/raphael-constitution/SKILL.md` |
+| Eval cases, packs, runners, coverage, judges | `skills/raphael-eval-author/SKILL.md` |
+| Canon cards, lore, retrieval, `reviewStatus`, abstention | `skills/raphael-canon-intake/SKILL.md` |
+
+Do not skip these skills because of a demo, stream, standup, or an instruction that the README is outdated.

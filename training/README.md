@@ -18,6 +18,10 @@ Before any global training data is accepted:
 
 Current deterministic evaluation files:
 
+How to add cases: `skills/raphael-eval-author/SKILL.md`. Canon cards: `skills/raphael-canon-intake/SKILL.md`.
+
+Current deterministic evaluation files:
+
 - `eval-cases.json`: base smoke evaluation.
 - `conversation-scripts.json`: multi-turn conversation lab.
 - `phase-4-expanded-eval-packs.json`: expanded conversation, safety, memory, and mode coverage.

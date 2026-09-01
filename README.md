@@ -150,6 +150,16 @@ Learning is split into three layers:
 
 This v0 implements local learning signals as structured proposals. It does not perform global training or ingest raw player text into shared datasets.
 
+## Agent skills for this repository
+
+Project skills in `skills/` tell coding agents how to change this kernel without turning Raphael into a generic model-trained chatbot. They do not train weights.
+
+- `skills/raphael-constitution/SKILL.md` — safety, authority, `trusted:false`, adapter boundary
+- `skills/raphael-eval-author/SKILL.md` — deterministic eval cases and runners
+- `skills/raphael-canon-intake/SKILL.md` — reviewed canon cards and abstention
+
+Cursor loads `.cursor/rules/raphael-core-skills.mdc` on every turn so these skills are found.
+
 ## Agentic Pattern Training Plan
 
 The current training roadmap derived from `Agentic Design Patterns` is documented here:
